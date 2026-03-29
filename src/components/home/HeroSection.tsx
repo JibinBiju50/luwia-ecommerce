@@ -49,15 +49,9 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/product"
-              className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold text-white gradient-brand rounded-full hover:opacity-90 transition-opacity shadow-brand sm:w-auto w-full"
+              className="inline-flex items-center justify-center px-12 py-3.5 text-sm font-semibold text-white gradient-brand rounded-full hover:opacity-90 transition-opacity shadow-brand sm:w-auto w-full"
             >
               Shop Now
-            </Link>
-            <Link
-              href="#learn-more"
-              className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold text-brand-primary bg-white border-2 border-brand-primary/20 rounded-full hover:border-brand-primary/40 transition-colors sm:w-auto w-full"
-            >
-              Learn More
             </Link>
           </div>
         </div>
