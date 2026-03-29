@@ -5,13 +5,22 @@ import { useRouter } from "next/navigation";
 import { Heart, Share2, Minus, Plus, Truck, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { PRODUCT } from "@/lib/product";
+import type { Review } from "@/app/product/page";
+interface ProductInfoProps {
+  reviews: Review[];
+}
 
-export default function ProductInfo() {
+export default function ProductInfo({ reviews }: ProductInfoProps) {
   const [selectedQty, setSelectedQty] = useState(1);
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
   const { addToCart, updateQuantity, clearCart } = useCart();
   const router = useRouter();
+
+  const reviewCount = reviews?.length || 0;
+  const avgRating = reviewCount > 0
+    ? reviews.reduce((sum, r) => sum + r.star_rating, 0) / reviewCount
+    : 0;
 
   // Automatically clear the cart when they return to the product page
   // so abandoned checkouts don't leave lingering cart items.
@@ -67,14 +76,16 @@ export default function ProductInfo() {
                 <Star
                   key={star}
                   className={`w-4 h-4 ${
-                    star <= 4
+                    star <= Math.round(avgRating)
                       ? "fill-amber-400 text-amber-400"
                       : "fill-amber-400/30 text-amber-400/30"
                   }`}
                 />
               ))}
             </div>
-            <span className="text-sm text-gray-500">(2842)</span>
+            <span className="text-sm text-gray-500">
+              {reviewCount > 0 ? `(${reviewCount})` : "(No reviews yet)"}
+            </span>
           </div>
         </div>
 
