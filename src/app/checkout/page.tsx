@@ -47,13 +47,14 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("online");
   const [processing, setProcessing] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  // Redirect if cart is empty
+  // Redirect if cart is empty, UNLESS we just successfully placed an order
   useEffect(() => {
-    if (quantity === 0) {
+    if (quantity === 0 && !isSuccess) {
       router.push("/cart");
     }
-  }, [quantity, router]);
+  }, [quantity, isSuccess, router]);
 
   const unitPrice = paymentMethod === "online" ? PRODUCT.onlinePrice : PRODUCT.codPrice;
   const total = quantity * unitPrice;
@@ -159,6 +160,7 @@ export default function CheckoutPage() {
                   paymentMethod: "online",
                 })
               );
+              setIsSuccess(true);
               clearCart();
               router.push("/order/success");
             } else {
@@ -219,6 +221,7 @@ export default function CheckoutPage() {
           paymentMethod: "cod",
         })
       );
+      setIsSuccess(true);
       clearCart();
       router.push("/order/success");
     } catch {
@@ -227,7 +230,7 @@ export default function CheckoutPage() {
     }
   };
 
-  if (quantity === 0) return null;
+  if (quantity === 0 && !isSuccess) return null;
 
   return (
     <>
