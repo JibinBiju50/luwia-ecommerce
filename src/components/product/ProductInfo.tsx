@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Share2, Minus, Plus, Truck, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
@@ -10,15 +10,22 @@ export default function ProductInfo() {
   const [selectedQty, setSelectedQty] = useState(1);
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, updateQuantity, clearCart } = useCart();
   const router = useRouter();
+
+  // Automatically clear the cart when they return to the product page
+  // so abandoned checkouts don't leave lingering cart items.
+  useEffect(() => {
+    clearCart();
+  }, [clearCart]);
 
   const handleAddToCart = () => {
     addToCart(selectedQty);
   };
 
   const handleBuyNow = () => {
-    addToCart(selectedQty);
+    // Overwrite the cart with the exact selected quantity before checkout
+    updateQuantity(selectedQty);
     router.push("/checkout");
   };
 
