@@ -24,11 +24,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Image
-              src="/images/logo.png"
+              src="/images/logo_crop.png"
               alt="Luwia Skin Science"
               width={120}
               height={48}
-              className="h-10 md:h-12 w-auto"
+              className="h-10 md:h-16 w-auto"
               priority
             />
           </Link>

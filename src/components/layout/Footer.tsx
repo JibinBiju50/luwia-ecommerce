@@ -93,7 +93,7 @@ export default function Footer() {
               Follow Us
             </h3>
             <a
-              href="https://www.instagram.com/luwiaskinscience"
+              href="https://www.instagram.com/getluwia.in?igsh=MTVoOXZwZTk1YzBuZw=="
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-brand-primary transition-colors duration-200"
