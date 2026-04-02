@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
     const paymentLabel = paymentMethod === "cod" ? "Cash on Delivery" : "Paid Online";
 
     // Customer confirmation email
-    await resend.emails.send({
-      from: "Luwia Skin Science <orders@luwiaskinscience.com>",
+    const customerEmailResponse = await resend.emails.send({
+      from: "Luwia Skin Science <orders@luwia.in>",
       to: email,
       subject: `Order Confirmed! #${orderId.slice(0, 8).toUpperCase()}`,
       html: `
@@ -73,9 +73,13 @@ export async function POST(request: NextRequest) {
       `,
     });
 
+    if (customerEmailResponse.error) {
+      console.error("Customer email sending failed:", customerEmailResponse.error);
+    }
+
     // Business notification email
-    await resend.emails.send({
-      from: "Luwia Orders <orders@luwiaskinscience.com>",
+    const businessEmailResponse = await resend.emails.send({
+      from: "Luwia Orders <orders@luwia.in>",
       to: "luwiaskinscience@gmail.com",
       subject: `New Order #${orderId.slice(0, 8).toUpperCase()} — ${paymentLabel}`,
       html: `
@@ -95,6 +99,11 @@ export async function POST(request: NextRequest) {
         </div>
       `,
     });
+
+    if (businessEmailResponse.error) {
+      console.error("Business email sending failed:", businessEmailResponse.error);
+      throw new Error("Failed to send business email: " + businessEmailResponse.error.message);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
