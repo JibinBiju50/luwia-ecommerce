@@ -6,7 +6,6 @@ import Image from "next/image";
 import Script from "next/script";
 import { CreditCard, Banknote, Truck, ShieldCheck, Sparkles } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { PRODUCT } from "@/lib/product";
 import { INDIAN_STATES } from "@/lib/indian-states";
 
 declare global {
@@ -42,7 +41,7 @@ type PaymentMethod = "online" | "cod";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { quantity, clearCart } = useCart();
+  const { items, quantity, clearCart, getOnlineTotal, getCodTotal, getProductDetails } = useCart();
   const [form, setForm] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("online");
@@ -56,9 +55,11 @@ export default function CheckoutPage() {
     }
   }, [quantity, isSuccess, router]);
 
-  const unitPrice = paymentMethod === "online" ? PRODUCT.onlinePrice : PRODUCT.codPrice;
-  const total = quantity * unitPrice;
-  const savings = paymentMethod === "online" ? quantity * (PRODUCT.codPrice - PRODUCT.onlinePrice) : 0;
+  const onlineTotal = getOnlineTotal();
+  const codTotal = getCodTotal();
+  const total = paymentMethod === "online" ? onlineTotal : codTotal;
+  const savings = paymentMethod === "online" ? codTotal - onlineTotal : 0;
+  const currencySymbol = "₹";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -126,7 +127,7 @@ export default function CheckoutPage() {
         amount: data.amount,
         currency: data.currency,
         name: "Luwia Skin Science",
-        description: PRODUCT.name,
+        description: "Your Order",
         order_id: data.orderId,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         handler: async (response: any) => {
@@ -140,6 +141,7 @@ export default function CheckoutPage() {
                 razorpay_signature: response.razorpay_signature,
                 orderDetails: {
                   ...form,
+                  items,     // NEW: send the array of items
                   quantity,
                   amount: total,
                   paymentMethod: "online",
@@ -155,6 +157,7 @@ export default function CheckoutPage() {
                 JSON.stringify({
                   orderId: verifyData.orderId,
                   ...form,
+                  items,
                   quantity,
                   amount: total,
                   paymentMethod: "online",
@@ -201,6 +204,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           orderDetails: {
             ...form,
+            items,     // NEW: Send items array
             quantity,
             amount: total,
             paymentMethod: "cod",
@@ -216,6 +220,7 @@ export default function CheckoutPage() {
         JSON.stringify({
           orderId: data.orderId,
           ...form,
+          items,
           quantity,
           amount: total,
           paymentMethod: "cod",
@@ -268,9 +273,7 @@ export default function CheckoutPage() {
                       }`}
                       placeholder="Enter your full name"
                     />
-                    {errors.fullName && (
-                      <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>
-                    )}
+                    {errors.fullName && <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>}
                   </div>
 
                   {/* Email */}
@@ -289,9 +292,7 @@ export default function CheckoutPage() {
                       }`}
                       placeholder="you@example.com"
                     />
-                    {errors.email && (
-                      <p className="text-xs text-red-500 mt-1">{errors.email}</p>
-                    )}
+                    {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
                   </div>
 
                   {/* Phone */}
@@ -310,9 +311,7 @@ export default function CheckoutPage() {
                       }`}
                       placeholder="10-digit mobile number"
                     />
-                    {errors.phone && (
-                      <p className="text-xs text-red-500 mt-1">{errors.phone}</p>
-                    )}
+                    {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
                   </div>
 
                   {/* Address Line 1 */}
@@ -331,9 +330,7 @@ export default function CheckoutPage() {
                       }`}
                       placeholder="House number, building, street"
                     />
-                    {errors.addressLine1 && (
-                      <p className="text-xs text-red-500 mt-1">{errors.addressLine1}</p>
-                    )}
+                    {errors.addressLine1 && <p className="text-xs text-red-500 mt-1">{errors.addressLine1}</p>}
                   </div>
 
                   {/* Address Line 2 */}
@@ -368,9 +365,7 @@ export default function CheckoutPage() {
                       }`}
                       placeholder="City"
                     />
-                    {errors.city && (
-                      <p className="text-xs text-red-500 mt-1">{errors.city}</p>
-                    )}
+                    {errors.city && <p className="text-xs text-red-500 mt-1">{errors.city}</p>}
                   </div>
 
                   {/* State */}
@@ -388,15 +383,13 @@ export default function CheckoutPage() {
                       }`}
                     >
                       <option value="">Select state</option>
-                      {INDIAN_STATES.map((state) => (
-                        <option key={state} value={state}>
-                          {state}
+                      {INDIAN_STATES.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
                         </option>
                       ))}
                     </select>
-                    {errors.state && (
-                      <p className="text-xs text-red-500 mt-1">{errors.state}</p>
-                    )}
+                    {errors.state && <p className="text-xs text-red-500 mt-1">{errors.state}</p>}
                   </div>
 
                   {/* Pincode */}
@@ -416,9 +409,7 @@ export default function CheckoutPage() {
                       }`}
                       placeholder="6-digit pincode"
                     />
-                    {errors.pincode && (
-                      <p className="text-xs text-red-500 mt-1">{errors.pincode}</p>
-                    )}
+                    {errors.pincode && <p className="text-xs text-red-500 mt-1">{errors.pincode}</p>}
                   </div>
                 </div>
               </div>
@@ -458,14 +449,16 @@ export default function CheckoutPage() {
                         </span>
                       </div>
                       <p className="text-sm text-gray-500 mt-1">
-                        {PRODUCT.currencySymbol}{PRODUCT.onlinePrice}/unit
+                        Total: {currencySymbol}{onlineTotal}
                       </p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Sparkles className="w-3 h-3 text-green-600" />
-                        <span className="text-xs font-medium text-green-600">
-                          Save {PRODUCT.currencySymbol}{PRODUCT.codPrice - PRODUCT.onlinePrice} per unit!
-                        </span>
-                      </div>
+                      {savings > 0 && (
+                        <div className="flex items-center gap-1 mt-1">
+                          <Sparkles className="w-3 h-3 text-green-600" />
+                          <span className="text-xs font-medium text-green-600">
+                            Save {currencySymbol}{savings} overall!
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </button>
 
@@ -494,7 +487,7 @@ export default function CheckoutPage() {
                         </span>
                       </div>
                       <p className="text-sm text-gray-500 mt-1">
-                        {PRODUCT.currencySymbol}{PRODUCT.codPrice}/unit
+                        Total: {currencySymbol}{codTotal}
                       </p>
                     </div>
                   </button>
@@ -509,47 +502,54 @@ export default function CheckoutPage() {
                   Order Summary
                 </h2>
 
-                {/* Product */}
-                <div className="flex gap-3 pb-4 border-b border-gray-100">
-                  <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
-                    <Image
-                      src={PRODUCT.image}
-                      alt={PRODUCT.name}
-                      fill
-                      className="object-cover"
-                      sizes="64px"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-brand-text line-clamp-2">
-                      {PRODUCT.name}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">Qty: {quantity}</p>
-                  </div>
+                {/* Items */}
+                <div className="space-y-4 pb-4 border-b border-gray-100 max-h-64 overflow-y-auto pr-2">
+                  {items.map((item) => {
+                    const product = getProductDetails(item.productId);
+                    if (!product) return null;
+                    return (
+                      <div key={item.productId} className="flex gap-3">
+                        <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-gray-50">
+                          <Image
+                            src={product.cardImage || ('image' in product ? product.image : "")}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                            sizes="64px"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-brand-text line-clamp-2">
+                            {product.name}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* Pricing */}
                 <div className="space-y-3 mt-4 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500">
-                      Price ({quantity} × {PRODUCT.currencySymbol}{unitPrice})
+                      Subtotal ({quantity} items)
                     </span>
-                    <span className="font-medium">{PRODUCT.currencySymbol}{total}</span>
+                    <span className="font-medium">{currencySymbol}{paymentMethod === "cod" ? codTotal : onlineTotal}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Delivery Fee</span>
                     <span className="font-medium text-green-600">Free</span>
                   </div>
-                  {savings > 0 && (
+                  {savings > 0 && paymentMethod === "online" && (
                     <div className="flex justify-between text-green-600">
-                      <span>Online Discount</span>
-                      <span className="font-medium">-{PRODUCT.currencySymbol}{savings}</span>
+                      <span>Online Discount Applied</span>
                     </div>
                   )}
                   <div className="border-t border-gray-100 pt-3 flex justify-between">
                     <span className="font-semibold text-brand-text text-base">Total</span>
                     <span className="font-bold text-xl text-brand-text">
-                      {PRODUCT.currencySymbol}{total}
+                      {currencySymbol}{total}
                     </span>
                   </div>
                 </div>
@@ -569,7 +569,7 @@ export default function CheckoutPage() {
                   {processing
                     ? "Processing..."
                     : paymentMethod === "online"
-                    ? `Pay ${PRODUCT.currencySymbol}${total}`
+                    ? `Pay ${currencySymbol}${total}`
                     : "Place Order (COD)"}
                 </button>
 

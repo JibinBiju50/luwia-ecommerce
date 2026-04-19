@@ -15,7 +15,7 @@ export default function CommunityJoin() {
   };
 
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-b from-white to-brand-bg">
+    <section className="py-8 md:py-10 bg-gradient-to-b from-white to-brand-bg">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-brand-text">
           Join Our 10 Lakhs Trusted Customers Community

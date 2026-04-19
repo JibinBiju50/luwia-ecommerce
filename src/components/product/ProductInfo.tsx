@@ -29,12 +29,12 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
   }, [clearCart]);
 
   const handleAddToCart = () => {
-    addToCart(selectedQty);
+    addToCart("default", selectedQty);
   };
 
   const handleBuyNow = () => {
     // Overwrite the cart with the exact selected quantity before checkout
-    updateQuantity(selectedQty);
+    updateQuantity("default", selectedQty);
     router.push("/checkout");
   };
 
@@ -180,6 +180,12 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
         >
           Buy Now
         </button>
+      </div>
+
+      {/* All India Shipping */}
+      <div className="flex items-center justify-center gap-2 pt-4 pb-2 text-gray-700">
+        <Truck className="w-5 h-5 text-gray-500" />
+        <span className="text-sm font-bold tracking-wide uppercase">All India Shipping</span>
       </div>
 
       {/* Short description */}

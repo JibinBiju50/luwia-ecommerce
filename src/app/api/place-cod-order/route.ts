@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
         pincode: orderDetails.pincode,
         quantity: orderDetails.quantity,
         amount_paid: orderDetails.amount,
+        items: orderDetails.items,
         payment_method: "cod",
         razorpay_payment_id: null,
         razorpay_order_id: null,

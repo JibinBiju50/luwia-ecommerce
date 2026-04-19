@@ -3,6 +3,7 @@ import HeroSection from "@/components/home/HeroSection";
 import ImageSlider from "@/components/home/ImageSlider";
 import ProductCard from "@/components/home/ProductCard";
 import ContentWithImage from "@/components/home/ContentWithImage";
+import CustomerVideos from "@/components/home/CustomerVideos";
 import CustomerResults from "@/components/home/CustomerResults";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import CommunityJoin from "@/components/home/CommunityJoin";
@@ -17,6 +18,7 @@ export default function HomePage() {
       <ProductCard />
       <ImageSlider images={PRODUCT.sliderImages.ingredients} speed={28} />
       <ContentWithImage />
+      <CustomerVideos />
       <CustomerResults />
       <FeaturesSection />
       <CommunityJoin />

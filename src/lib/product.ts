@@ -1,8 +1,8 @@
 export const PRODUCT = {
   name: "Luwia — Skin Bright & Repair (Pearl Radiance Cream)",
-  originalPrice: 750,
-  onlinePrice: 680,
-  codPrice: 750,
+  originalPrice: 849,
+  onlinePrice: 649,
+  codPrice: 849,
   maxQuantity: 10,
   currency: "INR",
   currencySymbol: "₹",
@@ -33,39 +33,48 @@ Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect
 
   ingredients: [
     {
-      name: "Niacinamide (Vitamin B3)",
-      description:
-        "Refines pores, fades dark spots, and enhances overall skin clarity for a visibly even tone.",
+      name: "Sandalwood Extract",
+      description: "Calms inflammation & evens skin tone",
+    },
+    {
+      name: "Turmeric Extract",
+      description: "Fights acne & brightens skin",
     },
     {
       name: "Glutathione",
-      description:
-        "A potent antioxidant that targets tan, pigmentation, and dullness, revealing luminous, radiant skin.",
+      description: "Boosts glow & detoxifies skin",
     },
     {
-      name: "Licorice Root Extract",
-      description:
-        "Naturally brightens and soothes, helping reduce discoloration while calming the skin.",
+      name: "Niacinamide (Vitamin B3)",
+      description: "Minimizes pores & balances oil",
     },
     {
-      name: "Shea Butter",
-      description:
-        "Deeply nourishing and restorative, delivering lasting hydration and softness.",
+      name: "Biotin (Vitamin B7)",
+      description: "Strengthens skin barrier",
     },
     {
-      name: "Squalane & Glycerin",
-      description:
-        "Lightweight hydration system that attracts and locks in moisture, keeping skin plump and smooth.",
+      name: "Kojic Acid",
+      description: "Fades dark spots & pigmentation",
     },
     {
-      name: "Vitamin E (Tocopherol)",
-      description:
-        "Protects against environmental stress while supporting skin repair and glow.",
+      name: "Collagen",
+      description: "Improves skin elasticity & firmness",
     },
     {
-      name: "Advanced Base Formula",
-      description:
-        "A balanced blend of skin-conditioning emollients, stabilizers, and gentle preservatives ensures optimal texture, safety, and performance for daily use.",
+      name: "Glycerin",
+      description: "Deep hydration & moisture lock",
+    },
+    {
+      name: "Vitamins A, B, C, E",
+      description: "Repair, protect, and renew skin",
+    },
+    {
+      name: "Alpha Arbutin",
+      description: "Reduces tanning and hyperpigmentation",
+    },
+    {
+      name: "DM Water",
+      description: "Purified base for safe formulation",
     },
   ],
 
@@ -89,8 +98,6 @@ Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect
 
   reviewImages: [
     "/images/customer_review_1.jpeg",
-    "/images/customer_review_2.jpeg",
-    "/images/customer_review_3.jpeg",
     "/images/customer_review_4.jpeg",
   ],
 

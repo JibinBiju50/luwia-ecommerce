@@ -23,15 +23,7 @@ export default function CustomerResults() {
     []
   );
 
-  const handlePrev = () => {
-    const newIndex = activeIndex > 0 ? activeIndex - 1 : images.length - 1;
-    scrollToIndex(newIndex);
-  };
 
-  const handleNext = () => {
-    const newIndex = activeIndex < images.length - 1 ? activeIndex + 1 : 0;
-    scrollToIndex(newIndex);
-  };
 
   const handleScroll = () => {
     const el = scrollRef.current;
@@ -50,8 +42,10 @@ export default function CustomerResults() {
     setActiveIndex(closest);
   };
 
+
+
   return (
-    <section className="py-16 md:py-24 bg-brand-bg/30">
+    <section className="py-8 md:py-12 bg-brand-bg/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-brand-text">
           Real Customer Results
@@ -85,7 +79,6 @@ export default function CustomerResults() {
             </div>
           ))}
         </div>
-
       </div>
 
       {/* Dot indicators */}
@@ -104,8 +97,10 @@ export default function CustomerResults() {
         ))}
       </div>
 
+
+
       {/* CTA overlay text */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 text-center">
         <div className="inline-block bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-6 shadow-brand border border-brand-primary/10">
           <h3 className="text-xl md:text-2xl font-bold text-brand-text">
             Get Glass Skin with Luwia
