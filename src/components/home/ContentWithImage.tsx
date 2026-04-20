@@ -6,12 +6,12 @@ export default function ContentWithImage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Image */}
-          <div className="relative h-[350px] md:h-[450px] rounded-2xl overflow-hidden shadow-brand-lg">
+          <div className="relative mx-auto w-full max-w-[180px] md:max-w-[240px] h-[180px] md:h-[240px] rounded-2xl overflow-hidden">
             <Image
-              src="/images/cream_with_cover.jpeg"
+              src="/images/luwia_men_crop.png"
               alt="Luwia Pearl Radiance Cream with packaging"
               fill
-              className="object-cover"
+              className="object-contain drop-shadow-xl animate-float"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>

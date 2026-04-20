@@ -103,6 +103,6 @@ Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect
 
   sliderImages: {
     cream: ["/images/cream_img_1.jpeg", "/images/cream_img_2.jpeg"],
-    ingredients: ["/images/niacinamide.jpeg", "/images/shea_butter.jpeg"],
+    ingredients: ["/images/luwia_cream_1.jpeg", "/images/luwia_cream_2.jpeg"],
   },
 };

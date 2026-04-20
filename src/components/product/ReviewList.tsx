@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Star } from "lucide-react";
-import type { Review } from "@/app/product/page";
+import type { Review } from "@/components/product/ProductInfo";
 
 interface ReviewListProps {
   reviews: Review[];
@@ -9,12 +10,14 @@ interface ReviewListProps {
 }
 
 export default function ReviewList({ reviews, loading }: ReviewListProps) {
-
+  const [showAll, setShowAll] = useState(false);
 
   // Calculate average rating
   const avgRating = reviews.length > 0
     ? (reviews.reduce((sum, r) => sum + r.star_rating, 0) / reviews.length).toFixed(1)
     : "0.0";
+
+  const displayedReviews = showAll ? reviews : reviews.slice(0, 3);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -37,7 +40,7 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
           Real Reviews
         </h2>
         <span className="text-sm text-brand-primary font-medium">
-          See All {reviews.length}
+          {reviews.length} Review{reviews.length !== 1 ? "s" : ""}
         </span>
       </div>
 
@@ -76,7 +79,7 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
         </div>
       ) : (
         <div className="space-y-4">
-          {reviews.map((review) => (
+          {displayedReviews.map((review) => (
             <div
               key={review.id}
               className="bg-gray-50/80 rounded-2xl p-5 border border-gray-100"
@@ -116,6 +119,16 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
               </p>
             </div>
           ))}
+
+          {/* See more / less toggle */}
+          {reviews.length > 3 && (
+            <button
+              onClick={() => setShowAll((prev) => !prev)}
+              className="w-full py-3 text-sm font-semibold text-brand-primary border border-brand-primary/20 rounded-full hover:bg-brand-bg transition-all"
+            >
+              {showAll ? "Show Less" : `See All ${reviews.length} Reviews`}
+            </button>
+          )}
         </div>
       )}
     </div>

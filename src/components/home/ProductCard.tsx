@@ -13,14 +13,16 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardProps) {
-  const { addToCart } = useCart();
   const router = useRouter();
 
   // If the product doesn't have an ID, it's the old default product.
   const productId = 'id' in product ? product.id : "default";
 
   const handleBuyNow = () => {
-    addToCart(productId, 1);
+    sessionStorage.setItem(
+      "luwia-direct-buy",
+      JSON.stringify({ productId, quantity: 1 })
+    );
     router.push("/checkout");
   };
 
@@ -36,7 +38,7 @@ export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardPr
         <div className="max-w-sm mx-auto">
           <div className="bg-white rounded-2xl overflow-hidden shadow-brand hover:shadow-brand-lg transition-shadow duration-300">
             {/* Image */}
-            <Link href="/product" className="block relative">
+            <Link href={'id' in product ? `/products/${product.id}` : "/products"} className="block relative">
               <div className="relative h-[320px] sm:h-[380px] overflow-hidden">
                 <Image
                   src={product.cardImage}
@@ -54,7 +56,7 @@ export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardPr
 
             {/* Content */}
             <div className="p-5">
-              <Link href="/product">
+              <Link href={'id' in product ? `/products/${product.id}` : "/products"}>
                 <h3 className="text-base font-semibold text-brand-text line-clamp-2 hover:text-brand-primary transition-colors">
                   {product.name}
                 </h3>

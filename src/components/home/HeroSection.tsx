@@ -41,7 +41,7 @@ export default function HeroSection() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/product"
+              href="/products"
               className="inline-flex items-center justify-center px-12 py-3.5 text-sm font-semibold text-white gradient-brand rounded-full hover:opacity-90 transition-opacity shadow-brand sm:w-auto w-full"
             >
               Shop Now

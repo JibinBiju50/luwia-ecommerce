@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { PRODUCT } from "@/lib/product";
+import type { Product } from "@/lib/products";
 
 type Section = "science" | "results" | "ingredients";
 
-export default function ProductDescription() {
+interface ProductDescriptionProps {
+  product: Product;
+}
+
+export default function ProductDescription({ product }: ProductDescriptionProps) {
   const [openSection, setOpenSection] = useState<Section | null>("science");
 
   const toggle = (section: Section) => {
@@ -36,7 +40,7 @@ export default function ProductDescription() {
           }`}
         >
           <div className="px-6 pb-5 text-sm text-gray-600 leading-relaxed whitespace-pre-line">
-            {PRODUCT.description}
+            {product.description}
           </div>
         </div>
       </div>
@@ -62,7 +66,7 @@ export default function ProductDescription() {
           }`}
         >
           <div className="px-6 pb-5 space-y-3">
-            {PRODUCT.visibleResults.map((result) => (
+            {product.visibleResults.map((result) => (
               <div
                 key={result.stat}
                 className="flex items-center gap-4 bg-brand-bg/50 rounded-xl px-5 py-4"
@@ -103,7 +107,7 @@ export default function ProductDescription() {
           }`}
         >
           <div className="px-6 pb-5 space-y-4">
-            {PRODUCT.ingredients.map((ingredient) => (
+            {product.ingredients.map((ingredient) => (
               <div key={ingredient.name}>
                 <h3 className="text-sm font-semibold text-brand-text">
                   {ingredient.name}

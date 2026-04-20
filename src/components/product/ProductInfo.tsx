@@ -1,20 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Share2, Minus, Plus, Truck, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { PRODUCT } from "@/lib/product";
-import type { Review } from "@/app/product/page";
+import type { Product } from "@/lib/products";
+
+export interface Review {
+  id: string;
+  reviewer_name: string;
+  star_rating: number;
+  review_text: string;
+  created_at: string;
+}
+
 interface ProductInfoProps {
+  product: Product;
   reviews: Review[];
 }
 
-export default function ProductInfo({ reviews }: ProductInfoProps) {
+export default function ProductInfo({ product, reviews }: ProductInfoProps) {
   const [selectedQty, setSelectedQty] = useState(1);
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
-  const { addToCart, updateQuantity, clearCart } = useCart();
+  const { addToCart } = useCart();
   const router = useRouter();
 
   const reviewCount = reviews?.length || 0;
@@ -22,26 +31,23 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
     ? reviews.reduce((sum, r) => sum + r.star_rating, 0) / reviewCount
     : 0;
 
-  // Automatically clear the cart when they return to the product page
-  // so abandoned checkouts don't leave lingering cart items.
-  useEffect(() => {
-    clearCart();
-  }, [clearCart]);
-
   const handleAddToCart = () => {
-    addToCart("default", selectedQty);
+    addToCart(product.id, selectedQty);
   };
 
   const handleBuyNow = () => {
-    // Overwrite the cart with the exact selected quantity before checkout
-    updateQuantity("default", selectedQty);
+    // Save direct-buy item to sessionStorage — doesn't touch the cart at all
+    sessionStorage.setItem(
+      "luwia-direct-buy",
+      JSON.stringify({ productId: product.id, quantity: selectedQty })
+    );
     router.push("/checkout");
   };
 
   const handleShare = async () => {
     const shareData = {
-      title: PRODUCT.name,
-      text: PRODUCT.shortDescription,
+      title: product.name,
+      text: product.shortDescription,
       url: window.location.href,
     };
 
@@ -59,7 +65,7 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
   };
 
   const decrementQty = () => setSelectedQty((q) => Math.max(1, q - 1));
-  const incrementQty = () => setSelectedQty((q) => Math.min(PRODUCT.maxQuantity, q + 1));
+  const incrementQty = () => setSelectedQty((q) => Math.min(product.maxQuantity, q + 1));
 
   return (
     <div className="space-y-5">
@@ -67,7 +73,7 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-brand-text leading-tight">
-            {PRODUCT.name}
+            {product.name}
           </h1>
           {/* Star rating */}
           <div className="flex items-center gap-2 mt-2">
@@ -121,13 +127,13 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
       {/* Price */}
       <div className="flex items-baseline gap-3">
         <span className="text-3xl font-bold text-brand-text">
-          {PRODUCT.currencySymbol}{PRODUCT.onlinePrice}
+          {product.currencySymbol}{product.onlinePrice}
         </span>
         <span className="text-lg text-gray-400 line-through">
-          {PRODUCT.currencySymbol}{PRODUCT.originalPrice}
+          {product.currencySymbol}{product.originalPrice}
         </span>
         <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-          Save {PRODUCT.currencySymbol}{PRODUCT.originalPrice - PRODUCT.onlinePrice}
+          Save {product.currencySymbol}{product.originalPrice - product.onlinePrice}
         </span>
       </div>
 
@@ -158,7 +164,7 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
           <button
             onClick={incrementQty}
             className="px-3 py-2 text-gray-500 hover:bg-gray-50 transition-colors disabled:opacity-30"
-            disabled={selectedQty >= PRODUCT.maxQuantity}
+            disabled={selectedQty >= product.maxQuantity}
             aria-label="Increase quantity"
           >
             <Plus className="w-4 h-4" />
@@ -190,7 +196,7 @@ export default function ProductInfo({ reviews }: ProductInfoProps) {
 
       {/* Short description */}
       <p className="text-sm text-gray-500 leading-relaxed pt-2">
-        {PRODUCT.shortDescription}
+        {product.shortDescription}
       </p>
     </div>
   );

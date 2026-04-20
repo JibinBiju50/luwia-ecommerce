@@ -8,15 +8,18 @@ import CustomerResults from "@/components/home/CustomerResults";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import CommunityJoin from "@/components/home/CommunityJoin";
 import { PRODUCT } from "@/lib/product";
+import { PRODUCTS } from "@/lib/products";
 
 export default function HomePage() {
+  const comboProduct = PRODUCTS.find((p) => p.id === "luwia-combo") || PRODUCTS[2];
+
   return (
     <>
       <SalesBanner />
       <HeroSection />
       <ImageSlider images={PRODUCT.sliderImages.cream} speed={25} />
-      <ProductCard />
-      <ImageSlider images={PRODUCT.sliderImages.ingredients} speed={28} />
+      <ProductCard product={comboProduct} />
+      <ImageSlider images={PRODUCT.sliderImages.ingredients} speed={28} objectFit="contain" height="aspect-[4/3] md:aspect-[16/9] bg-brand-light/20" />
       <ContentWithImage />
       <CustomerVideos />
       <CustomerResults />

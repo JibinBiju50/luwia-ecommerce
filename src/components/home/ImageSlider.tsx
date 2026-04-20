@@ -8,11 +8,13 @@ interface ImageSliderProps {
   images: string[];
   speed?: number;
   height?: string;
+  objectFit?: "cover" | "contain";
 }
 
 export default function ImageSlider({
   images,
   height = "h-[450px] md:h-[600px]",
+  objectFit = "cover",
 }: ImageSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -73,30 +75,13 @@ export default function ImageSlider({
               src={src}
               alt={`Product showcase ${i + 1}`}
               fill
-              className="object-cover"
+              className={`object-${objectFit}`}
               sizes="100vw"
             />
           </div>
         ))}
       </div>
 
-      {/* Left Arrow */}
-      <button
-        onClick={handlePrev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 p-2 text-white/80 hover:text-white hover:scale-110 transition-all md:opacity-0 md:group-hover:opacity-100 drop-shadow-md"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="w-8 h-8" />
-      </button>
-
-      {/* Right Arrow */}
-      <button
-        onClick={handleNext}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-white/80 hover:text-white hover:scale-110 transition-all md:opacity-0 md:group-hover:opacity-100 drop-shadow-md"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="w-8 h-8" />
-      </button>
 
       {/* Dot indicators */}
       {images.length > 1 && (
@@ -107,8 +92,8 @@ export default function ImageSlider({
               onClick={() => scrollToIndex(i)}
               className={`w-2 h-2 rounded-full transition-all ${
                 i === activeIndex
-                  ? "bg-white w-6"
-                  : "bg-white/50 hover:bg-white/70"
+                  ? "bg-white/40 w-6"
+                  : "bg-white/20 hover:bg-white/40"
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
