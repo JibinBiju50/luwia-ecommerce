@@ -13,6 +13,10 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
   const [isZoomed, setIsZoomed] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
+  // Swipe state
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
   const activeImage = safeImages[activeIndex];
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -20,6 +24,33 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setMousePos({ x, y });
+  };
+
+  const minSwipeDistance = 50;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setActiveIndex((prev) => (prev === safeImages.length - 1 ? 0 : prev + 1));
+      setIsZoomed(false);
+    }
+    if (isRightSwipe) {
+      setActiveIndex((prev) => (prev === 0 ? safeImages.length - 1 : prev - 1));
+      setIsZoomed(false);
+    }
   };
 
   return (
@@ -30,6 +61,9 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
         onClick={() => setIsZoomed(!isZoomed)}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setIsZoomed(false)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <Image
           src={activeImage}

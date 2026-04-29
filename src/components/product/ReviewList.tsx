@@ -17,7 +17,9 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
     ? (reviews.reduce((sum, r) => sum + r.star_rating, 0) / reviews.length).toFixed(1)
     : "0.0";
 
-  const displayedReviews = showAll ? reviews : reviews.slice(0, 3);
+  // Filter out reviews that don't have both name and text for display
+  const validReviews = reviews.filter(r => r.reviewer_name?.trim() && r.review_text?.trim());
+  const displayedReviews = showAll ? validReviews : validReviews.slice(0, 3);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -121,12 +123,12 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
           ))}
 
           {/* See more / less toggle */}
-          {reviews.length > 3 && (
+          {validReviews.length > 3 && (
             <button
               onClick={() => setShowAll((prev) => !prev)}
               className="w-full py-3 text-sm font-semibold text-brand-primary border border-brand-primary/20 rounded-full hover:bg-brand-bg transition-all"
             >
-              {showAll ? "Show Less" : `See All ${reviews.length} Reviews`}
+              {showAll ? "Show Less" : `See All ${validReviews.length} Reviews`}
             </button>
           )}
         </div>

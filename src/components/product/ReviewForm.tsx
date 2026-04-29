@@ -29,17 +29,8 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
     e.preventDefault();
     setError("");
 
-    // Validation
-    if (!name.trim()) {
-      setError("Please enter your name.");
-      return;
-    }
     if (rating === 0) {
       setError("Please select a star rating.");
-      return;
-    }
-    if (!reviewText.trim()) {
-      setError("Please write your review.");
       return;
     }
 
