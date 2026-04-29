@@ -3,6 +3,7 @@
 import { use } from "react";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { PRODUCTS } from "@/lib/products";
 import { supabase } from "@/lib/supabase-client";
 import ProductGallery from "@/components/product/ProductGallery";
@@ -11,6 +12,13 @@ import ProductDescription from "@/components/product/ProductDescription";
 import ReviewList from "@/components/product/ReviewList";
 import ReviewForm from "@/components/product/ReviewForm";
 import CustomerVideos from "@/components/home/CustomerVideos";
+
+import posterImg from "../../../../public/images/product_img_poster.jpeg";
+import ingredientsImg from "../../../../public/images/active_ingredients_img.jpeg";
+import testedImg from "../../../../public/images/tested_and_loved_img.jpeg";
+import trustedImg from "../../../../public/images/trusted_by_real_users_img.jpeg";
+import howToUseWomenImg from "../../../../public/images/HowToUse Women_page-0001.jpg";
+import howToUseMenImg from "../../../../public/images/HowToUse Men_page-0001.jpg";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -58,6 +66,23 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16 mb-16">
           <ProductGallery images={product.gallery} />
           <ProductInfo product={product} reviews={reviews} />
+        </div>
+
+        {/* Banner Images Section */}
+        <div className="flex flex-col gap-6 md:gap-10 mb-16">
+          <Image src={posterImg} alt="Product Poster" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
+          <Image src={ingredientsImg} alt="Active Ingredients" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
+          
+          {(product.id === "luwia-prime" || product.id === "luwia-combo") && (
+            <Image src={howToUseWomenImg} alt="How to Use (Women)" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
+          )}
+
+          {(product.id === "luwia-core" || product.id === "luwia-combo") && (
+            <Image src={howToUseMenImg} alt="How to Use (Men)" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
+          )}
+
+          <Image src={testedImg} alt="Tested and Loved" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
+          <Image src={trustedImg} alt="Trusted by Real Users" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
         </div>
 
         {/* Product Description */}

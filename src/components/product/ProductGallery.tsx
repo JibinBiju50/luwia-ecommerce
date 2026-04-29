@@ -17,8 +17,6 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  const activeImage = safeImages[activeIndex];
-
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -65,17 +63,26 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <Image
-          src={activeImage}
-          alt="Luwia product photo"
-          fill
-          className={`object-contain transition-transform duration-300 ${
-            isZoomed ? "scale-150" : "scale-100"
-          }`}
-          style={isZoomed ? { transformOrigin: `${mousePos.x}% ${mousePos.y}%` } : undefined}
-          priority
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
+        <div
+          className="flex w-full h-full transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+        >
+          {safeImages.map((src, i) => (
+            <div key={src} className="relative w-full h-full flex-shrink-0">
+              <Image
+                src={src}
+                alt={`Luwia product photo ${i + 1}`}
+                fill
+                className={`object-contain transition-transform duration-300 ${
+                  isZoomed && i === activeIndex ? "scale-150" : "scale-100"
+                }`}
+                style={isZoomed && i === activeIndex ? { transformOrigin: `${mousePos.x}% ${mousePos.y}%` } : undefined}
+                priority={i === 0}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          ))}
+        </div>
 
         {/* Tags */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
