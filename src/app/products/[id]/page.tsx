@@ -11,7 +11,10 @@ import ProductInfo, { type Review } from "@/components/product/ProductInfo";
 import ProductDescription from "@/components/product/ProductDescription";
 import ReviewList from "@/components/product/ReviewList";
 import ReviewForm from "@/components/product/ReviewForm";
+import ProductFAQ from "@/components/product/ProductFAQ";
+import ProductFeatures from "@/components/product/ProductFeatures";
 import CustomerVideos from "@/components/home/CustomerVideos";
+import SalesBanner from "@/components/home/SalesBanner";
 
 import posterImg from "../../../../public/images/product_img_poster.jpeg";
 import ingredientsImg from "../../../../public/images/active_ingredients_img.jpeg";
@@ -52,6 +55,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   return (
     <main className="bg-white min-h-screen">
+      <SalesBanner />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-400 mb-6 flex items-center gap-2">
@@ -69,7 +73,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
 
         {/* Banner Images Section */}
-        <div className="flex flex-col gap-6 md:gap-10 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-10 mb-16 max-w-5xl mx-auto">
           <Image src={posterImg} alt="Product Poster" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
           <Image src={ingredientsImg} alt="Active Ingredients" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
           
@@ -84,6 +88,9 @@ export default function ProductPage({ params }: ProductPageProps) {
           <Image src={testedImg} alt="Tested and Loved" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
           <Image src={trustedImg} alt="Trusted by Real Users" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
         </div>
+
+        {/* Features Section */}
+        <ProductFeatures />
 
         {/* Product Description */}
         <div className="mb-16">
@@ -103,6 +110,10 @@ export default function ProductPage({ params }: ProductPageProps) {
           <ReviewList reviews={reviews} loading={loadingReviews} />
           <ReviewForm onReviewSubmitted={handleReviewSubmitted} />
         </div>
+      </div>
+      {/* FAQ Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+        <ProductFAQ />
       </div>
     </main>
   );

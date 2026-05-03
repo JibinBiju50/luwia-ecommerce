@@ -12,6 +12,7 @@ export interface Review {
   reviewer_name: string;
   star_rating: number;
   review_text: string;
+  image_urls: string[];
   created_at: string;
 }
 

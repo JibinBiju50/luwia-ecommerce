@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 const navLinks = [
@@ -16,6 +16,19 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { quantity } = useCart();
+
+  const [showPopup, setShowPopup] = useState(false);
+  const prevQuantityRef = useRef(quantity);
+
+  useEffect(() => {
+    if (quantity > prevQuantityRef.current) {
+      setShowPopup(true);
+      const timer = setTimeout(() => setShowPopup(false), 2500);
+      prevQuantityRef.current = quantity;
+      return () => clearTimeout(timer);
+    }
+    prevQuantityRef.current = quantity;
+  }, [quantity]);
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-brand-primary/10">
@@ -53,11 +66,18 @@ export default function Navbar() {
               className="relative p-2 text-gray-700 hover:text-brand-primary transition-colors"
               aria-label="Shopping cart"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingCart className="w-6 h-6" />
               {quantity > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 bg-brand-primary text-white text-[10px] font-bold w-[18px] h-[18px] rounded-full flex items-center justify-center">
                   {quantity}
                 </span>
+              )}
+
+              {/* Item Added Popup */}
+              {showPopup && (
+                <div className="absolute top-full mt-3 right-0 bg-brand-text text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap animate-fade-in-up before:content-[''] before:absolute before:-top-1 before:right-3 before:w-2.5 before:h-2.5 before:bg-brand-text before:rotate-45">
+                  Item added to cart!
+                </div>
               )}
             </Link>
 
