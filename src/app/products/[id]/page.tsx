@@ -74,7 +74,9 @@ export default function ProductPage({ params }: ProductPageProps) {
 
         {/* Banner Images Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-10 mb-16 max-w-5xl mx-auto">
-          <Image src={posterImg} alt="Product Poster" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
+          {product.id !== "luwia-core" && (
+            <Image src={posterImg} alt="Product Poster" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
+          )}
           <Image src={ingredientsImg} alt="Active Ingredients" className="w-full h-auto rounded-2xl shadow-sm" placeholder="blur" />
           
           {(product.id === "luwia-prime" || product.id === "luwia-combo") && (
