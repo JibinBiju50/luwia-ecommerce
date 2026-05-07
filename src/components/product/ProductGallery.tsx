@@ -155,8 +155,11 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
           onClick={() => setIsLightboxOpen(false)}
         >
           <button 
-            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/70 hover:text-white transition-colors bg-black/20 hover:bg-black/40 rounded-full p-2"
-            onClick={() => setIsLightboxOpen(false)}
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/70 hover:text-white transition-colors bg-black/20 hover:bg-black/40 rounded-full p-2 z-[110]"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLightboxOpen(false);
+            }}
             aria-label="Close lightbox"
           >
             <X className="w-8 h-8" />

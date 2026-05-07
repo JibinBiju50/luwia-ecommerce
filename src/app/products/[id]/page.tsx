@@ -62,8 +62,12 @@ export default function ProductPage({ params }: ProductPageProps) {
 
         {/* Product Section */}
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16 mb-16">
-          <ProductGallery images={product.gallery} />
-          <ProductInfo product={product} reviews={reviews} />
+          <div className="min-w-0">
+            <ProductGallery images={product.gallery} />
+          </div>
+          <div className="min-w-0">
+            <ProductInfo product={product} reviews={reviews} />
+          </div>
         </div>
 
 

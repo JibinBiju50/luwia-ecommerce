@@ -23,7 +23,7 @@ export type Product = {
 export const PRODUCTS: Product[] = [
   {
     id: "luwia-prime",
-    name: "Luwia Prime",
+    name: "Luwia Prime - for women (Skin brightening & Repair)",
     originalPrice: 850,
     onlinePrice: 680,
     codPrice: 750,
@@ -57,7 +57,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "luwia-core",
-    name: "Luwia Core",
+    name: "Luwia Core - for Men (Skin brightening and Repair)",
     originalPrice: 850,
     onlinePrice: 680,
     codPrice: 750,
@@ -90,7 +90,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "luwia-combo",
-    name: "Luwia Ultimate Combo",
+    name: "Luwia ultimate Combo - for Men and Women",
     originalPrice: 1700,
     onlinePrice: 1149,
     codPrice: 1500,

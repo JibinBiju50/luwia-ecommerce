@@ -9,12 +9,6 @@ export default function SalesBanner() {
   const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 45, seconds: 12 });
 
   useEffect(() => {
-    // Check if banner was dismissed in this session
-    const wasDismissed = sessionStorage.getItem("luwia-sale-banner-dismissed");
-    if (wasDismissed) {
-      setDismissed(true);
-      return;
-    }
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -36,7 +30,6 @@ export default function SalesBanner() {
 
   const handleDismiss = () => {
     setDismissed(true);
-    sessionStorage.setItem("luwia-sale-banner-dismissed", "true");
   };
 
   if (dismissed) return null;
@@ -44,24 +37,22 @@ export default function SalesBanner() {
   const pad = (n: number) => n.toString().padStart(2, "0");
 
   return (
-    <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white">
-      <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-center gap-3 text-xs sm:text-sm">
-        <span className="font-medium">Hurry Up</span>
-        <span className="text-white/60">•</span>
-        <span className="text-white/90">Sale ends in</span>
-        <div className="flex items-center gap-1 font-mono font-bold">
-          <span className="bg-white/20 rounded px-1.5 py-0.5">{pad(timeLeft.hours)}</span>
-          <span className="text-white/60">:</span>
-          <span className="bg-white/20 rounded px-1.5 py-0.5">{pad(timeLeft.minutes)}</span>
-          <span className="text-white/60">:</span>
-          <span className="bg-white/20 rounded px-1.5 py-0.5">{pad(timeLeft.seconds)}</span>
+    <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white shadow-[0_0_35px_rgba(139,143,191,1)] z-40 font-serif">
+      <div className="max-w-7xl mx-auto px-8 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base font-bold tracking-wide">
+        <span className="font-black italic uppercase tracking-widest text-yellow-300 drop-shadow-[0_0_15px_rgba(253,224,71,1)] animate-pulse text-lg sm:text-xl">
+          Upto 20% Offer
+        </span>
+        <span className="text-white/60 hidden sm:inline">•</span>
+        <div className="flex items-center gap-2">
+          <span className="text-white/95">Hurry Up! Sale ends in</span>
+          <div className="flex items-center gap-1 font-mono font-bold text-base sm:text-lg">
+            <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.hours)}</span>
+            <span className="text-white/80">:</span>
+            <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.minutes)}</span>
+            <span className="text-white/80">:</span>
+            <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.seconds)}</span>
+          </div>
         </div>
-        <Link
-          href="/product"
-          className="ml-2 bg-white text-brand-primary px-4 py-1 rounded-full text-xs font-semibold hover:bg-white/90 transition-colors"
-        >
-          Shop Now
-        </Link>
         <button
           onClick={handleDismiss}
           className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/70 hover:text-white transition-colors"
