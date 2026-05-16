@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { Star, MessageSquare, ImagePlus, X, Loader2 } from "lucide-react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { Star, MessageSquare, ImagePlus, X, Loader2, LogIn } from "lucide-react";
 import { supabase } from "@/lib/supabase-client";
+import { useAuth } from "@/context/AuthContext";
 
 interface Review {
   id: string;
@@ -28,6 +29,7 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const BUCKET = "review-images";
 
 export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
+  const { user, openAuthModal } = useAuth();
   const [name, setName] = useState("");
   const [rating, setRating] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
@@ -38,6 +40,19 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
   const [error, setError] = useState("");
   const [imageError, setImageError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Pre-fill name from Google profile or email
+  useEffect(() => {
+    if (user && !name) {
+      const displayName =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.email?.split("@")[0] ||
+        "";
+      setName(displayName);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const addImages = useCallback((files: File[]) => {
     setImageError("");
@@ -103,6 +118,11 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
     e.preventDefault();
     setError("");
 
+    if (!user) {
+      openAuthModal();
+      return;
+    }
+
     if (rating === 0) {
       setError("Please select a star rating.");
       return;
@@ -111,7 +131,7 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
     setSubmitting(true);
 
     try {
-      // 1. Insert the review row first to get an ID for the storage path
+      // 1. Insert the review row — user_id links it to the signed-in account
       const { data: inserted, error: dbError } = await supabase
         .from("reviews")
         .insert({
@@ -119,6 +139,7 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
           star_rating: rating,
           review_text: reviewText.trim(),
           image_urls: [],
+          user_id: user.id,
         })
         .select()
         .single();
@@ -154,6 +175,33 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
       setSubmitting(false);
     }
   };
+
+  // ── Auth gate: show sign-in prompt if not logged in ─────────
+  if (!user) {
+    return (
+      <div className="border border-gray-100 rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[260px] gap-4">
+        <div className="w-12 h-12 rounded-full flex items-center justify-center mb-1"
+          style={{ background: "linear-gradient(135deg, #f0f0f8 0%, #e8e8f4 100%)" }}>
+          <MessageSquare className="w-5 h-5 text-brand-primary" />
+        </div>
+        <div>
+          <h3 className="text-base font-semibold text-brand-text mb-1">Share Your Experience</h3>
+          <p className="text-sm text-gray-400 max-w-[220px]">
+            Sign in to leave a review and help others discover Luwia.
+          </p>
+        </div>
+        <button
+          id="review-signin-btn"
+          onClick={openAuthModal}
+          className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-full transition-all hover:opacity-90"
+          style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+        >
+          <LogIn className="w-4 h-4" />
+          Sign In to Review
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="border border-gray-100 rounded-2xl p-6">

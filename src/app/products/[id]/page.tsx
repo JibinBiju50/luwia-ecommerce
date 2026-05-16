@@ -1,7 +1,7 @@
 "use client";
 
 import { use } from "react";
-import { notFound } from "next/navigation";
+import { notFound, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { PRODUCTS } from "@/lib/products";
@@ -15,6 +15,7 @@ import ProductFAQ from "@/components/product/ProductFAQ";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import CustomerVideos from "@/components/home/CustomerVideos";
 import SalesBanner from "@/components/home/SalesBanner";
+import MagicLinkModal from "@/components/auth/MagicLinkModal";
 
 
 interface ProductPageProps {
@@ -24,6 +25,7 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const { id } = use(params);
   const product = PRODUCTS.find((p) => p.id === id);
+  const pathname = usePathname();
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
@@ -83,6 +85,39 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
       </div>
 
+      {/* Cream Bar Infographic — product-specific, full-width section */}
+      {(product.id === "luwia-core" || product.id === "luwia-prime") && (
+        <section className="w-full py-10 md:py-16 px-4 sm:px-6 lg:px-8"
+          style={{ background: "linear-gradient(135deg, #fdf6ee 0%, #fef3e8 50%, #fdf6ee 100%)" }}>
+          <div className="max-w-2xl mx-auto">
+            {/* Decorative top label */}
+            <p className="text-center text-xs font-semibold tracking-[0.2em] uppercase text-orange-400 mb-4">
+              Clinically Tested Results
+            </p>
+
+            {/* Image container */}
+            <div className="relative rounded-3xl overflow-hidden shadow-xl ring-1 ring-orange-100">
+              <Image
+                src={
+                  product.id === "luwia-core"
+                    ? "/images/men_cream_bar.jpeg"
+                    : "/images/women_cream_bar.jpeg"
+                }
+                alt={
+                  product.id === "luwia-core"
+                    ? "Luwia Core — Tested & Loved visible results for men"
+                    : "Luwia Prime — Tested & Loved visible results for women"
+                }
+                width={1080}
+                height={1080}
+                className="w-full h-auto object-cover"
+                priority={false}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Videos Section — full width */}
       <CustomerVideos />
 
@@ -97,6 +132,9 @@ export default function ProductPage({ params }: ProductPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <ProductFAQ />
       </div>
+
+      {/* Magic link modal for Meta Ads conversion */}
+      <MagicLinkModal returnPath={pathname} />
     </main>
   );
 }

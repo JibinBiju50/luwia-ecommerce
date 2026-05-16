@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LogOut, ChevronDown } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -16,9 +17,23 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { quantity } = useCart();
+  const { user, signOut, openAuthModal } = useAuth();
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   const [showPopup, setShowPopup] = useState(false);
   const prevQuantityRef = useRef(quantity);
+
+  // Close user dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (quantity > prevQuantityRef.current) {
@@ -59,8 +74,51 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Cart + Mobile Toggle */}
-          <div className="flex items-center gap-4">
+          {/* Cart + Auth + Mobile Toggle */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Sign In / User Avatar */}
+            {user ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  id="navbar-user-menu-btn"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-primary/20 hover:border-brand-primary/40 hover:bg-brand-bg transition-all"
+                  aria-label="User menu"
+                >
+                  <span className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                    style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}>
+                    {user.email?.[0].toUpperCase() ?? <User className="w-3 h-3" />}
+                  </span>
+                  <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                    <div className="px-3 py-2 border-b border-gray-50">
+                      <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                    </div>
+                    <button
+                      id="navbar-signout-btn"
+                      onClick={async () => { setUserMenuOpen(false); await signOut(); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-red-500 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                id="navbar-signin-btn"
+                onClick={openAuthModal}
+                className="hidden md:flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white rounded-full transition-all"
+                style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+              >
+                Sign In
+              </button>
+            )}
+
             <Link
               href="/cart"
               className="relative p-2 text-gray-700 hover:text-brand-primary transition-colors"
@@ -95,7 +153,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <nav className="px-4 pb-4 space-y-1 bg-white/95 backdrop-blur-lg border-t border-brand-primary/10">
@@ -109,6 +167,25 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          {/* Sign In / Sign Out in mobile menu */}
+          {user ? (
+            <button
+              onClick={async () => { setMobileOpen(false); await signOut(); }}
+              className="w-full flex items-center gap-2 py-3 px-3 text-sm font-medium text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
+          ) : (
+            <button
+              id="mobile-signin-btn"
+              onClick={() => { setMobileOpen(false); openAuthModal(); }}
+              className="w-full py-3 px-3 text-sm font-semibold text-white rounded-xl text-left"
+              style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+            >
+              Sign In
+            </button>
+          )}
         </nav>
       </div>
     </header>

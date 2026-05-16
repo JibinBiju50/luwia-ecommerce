@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Heart, Share2, Minus, Plus, Truck, Star, Flame, Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import type { Product } from "@/lib/products";
 
 export interface Review {
@@ -26,6 +27,7 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
   const { addToCart } = useCart();
+  const { user, openMagicLinkModal, pendingCartAction } = useAuth();
   const router = useRouter();
 
   const reviewCount = reviews?.length || 0;
@@ -34,6 +36,12 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
     : 0;
 
   const handleAddToCart = () => {
+    if (!user) {
+      // Store the cart action — fires automatically after sign-in
+      pendingCartAction.current = () => addToCart(product.id, selectedQty);
+      openMagicLinkModal();
+      return;
+    }
     addToCart(product.id, selectedQty);
   };
 
@@ -84,6 +92,7 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-brand-text leading-tight break-words">
             {product.name}
           </h1>
+
           {/* Star rating */}
           <div className="flex items-center gap-2 mt-2">
             <div className="flex items-center gap-0.5">
@@ -131,6 +140,31 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
             <Heart className={`w-4 h-4 ${liked ? "fill-current" : ""}`} />
           </button>
         </div>
+      </div>
+
+      {/* Characteristic tags banner — full width */}
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 -mt-2">
+        {[
+          "All Skin Types",
+          "Brightens Skin Tone",
+          "Fades Dark Spots",
+          "Deep Moisturization",
+          "Repairs Skin Barrier",
+          "Dermatologically Tested",
+        ].map((tag) => (
+          <span
+            key={tag}
+            className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap"
+            style={{
+              background: "linear-gradient(135deg, #fef9f4 0%, #fdf3e7 100%)",
+              color: "#7c5c3a",
+              border: "1px solid #f0d9bc",
+              boxShadow: "0 1px 3px rgba(180,130,60,0.08)",
+            }}
+          >
+            {tag}
+          </span>
+        ))}
       </div>
 
       {/* Price */}

@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { PRODUCTS, Product } from "@/lib/products";
 import { PRODUCT } from "@/lib/product";
+import { supabase } from "@/lib/supabase-client";
 
 export interface CartItem {
   productId: string;
@@ -73,6 +74,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ items }));
     }
   }, [items, hydrated]);
+
+  // Clear cart on sign-out
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
+        setItems([]);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   const addToCart = useCallback((productId: string, qty: number = 1) => {
     setItems((prevItems) => {
