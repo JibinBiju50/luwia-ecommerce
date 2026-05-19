@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
               Click the button below to securely sign in. This link expires in 1 hour and can only be used once.
             </p>
             <a href="${magicLink}"
-               style="display: inline-block; background: linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%); color: white; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 32px; border-radius: 50px;">
+               style="display: inline-block; background: linear-gradient(135deg, #1E3A8A 0%, #172554 100%); color: white; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 32px; border-radius: 50px;">
               Sign In to Luwia →
             </a>
             <p style="color: #9CA3AF; font-size: 12px; margin-top: 32px; line-height: 1.6;">
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
               This link will expire in 1 hour.
             </p>
             <hr style="border: none; border-top: 1px solid #F3F4F6; margin: 28px 0;" />
-            <p style="color: #8B8FBF; font-size: 13px; font-weight: 600; margin: 0;">
+            <p style="color: #1E3A8A; font-size: 13px; font-weight: 600; margin: 0;">
               Luwia Skin Science — Glow confidently. ✨
             </p>
           </div>

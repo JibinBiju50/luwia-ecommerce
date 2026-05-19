@@ -220,7 +220,7 @@ export default function CheckoutPage() {
           ondismiss: () => setProcessing(false),
         },
         prefill: { name: form.fullName, email: form.email, contact: form.phone },
-        theme: { color: "#8B8FBF" },
+        theme: { color: "#1E3A8A" },
       };
 
       const rzp = new window.Razorpay(options);

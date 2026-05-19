@@ -27,12 +27,12 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
+    <footer className="bg-brand-primary border-t border-brand-primary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Shop */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Shop
             </h3>
             <ul className="space-y-3">
@@ -40,7 +40,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-600 hover:text-brand-primary transition-colors duration-200"
+                    className="text-sm text-white/80 hover:text-white transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -51,7 +51,7 @@ export default function Footer() {
 
           {/* Luwia */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Luwia
             </h3>
             <ul className="space-y-3">
@@ -59,7 +59,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-600 hover:text-brand-primary transition-colors duration-200"
+                    className="text-sm text-white/80 hover:text-white transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -70,7 +70,7 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Legal
             </h3>
             <ul className="space-y-3">
@@ -78,7 +78,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-600 hover:text-brand-primary transition-colors duration-200"
+                    className="text-sm text-white/80 hover:text-white transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -89,14 +89,14 @@ export default function Footer() {
 
           {/* Follow Us */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
               Follow Us
             </h3>
             <a
               href="https://www.instagram.com/getluwia.in?igsh=MTVoOXZwZTk1YzBuZw=="
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-brand-primary transition-colors duration-200"
+              className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors duration-200"
             >
               <InstagramIcon className="w-5 h-5" />
               <span>Instagram</span>
@@ -105,10 +105,10 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-12 pt-8 border-t border-gray-200 text-center">
-          <p className="text-sm font-medium text-gray-900">Luwia Products</p>
-          <p className="text-xs text-gray-500 mt-1">Kottayam, Kerala, India</p>
-          <p className="text-xs text-gray-400 mt-4">
+        <div className="mt-12 pt-8 border-t border-white/20 text-center">
+          <p className="text-sm font-medium text-white">Luwia Products</p>
+          <p className="text-xs text-white/70 mt-1">Kottayam, Kerala, India</p>
+          <p className="text-xs text-white/60 mt-4">
             © {new Date().getFullYear()} LUWIA SKIN SCIENCE. ALL RIGHTS RESERVED.
           </p>
         </div>

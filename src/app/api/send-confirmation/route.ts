@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       html: `
         <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #F8F7FC;">
           <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(139,143,191,0.1);">
-            <h1 style="color: #8B8FBF; font-size: 24px; margin-bottom: 8px;">Thank you, ${customerName}! ✨</h1>
+            <h1 style="color: #1E3A8A; font-size: 24px; margin-bottom: 8px;">Thank you, ${customerName}! ✨</h1>
             <p style="color: #6B7280; font-size: 14px;">Your order has been placed successfully.</p>
 
             <div style="background: #F8F7FC; border-radius: 12px; padding: 20px; margin: 24px 0;">
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
               You'll receive tracking details once your order is dispatched. Estimated delivery: 3–7 business days.
             </p>
 
-            <p style="color: #8B8FBF; font-size: 14px; font-weight: 600; margin-top: 24px;">
+            <p style="color: #1E3A8A; font-size: 14px; font-weight: 600; margin-top: 24px;">
               Glow confidently. Glow with Luwia. ✨
             </p>
           </div>

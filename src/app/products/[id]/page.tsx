@@ -87,9 +87,9 @@ export default function ProductPage({ params }: ProductPageProps) {
 
       {/* Cream Bar Infographic — product-specific, full-width section */}
       {(product.id === "luwia-core" || product.id === "luwia-prime") && (
-        <section className="w-full py-10 md:py-16 px-4 sm:px-6 lg:px-8"
+        <section className="w-full py-6 md:py-8 px-4 sm:px-6 lg:px-8"
           style={{ background: "linear-gradient(135deg, #fdf6ee 0%, #fef3e8 50%, #fdf6ee 100%)" }}>
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-xl lg:max-w-lg mx-auto">
             {/* Decorative top label */}
             <p className="text-center text-xs font-semibold tracking-[0.2em] uppercase text-orange-400 mb-4">
               Clinically Tested Results

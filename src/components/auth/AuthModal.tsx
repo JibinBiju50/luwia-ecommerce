@@ -103,7 +103,7 @@ export default function AuthModal() {
           <div className="text-center mb-6">
             <div
               className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center mb-3"
-              style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+              style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
             >
               <span className="text-white font-bold text-lg">L</span>
             </div>
@@ -157,7 +157,7 @@ export default function AuthModal() {
                 id="auth-magic-link-btn"
                 onClick={() => setView("magic-link")}
                 className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold text-white transition-all"
-                style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+                style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
               >
                 <Mail className="w-4 h-4" />
                 Sign in with Email Link
@@ -205,7 +205,7 @@ export default function AuthModal() {
                   type="submit"
                   disabled={status === "loading" || !email}
                   className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white rounded-xl transition-all disabled:opacity-60"
-                  style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+                  style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
                 >
                   {status === "loading" ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

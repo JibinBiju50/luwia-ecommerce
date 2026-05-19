@@ -86,7 +86,7 @@ export default function Navbar() {
                   aria-label="User menu"
                 >
                   <span className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                    style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}>
+                    style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}>
                     {user.email?.[0].toUpperCase() ?? <User className="w-3 h-3" />}
                   </span>
                   <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
@@ -113,7 +113,7 @@ export default function Navbar() {
                 id="navbar-signin-btn"
                 onClick={openAuthModal}
                 className="hidden md:flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white rounded-full transition-all"
-                style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+                style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
               >
                 Sign In
               </button>
@@ -181,7 +181,7 @@ export default function Navbar() {
               id="mobile-signin-btn"
               onClick={() => { setMobileOpen(false); openAuthModal(); }}
               className="w-full py-3 px-3 text-sm font-semibold text-white rounded-xl text-left"
-              style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+              style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
             >
               Sign In
             </button>

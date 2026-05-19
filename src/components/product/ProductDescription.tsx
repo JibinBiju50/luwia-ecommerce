@@ -39,7 +39,7 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
             openSection === "science" ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="px-6 pb-5 text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+          <div className="px-4 pb-5 text-xs md:text-sm text-gray-600 leading-relaxed whitespace-pre-line">
             {product.description}
           </div>
         </div>
@@ -103,16 +103,20 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
         </button>
         <div
           className={`overflow-hidden transition-all duration-300 ${
-            openSection === "ingredients" ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+            openSection === "ingredients" ? "max-h-[1500px] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="px-6 pb-5 space-y-4">
+          <div className="px-6 pb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {product.ingredients.map((ingredient) => (
-              <div key={ingredient.name}>
-                <h3 className="text-sm font-semibold text-brand-text">
+              <div 
+                key={ingredient.name}
+                className="bg-brand-bg/30 border border-brand-primary/10 rounded-xl p-4 hover:shadow-sm hover:border-brand-primary/20 transition-all duration-300"
+              >
+                <h3 className="text-sm font-semibold text-brand-text flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-primary"></span>
                   {ingredient.name}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                <p className="text-xs text-gray-500 mt-1.5 leading-relaxed pl-3.5">
                   {ingredient.description}
                 </p>
               </div>

@@ -194,7 +194,7 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
           id="review-signin-btn"
           onClick={openAuthModal}
           className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-full transition-all hover:opacity-90"
-          style={{ background: "linear-gradient(135deg, #8B8FBF 0%, #6B6FA8 100%)" }}
+          style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
         >
           <LogIn className="w-4 h-4" />
           Sign In to Review
