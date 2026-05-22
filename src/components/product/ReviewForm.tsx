@@ -15,6 +15,7 @@ interface Review {
 }
 
 interface ReviewFormProps {
+  productId: string;
   onReviewSubmitted: (review: Review) => void;
 }
 
@@ -28,7 +29,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const BUCKET = "review-images";
 
-export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
+export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormProps) {
   const { user, openAuthModal } = useAuth();
   const [name, setName] = useState("");
   const [rating, setRating] = useState(0);
@@ -140,6 +141,7 @@ export default function ReviewForm({ onReviewSubmitted }: ReviewFormProps) {
           review_text: reviewText.trim(),
           image_urls: [],
           user_id: user.id,
+          product_id: productId,
         })
         .select()
         .single();

@@ -36,12 +36,13 @@ export default function ProductPage({ params }: ProductPageProps) {
       const { data } = await supabase
         .from("reviews")
         .select("*")
+        .eq("product_id", id)
         .order("created_at", { ascending: false });
       setReviews((data as Review[]) || []);
       setLoadingReviews(false);
     }
     fetchReviews();
-  }, []);
+  }, [id]);
 
   if (!product) return notFound();
 
@@ -125,7 +126,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
           <ReviewList reviews={reviews} loading={loadingReviews} />
-          <ReviewForm onReviewSubmitted={handleReviewSubmitted} />
+          <ReviewForm productId={product.id} onReviewSubmitted={handleReviewSubmitted} />
         </div>
       </div>
       {/* FAQ Section */}

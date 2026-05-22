@@ -76,6 +76,14 @@ Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect
       name: "DM Water",
       description: "Purified base for safe formulation",
     },
+    {
+      name: "Shea Butter",
+      description: "Moisturizes, nourishes, and soothes skin"
+    },
+    {
+      name: "Licorice root extract",
+      description: "brightens skin and reduces hyperpigmentation"
+    }
   ],
 
   visibleResults: [
@@ -101,8 +109,4 @@ Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect
     "/images/customer_review_4.jpeg",
   ],
 
-  sliderImages: {
-    cream: ["/images/cream_img_1.jpeg", "/images/cream_img_2.jpeg"],
-    ingredients: ["/images/luwia_cream_1.jpeg", "/images/luwia_cream_2.jpeg"],
-  },
 };

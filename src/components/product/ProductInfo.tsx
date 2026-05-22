@@ -258,13 +258,13 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
       </div>
 
       {/* All India Shipping */}
-      <div className="flex items-center justify-center gap-2 pt-4 pb-2 text-gray-700">
+      <div className="flex items-center justify-center gap-2 pt-4 pb-2 text-gray-700 ">
         <Truck className="w-5 h-5 text-gray-500" />
         <span className="text-sm font-bold tracking-wide uppercase">All India Shipping</span>
       </div>
 
       {/* Payment Methods */}
-      <div className="pt-2 pb-2">
+      <div className="pt-2 pb-2 ">
         <Image
           src="/images/payment_method.png"
           alt="Secure Payment Methods"
