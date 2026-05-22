@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Heart, Share2, Minus, Plus, Truck, Star, Flame, Eye } from "lucide-react";
+import confetti from "canvas-confetti";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import type { Product } from "@/lib/products";
@@ -26,7 +27,7 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
   const [selectedQty, setSelectedQty] = useState(1);
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, couponApplied, applyCoupon } = useCart();
   const { user, openMagicLinkModal, pendingCartAction } = useAuth();
   const router = useRouter();
 
@@ -79,6 +80,16 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
     } catch {
       // User cancelled or error
     }
+  };
+
+  const handleApplyCoupon = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#1E3A8A', '#60A5FA', '#FFFFFF']
+    });
+    applyCoupon();
   };
 
   const decrementQty = () => setSelectedQty((q) => Math.max(1, q - 1));
@@ -170,15 +181,47 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
       {/* Price */}
       <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
         <span className="text-3xl font-bold text-brand-text">
-          {product.currencySymbol}{product.onlinePrice}
+          {product.currencySymbol}{couponApplied ? product.onlinePrice : product.originalPrice}
         </span>
-        <span className="text-lg text-gray-400 line-through">
-          {product.currencySymbol}{product.originalPrice}
-        </span>
-        <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-          Save {product.currencySymbol}{product.originalPrice - product.onlinePrice}
-        </span>
+        {couponApplied && (
+          <span className="text-lg text-gray-400 line-through">
+            {product.currencySymbol}{product.originalPrice}
+          </span>
+        )}
+        {couponApplied && (
+          <span className="text-sm font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+            Save {product.currencySymbol}{product.originalPrice - product.onlinePrice}
+          </span>
+        )}
       </div>
+
+      {/* Coupon Box */}
+      {!couponApplied ? (
+        <div className="p-4 border border-brand-primary/20 bg-brand-light/5 rounded-xl flex items-center justify-between shadow-sm transition-all hover:shadow-md">
+          <div>
+            <p className="text-sm font-bold text-brand-text flex items-center gap-1.5">
+              <span className="text-base">🎁</span> Have a coupon?
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">Apply code <span className="font-bold text-brand-primary">LUWIAGLOW20</span> for 20% OFF!</p>
+          </div>
+          <button
+            onClick={handleApplyCoupon}
+            className="px-4 py-2 text-xs font-bold text-white bg-brand-primary rounded-lg shadow-sm hover:opacity-90 transition-opacity flex-shrink-0"
+          >
+            Apply
+          </button>
+        </div>
+      ) : (
+        <div className="p-4 border border-green-200 bg-green-50 rounded-xl flex items-center justify-between shadow-sm">
+          <div className="flex items-center gap-3 text-green-700">
+            <span className="text-2xl animate-bounce">🎉</span>
+            <div>
+              <p className="text-sm font-bold">LUWIAGLOW20 Applied!</p>
+              <p className="text-xs text-green-600">You got a 20% discount on this product.</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Free Delivery */}
       <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap text-green-600 bg-green-50/50 px-3 sm:px-4 py-2.5 rounded-xl">

@@ -13,6 +13,9 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[];
   quantity: number; // Total quantity of all items
+  couponApplied: boolean;
+  applyCoupon: () => void;
+  removeCoupon: () => void;
   addToCart: (productId: string, qty?: number) => void;
   updateQuantity: (productId: string, qty: number) => void;
   clearCart: () => void;
@@ -40,6 +43,7 @@ const findProduct = (id: string) => {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [couponApplied, setCouponApplied] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
   // Hydrate from localStorage on mount
@@ -51,6 +55,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed.items)) {
           setItems(parsed.items);
+        }
+        if (typeof parsed.couponApplied === "boolean") {
+          setCouponApplied(parsed.couponApplied);
         }
       } else {
         // Fallback: migrate from old cart
@@ -71,9 +78,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Persist to localStorage on change
   useEffect(() => {
     if (hydrated) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ items }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, couponApplied }));
     }
-  }, [items, hydrated]);
+  }, [items, couponApplied, hydrated]);
 
   // Clear cart on sign-out
   useEffect(() => {
@@ -116,19 +123,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems([]);
   }, []);
 
+  const applyCoupon = useCallback(() => setCouponApplied(true), []);
+  const removeCoupon = useCallback(() => setCouponApplied(false), []);
+
   const getOnlineTotal = useCallback(() => {
     return items.reduce((total, item) => {
       const product = findProduct(item.productId);
-      return total + (product ? product.onlinePrice * item.quantity : 0);
+      if (!product) return total;
+      const price = couponApplied ? product.onlinePrice : product.originalPrice;
+      return total + (price * item.quantity);
     }, 0);
-  }, [items]);
+  }, [items, couponApplied]);
 
   const getCodTotal = useCallback(() => {
     return items.reduce((total, item) => {
       const product = findProduct(item.productId);
-      return total + (product ? product.codPrice * item.quantity : 0);
+      if (!product) return total;
+      const price = couponApplied ? product.codPrice : product.originalPrice + 70;
+      return total + (price * item.quantity);
     }, 0);
-  }, [items]);
+  }, [items, couponApplied]);
 
   const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -137,6 +151,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       value={{
         items,
         quantity: totalQuantity,
+        couponApplied,
+        applyCoupon,
+        removeCoupon,
         addToCart,
         updateQuantity,
         clearCart,

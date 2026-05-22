@@ -44,23 +44,27 @@ type PaymentMethod = "online" | "cod";
 const currencySymbol = "₹";
 
 // Calculate totals from an items array
-function calcOnlineTotal(checkoutItems: CartItem[]) {
+function calcOnlineTotal(checkoutItems: CartItem[], couponApplied: boolean) {
   return checkoutItems.reduce((total, item) => {
     const product = PRODUCTS.find((p) => p.id === item.productId);
-    return total + (product ? product.onlinePrice * item.quantity : 0);
+    if (!product) return total;
+    const price = couponApplied ? product.onlinePrice : product.originalPrice;
+    return total + (price * item.quantity);
   }, 0);
 }
 
-function calcCodTotal(checkoutItems: CartItem[]) {
+function calcCodTotal(checkoutItems: CartItem[], couponApplied: boolean) {
   return checkoutItems.reduce((total, item) => {
     const product = PRODUCTS.find((p) => p.id === item.productId);
-    return total + (product ? product.codPrice * item.quantity : 0);
+    if (!product) return total;
+    const price = couponApplied ? product.codPrice : product.originalPrice + 70;
+    return total + (price * item.quantity);
   }, 0);
 }
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items: cartItems, quantity: cartQuantity, clearCart, getProductDetails } = useCart();
+  const { items: cartItems, quantity: cartQuantity, clearCart, getProductDetails, couponApplied } = useCart();
   const [form, setForm] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("online");
@@ -100,8 +104,8 @@ export default function CheckoutPage() {
     }
   }, [checkoutQuantity, isSuccess, router, hydrated]);
 
-  const onlineTotal = calcOnlineTotal(checkoutItems);
-  const codTotal = calcCodTotal(checkoutItems);
+  const onlineTotal = calcOnlineTotal(checkoutItems, couponApplied);
+  const codTotal = calcCodTotal(checkoutItems, couponApplied);
   const total = paymentMethod === "online" ? onlineTotal : codTotal;
   const savings = paymentMethod === "online" ? codTotal - onlineTotal : 0;
 

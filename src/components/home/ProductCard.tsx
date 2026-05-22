@@ -14,6 +14,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardProps) {
   const router = useRouter();
+  const { couponApplied } = useCart();
 
   // If the product doesn't have an ID, it's the old default product.
   const productId = 'id' in product ? product.id : "default";
@@ -56,11 +57,13 @@ export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardPr
         {/* Price */}
         <div className="mt-3 flex items-center gap-3">
           <span className="text-xl font-bold text-brand-text">
-            {product.currencySymbol}{product.onlinePrice}
+            {product.currencySymbol}{couponApplied ? product.onlinePrice : product.originalPrice}
           </span>
-          <span className="text-sm text-gray-400 line-through">
-            {product.currencySymbol}{product.originalPrice}
-          </span>
+          {couponApplied && (
+            <span className="text-sm text-gray-400 line-through">
+              {product.currencySymbol}{product.originalPrice}
+            </span>
+          )}
         </div>
 
         {/* Free Delivery Badge */}

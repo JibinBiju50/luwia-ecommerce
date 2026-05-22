@@ -14,6 +14,7 @@ import ReviewForm from "@/components/product/ReviewForm";
 import ProductFAQ from "@/components/product/ProductFAQ";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import CustomerVideos from "@/components/home/CustomerVideos";
+import FeaturesSection from "@/components/home/FeaturesSection";
 import SalesBanner from "@/components/home/SalesBanner";
 import MagicLinkModal from "@/components/auth/MagicLinkModal";
 
@@ -118,6 +119,9 @@ export default function ProductPage({ params }: ProductPageProps) {
           </div>
         </section>
       )}
+
+      {/* Features Section from Homepage */}
+      <FeaturesSection />
 
       {/* Videos Section — full width */}
       <CustomerVideos />
