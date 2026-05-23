@@ -6,6 +6,11 @@ export default function CustomerVideos() {
   const videoScrollRef = useRef<HTMLDivElement>(null);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
 
+  // Drag to scroll state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
   const videos = [
     "/videos/video_1.mp4",
     "/videos/video_2.mp4",
@@ -44,6 +49,29 @@ export default function CustomerVideos() {
     setActiveVideoIndex(closest);
   };
 
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!videoScrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - videoScrollRef.current.offsetLeft);
+    setScrollLeft(videoScrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging || !videoScrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - videoScrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // scroll multiplier
+    videoScrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
   return (
     <section className="py-8 md:py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
@@ -56,7 +84,13 @@ export default function CustomerVideos() {
         <div
           ref={videoScrollRef}
           onScroll={handleVideoScroll}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-6"
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          className={`flex gap-4 overflow-x-auto no-scrollbar pb-6 select-none ${
+            isDragging ? "cursor-grabbing snap-none" : "cursor-grab snap-x snap-mandatory"
+          }`}
         >
           {videos.map((src, i) => (
             <div
@@ -66,7 +100,7 @@ export default function CustomerVideos() {
               <div className="relative w-full flex items-center justify-center rounded-2xl">
                 <video
                   src={src}
-                  className="w-full h-auto rounded-2xl"
+                  className="w-full h-auto rounded-2xl pointer-events-none"
                   muted
                   autoPlay
                   loop

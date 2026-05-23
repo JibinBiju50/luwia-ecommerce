@@ -6,6 +6,7 @@ import ContentWithImage from "@/components/home/ContentWithImage";
 import CustomerVideos from "@/components/home/CustomerVideos";
 import CustomerResults from "@/components/home/CustomerResults";
 import FeaturesSection from "@/components/home/FeaturesSection";
+import InstagramFeed from "@/components/home/InstagramFeed";
 import CommunityJoin from "@/components/home/CommunityJoin";
 import { PRODUCT } from "@/lib/product";
 import { PRODUCTS } from "@/lib/products";
@@ -46,6 +47,7 @@ export default function HomePage() {
       <CustomerVideos />
       <CustomerResults />
       <FeaturesSection />
+      <InstagramFeed />
       <CommunityJoin />
     </>
   );

@@ -23,13 +23,13 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
       <div className="border border-gray-100 rounded-2xl overflow-hidden">
         <button
           onClick={() => toggle("science")}
-          className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50/50 transition-colors"
+          className="group w-full flex items-center justify-between px-6 py-4 text-left hover:bg-brand-primary/5 transition-colors"
         >
-          <h2 className="text-base md:text-lg font-semibold text-brand-text">
+          <h2 className="text-base md:text-lg font-semibold text-brand-text group-hover:text-brand-primary transition-colors">
             The Science Behind It
           </h2>
           <ChevronDown
-            className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
+            className={`w-5 h-5 text-gray-400 group-hover:text-brand-primary transition-all duration-300 ${
               openSection === "science" ? "rotate-180" : ""
             }`}
           />
@@ -49,13 +49,13 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
       <div className="border border-gray-100 rounded-2xl overflow-hidden">
         <button
           onClick={() => toggle("results")}
-          className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50/50 transition-colors"
+          className="group w-full flex items-center justify-between px-6 py-4 text-left hover:bg-brand-primary/5 transition-colors"
         >
-          <h2 className="text-base md:text-lg font-semibold text-brand-text">
+          <h2 className="text-base md:text-lg font-semibold text-brand-text group-hover:text-brand-primary transition-colors">
             Visible Results
           </h2>
           <ChevronDown
-            className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
+            className={`w-5 h-5 text-gray-400 group-hover:text-brand-primary transition-all duration-300 ${
               openSection === "results" ? "rotate-180" : ""
             }`}
           />
@@ -90,13 +90,13 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
       <div className="border border-gray-100 rounded-2xl overflow-hidden">
         <button
           onClick={() => toggle("ingredients")}
-          className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50/50 transition-colors"
+          className="group w-full flex items-center justify-between px-6 py-4 text-left hover:bg-brand-primary/5 transition-colors"
         >
-          <h2 className="text-base md:text-lg font-semibold text-brand-text">
+          <h2 className="text-base md:text-lg font-semibold text-brand-text group-hover:text-brand-primary transition-colors">
             Clean Ingredients
           </h2>
           <ChevronDown
-            className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
+            className={`w-5 h-5 text-gray-400 group-hover:text-brand-primary transition-all duration-300 ${
               openSection === "ingredients" ? "rotate-180" : ""
             }`}
           />
