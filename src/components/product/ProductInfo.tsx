@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Heart, Share2, Minus, Plus, Truck, Star, Flame, Eye } from "lucide-react";
@@ -35,6 +35,37 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
   const avgRating = reviewCount > 0
     ? reviews.reduce((sum, r) => sum + r.star_rating, 0) / reviewCount
     : 0;
+
+  const [showAutoCouponModal, setShowAutoCouponModal] = useState(false);
+
+  useEffect(() => {
+    // If already applied, do nothing
+    if (couponApplied) return;
+
+    const timer = setTimeout(() => {
+      // Show modal
+      setShowAutoCouponModal(true);
+      
+      // Fire confetti from center of screen
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.5 },
+        colors: ['#1E3A8A', '#60A5FA', '#FFFFFF'],
+        zIndex: 100 // ensure above modal
+      });
+      
+      // Actually apply it to global state
+      applyCoupon();
+
+      // Dismiss after 4 seconds
+      setTimeout(() => {
+        setShowAutoCouponModal(false);
+      }, 4000);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [couponApplied, applyCoupon]);
 
   const handleAddToCart = () => {
     if (!user) {
@@ -97,6 +128,23 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
 
   return (
     <div className="space-y-5">
+      {/* Auto Coupon Modal Overlay */}
+      {showAutoCouponModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/40 backdrop-blur-md transition-all">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-[90%] text-center shadow-2xl animate-in zoom-in duration-300 ring-1 ring-brand-primary/10">
+            <span className="text-5xl animate-bounce inline-block mb-4">🎉</span>
+            <h2 className="text-2xl font-bold text-brand-text mb-2">Coupon Applied!</h2>
+            <p className="text-gray-500 mb-6 text-sm">We've automatically applied <span className="font-bold text-brand-primary">LUWIAGLOW20</span> for you!</p>
+            <div className="bg-green-50/80 border border-green-200 rounded-xl p-4 shadow-inner">
+              <p className="text-xs text-green-700 font-bold uppercase tracking-wider">Discounted Price</p>
+              <p className="text-3xl font-bold text-green-600 mt-1">
+                {product.currencySymbol}{product.onlinePrice}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Title + Wishlist */}
       <div className="flex items-start justify-between gap-3 sm:gap-4">
         <div className="min-w-0 flex-1">
@@ -227,7 +275,7 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
       <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap text-green-600 bg-green-50/50 px-3 sm:px-4 py-2.5 rounded-xl">
         <Truck className="w-4 h-4" />
         <span className="text-sm font-medium">Free Delivery</span>
-        <span className="text-xs text-gray-500 ml-1">• 3–7 business days</span>
+        <span className="text-xs text-gray-500 ml-1">• 3-5 business days</span>
       </div>
 
       {/* Quantity */}
@@ -262,13 +310,13 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
         <button
           onClick={handleAddToCart}
-          className="flex-1 py-3.5 text-sm font-semibold text-brand-primary border-2 border-brand-primary/20 rounded-full hover:border-brand-primary/40 hover:bg-brand-bg transition-all"
+          className="flex-1 py-3.5 text-sm font-semibold text-brand-primary border-2 border-brand-primary/20 rounded-full hover:border-brand-primary/40 hover:bg-brand-bg transition-all active:scale-[0.97] active:bg-brand-primary/10"
         >
           Add to Bag
         </button>
         <button
           onClick={handleBuyNow}
-          className="flex-1 py-3.5 text-sm font-semibold text-white gradient-brand rounded-full hover:opacity-90 transition-opacity shadow-brand"
+          className="flex-1 py-3.5 text-sm font-semibold text-white gradient-brand rounded-full hover:opacity-90 transition-all shadow-brand active:scale-[0.97] active:shadow-inner"
         >
           Buy Now
         </button>
@@ -301,19 +349,19 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
       </div>
 
       {/* All India Shipping */}
-      <div className="flex items-center justify-center gap-2 pt-4 pb-2 text-gray-700 ">
-        <Truck className="w-5 h-5 text-gray-500" />
+      <div className="flex items-center justify-center gap-2 py-3 px-4 bg-brand-light/10 border border-brand-primary/10 rounded-xl text-brand-text shadow-sm mt-4">
+        <Truck className="w-5 h-5 text-brand-primary" />
         <span className="text-sm font-bold tracking-wide uppercase">All India Shipping</span>
       </div>
 
       {/* Payment Methods */}
-      <div className="pt-2 pb-2 ">
+      <div className="py-4 px-4 bg-brand-light/10 border border-brand-primary/10 rounded-xl shadow-sm mt-3">
         <Image
           src="/images/payment_method.png"
           alt="Secure Payment Methods"
           width={400}
           height={60}
-          className="w-full h-auto object-contain"
+          className="w-full h-auto object-contain drop-shadow-sm"
         />
       </div>
     </div>

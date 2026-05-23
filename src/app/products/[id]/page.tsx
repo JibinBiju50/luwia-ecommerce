@@ -14,6 +14,7 @@ import ReviewForm from "@/components/product/ReviewForm";
 import ProductFAQ from "@/components/product/ProductFAQ";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import CustomerVideos from "@/components/home/CustomerVideos";
+import InstagramFeed from "@/components/home/InstagramFeed";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import SalesBanner from "@/components/home/SalesBanner";
 import MagicLinkModal from "@/components/auth/MagicLinkModal";
@@ -123,16 +124,39 @@ export default function ProductPage({ params }: ProductPageProps) {
       {/* Features Section from Homepage */}
       <FeaturesSection />
 
-      {/* Videos Section — full width */}
-      <CustomerVideos />
+      {/* Videos Section — hidden for Luwia Core */}
+      {product.id !== "luwia-core" && <CustomerVideos />}
+
+      {/* Custom Image Section — Only for Luwia Core */}
+      {product.id === "luwia-core" && (
+        <section className="w-full py-8 md:py-12 px-4 sm:px-6 lg:px-8 bg-gray-50/80 border-y border-gray-100">
+          <div className="max-w-xl lg:max-w-lg mx-auto">
+            <div className="relative rounded-3xl overflow-hidden shadow-xl ring-1 ring-brand-primary/10 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(30,58,138,0.5)] hover:-translate-y-2 group cursor-pointer">
+              <Image
+                src="/images/cream_men.jpeg"
+                alt="Luwia Core for Men"
+                width={1080}
+                height={1080}
+                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Instagram Feed Section — Only for Luwia Prime */}
+      {product.id === "luwia-prime" && <InstagramFeed />}
 
       {/* Reviews Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
-          <ReviewList reviews={reviews} loading={loadingReviews} />
-          <ReviewForm productId={product.id} onReviewSubmitted={handleReviewSubmitted} />
+      <section className="w-full bg-brand-light/10 border-y border-brand-primary/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
+            <ReviewList reviews={reviews} loading={loadingReviews} />
+            <ReviewForm productId={product.id} onReviewSubmitted={handleReviewSubmitted} />
+          </div>
         </div>
-      </div>
+      </section>
       {/* FAQ Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <ProductFAQ />

@@ -92,13 +92,13 @@ export default function ProductFAQ() {
           <div key={index} className="border border-gray-100 rounded-2xl overflow-hidden bg-white">
             <button
               onClick={() => toggle(index)}
-              className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50/50 transition-colors"
+              className="group w-full flex items-center justify-between px-6 py-4 text-left hover:bg-brand-primary/5 transition-colors"
             >
-              <h3 className="text-sm md:text-base font-semibold text-brand-text pr-4">
+              <h3 className="text-sm md:text-base font-semibold text-brand-text group-hover:text-brand-primary transition-colors pr-4">
                 ❓ {faq.question}
               </h3>
               <ChevronDown
-                className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
+                className={`w-5 h-5 text-gray-400 flex-shrink-0 group-hover:text-brand-primary transition-all duration-300 ${
                   openIndex === index ? "rotate-180" : ""
                 }`}
               />
