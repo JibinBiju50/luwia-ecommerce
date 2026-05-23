@@ -12,7 +12,7 @@ interface MagicLinkModalProps {
 }
 
 export default function MagicLinkModal({ returnPath }: MagicLinkModalProps) {
-  const { user, showMagicLinkModal, openMagicLinkModal, closeMagicLinkModal } =
+  const { user, showMagicLinkModal, openMagicLinkModal, closeMagicLinkModal, pendingCartAction } =
     useAuth();
 
   const [email, setEmail] = useState("");
@@ -41,6 +41,10 @@ export default function MagicLinkModal({ returnPath }: MagicLinkModalProps) {
 
   const handleDismiss = () => {
     sessionStorage.setItem(DISMISSED_KEY, "1");
+    if (pendingCartAction?.current) {
+      pendingCartAction.current();
+      pendingCartAction.current = null;
+    }
     closeMagicLinkModal();
   };
 
