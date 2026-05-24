@@ -32,6 +32,17 @@ export const metadata: Metadata = {
     description:
       "Crafted for Indian skin. Glass skin formula with Niacinamide, Glutathione & Shea Butter.",
     type: "website",
+    images: [
+      {
+        url: "/images/product_link_img.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Luwia Skin Science",
+      },
+    ],
+  },
+  icons: {
+    icon: "/images/logo.png",
   },
 };
 
