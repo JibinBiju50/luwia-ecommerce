@@ -1,17 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { X, Mail, ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const DISMISSED_KEY = "luwia-auth-modal-dismissed";
 
 interface MagicLinkModalProps {
-  /** The URL to return the user to after sign-in (current product page path). */
-  returnPath: string;
+  /** The URL to return the user to after sign-in (current page path). */
+  returnPath?: string;
 }
 
 export default function MagicLinkModal({ returnPath }: MagicLinkModalProps) {
+  const pathname = usePathname();
+  const finalReturnPath = returnPath || pathname || "/";
   const { user, showMagicLinkModal, openMagicLinkModal, closeMagicLinkModal, pendingCartAction } =
     useAuth();
 
@@ -59,7 +62,7 @@ export default function MagicLinkModal({ returnPath }: MagicLinkModalProps) {
       const res = await fetch("/api/auth/send-magic-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, next: returnPath }),
+        body: JSON.stringify({ email, next: finalReturnPath }),
       });
 
       const data = await res.json();

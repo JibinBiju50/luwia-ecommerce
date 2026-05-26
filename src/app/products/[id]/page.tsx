@@ -14,10 +14,10 @@ import ReviewForm from "@/components/product/ReviewForm";
 import ProductFAQ from "@/components/product/ProductFAQ";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import CustomerVideos from "@/components/home/CustomerVideos";
+import ProductCarousel from "@/components/home/ProductCarousel";
 import InstagramFeed from "@/components/home/InstagramFeed";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import SalesBanner from "@/components/home/SalesBanner";
-import MagicLinkModal from "@/components/auth/MagicLinkModal";
 
 
 interface ProductPageProps {
@@ -28,6 +28,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const { id } = use(params);
   const product = PRODUCTS.find((p) => p.id === id);
   const pathname = usePathname();
+  const otherProducts = PRODUCTS.filter((p) => p.id !== id);
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
@@ -124,6 +125,15 @@ export default function ProductPage({ params }: ProductPageProps) {
       {/* Features Section from Homepage */}
       <FeaturesSection />
 
+      {/* Customers Also Bought */}
+      <div className="border-t border-brand-primary/10">
+        <ProductCarousel 
+          products={otherProducts} 
+          title="Customers Also Bought" 
+          subtitle="Complete your skincare routine with our highly recommended products." 
+        />
+      </div>
+
       {/* Videos Section — hidden for Luwia Core */}
       {product.id !== "luwia-core" && <CustomerVideos />}
 
@@ -163,7 +173,6 @@ export default function ProductPage({ params }: ProductPageProps) {
       </div>
 
       {/* Magic link modal for Meta Ads conversion */}
-      <MagicLinkModal returnPath={pathname} />
     </main>
   );
 }

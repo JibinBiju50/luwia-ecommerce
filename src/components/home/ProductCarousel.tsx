@@ -3,9 +3,19 @@
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
-import { PRODUCTS } from "@/lib/products";
+import { PRODUCTS, type Product } from "@/lib/products";
 
-export default function ProductCarousel() {
+interface ProductCarouselProps {
+  products?: Product[];
+  title?: string;
+  subtitle?: string;
+}
+
+export default function ProductCarousel({
+  products = PRODUCTS,
+  title = "Our Best Sellers",
+  subtitle = "Choose the perfect formulation for your skin type."
+}: ProductCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
@@ -42,11 +52,13 @@ export default function ProductCarousel() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-brand-text">
-            Our Best Sellers
+            {title}
           </h2>
-          <p className="text-gray-500 mt-2 text-sm max-w-xl mx-auto">
-            Choose the perfect formulation for your skin type.
-          </p>
+          {subtitle && (
+            <p className="text-gray-500 mt-2 text-sm max-w-xl mx-auto">
+              {subtitle}
+            </p>
+          )}
         </div>
 
         <div 
@@ -54,7 +66,7 @@ export default function ProductCarousel() {
           onScroll={checkScrollPosition}
           className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 md:gap-6 pb-6 hide-scrollbar lg:justify-center"
         >
-          {PRODUCTS.map((product) => (
+          {products.map((product) => (
             <div 
               key={product.id}
               className="w-[80vw] sm:w-[40vw] md:w-[30vw] lg:w-[300px] shrink-0 snap-center flex"

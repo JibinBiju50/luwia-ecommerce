@@ -6,6 +6,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import AuthModal from "@/components/auth/AuthModal";
+import MagicLinkModal from "@/components/auth/MagicLinkModal";
 import Script from "next/script";
 
 const dmSans = DM_Sans({
@@ -96,6 +97,7 @@ height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe>
             <main className="min-h-screen">{children}</main>
             <Footer />
             <AuthModal />
+            <MagicLinkModal />
           </CartProvider>
         </AuthProvider>
       </body>

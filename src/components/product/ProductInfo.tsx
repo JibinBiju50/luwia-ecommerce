@@ -67,7 +67,9 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
     return () => clearTimeout(timer);
   }, [couponApplied, applyCoupon]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!user) {
       // Store the cart action — fires automatically after sign-in
       pendingCartAction.current = () => addToCart(product.id, selectedQty);
@@ -312,7 +314,7 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
           onClick={handleAddToCart}
           className="flex-1 py-3.5 text-sm font-semibold text-brand-primary border-2 border-brand-primary/20 rounded-full hover:border-brand-primary/40 hover:bg-brand-bg transition-all active:scale-[0.97] active:bg-brand-primary/10"
         >
-          Add to Bag
+          Add to Cart
         </button>
         <button
           onClick={handleBuyNow}

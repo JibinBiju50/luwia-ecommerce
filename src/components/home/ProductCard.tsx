@@ -4,27 +4,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { Truck } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { PRODUCT as DEFAULT_PRODUCT } from "@/lib/product";
 import { Product } from "@/lib/products";
-import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   product?: Product | typeof DEFAULT_PRODUCT;
 }
 
 export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardProps) {
-  const router = useRouter();
-  const { couponApplied } = useCart();
+  const { couponApplied, addToCart } = useCart();
+  const { user, openMagicLinkModal, pendingCartAction } = useAuth();
 
   // If the product doesn't have an ID, it's the old default product.
   const productId = 'id' in product ? product.id : "default";
 
-  const handleBuyNow = () => {
-    sessionStorage.setItem(
-      "luwia-direct-buy",
-      JSON.stringify({ productId, quantity: 1 })
-    );
-    router.push("/checkout");
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      pendingCartAction.current = () => addToCart(productId, 1);
+      openMagicLinkModal();
+      return;
+    }
+    addToCart(productId, 1);
   };
 
   return (
@@ -72,18 +75,13 @@ export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardPr
           <span className="text-xs font-medium">Free Delivery</span>
         </div>
 
-        {/* Description */}
-        <p className="mt-3 text-sm text-gray-500 line-clamp-2 flex-grow">
-          {product.shortDescription}
-        </p>
-
         {/* Buttons */}
-        <div className="mt-5 pt-2">
+        <div className="mt-auto pt-4">
           <button
-            onClick={handleBuyNow}
-            className="w-full py-3 text-sm font-semibold text-white bg-brand-primary rounded-full hover:opacity-90 transition-opacity shadow-md hover:shadow-lg"
+            onClick={handleAddToCart}
+            className="w-full py-3 text-sm font-semibold text-white bg-brand-primary rounded-full hover:opacity-90 transition-all shadow-md hover:shadow-lg active:scale-[0.97] active:shadow-inner"
           >
-            Buy Now
+            Add to Cart
           </button>
         </div>
       </div>
