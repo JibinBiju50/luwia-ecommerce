@@ -37,29 +37,46 @@ export default function SalesBanner() {
   const pad = (n: number) => n.toString().padStart(2, "0");
 
   return (
-    <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white shadow-[0_0_35px_rgba(139,143,191,1)] z-40 font-serif">
-      <div className="max-w-7xl mx-auto px-8 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base font-bold tracking-wide">
-        <span className="font-black italic uppercase tracking-widest text-yellow-300 drop-shadow-[0_0_15px_rgba(253,224,71,1)] animate-pulse text-lg sm:text-xl">
-          Upto 20% Offer
-        </span>
-        <span className="text-white/60 hidden sm:inline">•</span>
-        <div className="flex items-center gap-2">
-          <span className="text-white/95">Hurry Up! Sale ends in</span>
-          <div className="flex items-center gap-1 font-mono font-bold text-base sm:text-lg">
-            <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.hours)}</span>
-            <span className="text-white/80">:</span>
-            <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.minutes)}</span>
-            <span className="text-white/80">:</span>
-            <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.seconds)}</span>
-          </div>
+    <div className="flex flex-col w-full relative z-[60]">
+      {/* Infinite scrolling banner */}
+      <div className="w-full bg-[#FFD700] text-black py-2 overflow-hidden flex items-center border-b border-black/5">
+        <div className="flex whitespace-nowrap animate-scroll [--scroll-duration:25s] min-w-max">
+          {[...Array(8)].map((_, i) => (
+            <span key={i} className="px-4 font-bold text-xs sm:text-[13px] uppercase tracking-[0.15em] flex items-center gap-4 shrink-0 font-inter">
+              ⚡ EXCLUSIVE OFFER: CODE 'LUWIAGLOW20' GIVES 20% DISCOUNT
+              <span className="opacity-30 px-2">•</span>
+              FREE SHIPPING ON ALL ORDERS
+              <span className="opacity-30 px-2">•</span>
+            </span>
+          ))}
         </div>
-        <button
-          onClick={handleDismiss}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/70 hover:text-white transition-colors"
-          aria-label="Dismiss sale banner"
-        >
-          <X className="w-4 h-4" />
-        </button>
+      </div>
+
+      {/* Existing Banner */}
+      <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white shadow-[0_0_35px_rgba(139,143,191,1)] font-inter">
+        <div className="max-w-7xl mx-auto px-8 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base font-bold tracking-wide">
+          <span className="font-black italic uppercase tracking-widest text-yellow-300 drop-shadow-[0_0_15px_rgba(253,224,71,1)] animate-pulse text-lg sm:text-xl">
+            Upto 20% Offer
+          </span>
+          <span className="text-white/60 hidden sm:inline">•</span>
+          <div className="flex items-center gap-2">
+            <span className="text-white/95">Hurry Up! Sale ends in</span>
+            <div className="flex items-center gap-1 font-mono font-bold text-base sm:text-lg">
+              <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.hours)}</span>
+              <span className="text-white/80">:</span>
+              <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.minutes)}</span>
+              <span className="text-white/80">:</span>
+              <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.seconds)}</span>
+            </div>
+          </div>
+          <button
+            onClick={handleDismiss}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/70 hover:text-white transition-colors"
+            aria-label="Dismiss sale banner"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );
