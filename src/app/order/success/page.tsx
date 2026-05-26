@@ -99,7 +99,7 @@ export default function OrderSuccessPage() {
             {/* Delivery note */}
             <div className="bg-brand-bg/50 rounded-xl p-4 text-center">
               <p className="text-sm text-gray-600">
-                📦 Estimated delivery: <span className="font-semibold">3–7 business days</span>
+                📦 Estimated delivery: <span className="font-semibold">3-5 business days</span>
               </p>
               <p className="text-xs text-gray-400 mt-1">
                 Tracking details will be shared via email after dispatch.
@@ -114,11 +114,21 @@ export default function OrderSuccessPage() {
           </div>
         )}
 
-        {/* CTA */}
-        <div className="text-center mt-8">
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+          <a
+            href={`https://wa.me/917025459137?text=${encodeURIComponent(
+              `Hi Luwia! I just placed an order. My Order ID is #${order?.orderId?.slice(0, 8).toUpperCase() || 'unknown'}. Please send me order updates here!`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-[#25D366] rounded-full hover:bg-[#128C7E] transition-colors shadow-lg"
+          >
+            Get Updates on WhatsApp
+          </a>
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-semibold text-white gradient-brand rounded-full hover:opacity-90 transition-opacity shadow-brand"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 text-sm font-semibold text-brand-primary bg-brand-light/10 border-2 border-brand-primary/20 rounded-full hover:border-brand-primary/40 hover:bg-brand-bg transition-all"
           >
             Continue Shopping
           </Link>

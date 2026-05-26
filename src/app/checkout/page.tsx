@@ -271,15 +271,6 @@ export default function CheckoutPage() {
             Checkout
           </h1>
 
-          {/* Direct-buy banner */}
-          {isDirectBuy && (
-            <div className="mb-6 flex items-center gap-3 bg-brand-bg/60 border border-brand-primary/10 px-4 py-3 rounded-xl text-sm text-brand-dark">
-              <Sparkles className="w-4 h-4 text-brand-primary flex-shrink-0" />
-              <span>
-                You&apos;re buying directly — items in your cart are unaffected.
-              </span>
-            </div>
-          )}
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left: Form + Payment Method */}
@@ -432,9 +423,9 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center gap-2 text-green-600 bg-green-50 px-3 py-2 rounded-lg">
-                  <Truck className="w-4 h-4 flex-shrink-0" />
-                  <span className="text-xs font-medium">Free Delivery • 3–7 business days</span>
+                <div className="flex items-center gap-1.5 text-green-600 mt-2 bg-green-50/50 w-fit px-2 py-1 rounded">
+                  <Truck className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">Free Delivery • 3-5 business days</span>
                 </div>
 
                 <button onClick={handlePlaceOrder} disabled={processing}
