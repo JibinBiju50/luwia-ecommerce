@@ -106,7 +106,7 @@ Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect
 
   reviewImages: [
     "/images/customer_review_1.jpeg",
-    "/images/customer_review_4.jpeg",
+    "/images/customer_review_2.jpeg",
   ],
 
 };

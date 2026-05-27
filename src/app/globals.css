@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Foundation:wght@400..700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -11,6 +12,8 @@
 
   --font-sans: "DM Sans", "Inter", system-ui, sans-serif;
   --font-inter: var(--font-inter), "Inter", sans-serif;
+  --font-nunito: var(--font-nunito), "Nunito", sans-serif;
+  --font-edu: "Edu NSW ACT Foundation", cursive;
 }
 
 /* Base Styles */

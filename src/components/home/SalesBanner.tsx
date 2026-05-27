@@ -53,20 +53,29 @@ export default function SalesBanner() {
       </div>
 
       {/* Existing Banner */}
-      <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white shadow-[0_0_35px_rgba(139,143,191,1)] font-inter">
-        <div className="max-w-7xl mx-auto px-8 py-3 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base font-bold tracking-wide">
-          <span className="font-black italic uppercase tracking-widest text-yellow-300 drop-shadow-[0_0_15px_rgba(253,224,71,1)] animate-pulse text-lg sm:text-xl">
-            Upto 20% Offer
+      <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white shadow-[0_0_35px_rgba(139,143,191,1)] font-nunito">
+        <div className="max-w-7xl mx-auto px-8 py-2 md:py-3 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5">
+          <span className="font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] text-lg sm:text-xl tracking-wide">
+            FLAT 20% OFF
           </span>
-          <span className="text-white/60 hidden sm:inline">•</span>
-          <div className="flex items-center gap-2">
-            <span className="text-white/95">Hurry Up! Sale ends in</span>
-            <div className="flex items-center gap-1 font-mono font-bold text-base sm:text-lg">
-              <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.hours)}</span>
-              <span className="text-white/80">:</span>
-              <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.minutes)}</span>
-              <span className="text-white/80">:</span>
-              <span className="bg-white/20 rounded px-2 py-0.5 shadow-inner">{pad(timeLeft.seconds)}</span>
+          <span className="font-edu text-[#FFE400] text-xl sm:text-2xl pt-1">
+            +Free Shipping Ends In
+          </span>
+          
+          <div className="flex items-center gap-1.5 ml-1">
+            <div className="bg-white rounded flex flex-col items-center justify-center px-1.5 py-1 min-w-[36px] sm:min-w-[42px] shadow-sm">
+              <span className="text-[#F43F5E] text-sm sm:text-lg font-black leading-none">{pad(timeLeft.hours)}</span>
+              <span className="text-black text-[7px] sm:text-[8px] font-bold tracking-wider mt-1 uppercase">Hour</span>
+            </div>
+            
+            <div className="bg-white rounded flex flex-col items-center justify-center px-1.5 py-1 min-w-[36px] sm:min-w-[42px] shadow-sm">
+              <span className="text-[#F43F5E] text-sm sm:text-lg font-black leading-none">{pad(timeLeft.minutes)}</span>
+              <span className="text-black text-[7px] sm:text-[8px] font-bold tracking-wider mt-1 uppercase">Minutes</span>
+            </div>
+            
+            <div className="bg-white rounded flex flex-col items-center justify-center px-1.5 py-1 min-w-[36px] sm:min-w-[42px] shadow-sm">
+              <span className="text-[#F43F5E] text-sm sm:text-lg font-black leading-none">{pad(timeLeft.seconds)}</span>
+              <span className="text-black text-[7px] sm:text-[8px] font-bold tracking-wider mt-1 uppercase">Second</span>
             </div>
           </div>
           <button
