@@ -69,7 +69,7 @@ export default function ProductCarousel({
           {products.map((product) => (
             <div 
               key={product.id}
-              className="w-[80vw] sm:w-[40vw] md:w-[30vw] lg:w-[300px] shrink-0 snap-center flex"
+              className="w-[calc(50vw-1.5rem)] sm:w-[280px] lg:w-[300px] shrink-0 snap-start sm:snap-center flex"
             >
               <div className="w-full">
                 <ProductCard product={product} />
