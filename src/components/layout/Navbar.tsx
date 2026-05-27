@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { ShoppingCart, Menu, X, User, LogOut, ChevronDown } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LogOut, ChevronDown, ClipboardList } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 
@@ -46,20 +46,30 @@ export default function Navbar() {
   }, [quantity]);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-brand-primary/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <>
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-brand-primary/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/images/logo.png"
-              alt="Luwia Skin Science"
-              width={120}
-              height={48}
-              className="h-10 md:h-12 w-auto"
-              priority
-            />
-          </Link>
+          {/* Mobile Toggle + Logo */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            <button
+              className="md:hidden p-1.5 -ml-1.5 text-gray-700 hover:text-brand-primary transition-colors"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <Link href="/" className="flex-shrink-0">
+              <Image
+                src="/images/logo.png"
+                alt="Luwia Skin Science"
+                width={120}
+                height={48}
+                className="h-9 sm:h-10 md:h-12 w-auto"
+                priority
+              />
+            </Link>
+          </div>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
@@ -93,10 +103,18 @@ export default function Navbar() {
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
                     <div className="px-3 py-2 border-b border-gray-50">
                       <p className="text-xs text-gray-400 truncate">{user.email}</p>
                     </div>
+                    <Link
+                      href="/my-orders"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-brand-primary transition-colors"
+                    >
+                      <ClipboardList className="w-4 h-4" />
+                      My Orders
+                    </Link>
                     <button
                       id="navbar-signout-btn"
                       onClick={async () => { setUserMenuOpen(false); await signOut(); }}
@@ -138,56 +156,86 @@ export default function Navbar() {
                 </div>
               )}
             </Link>
-
-            <button
-              className="md:hidden p-2 text-gray-700 hover:text-brand-primary transition-colors"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
         </div>
       </div>
+    </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Backdrop */}
+      {mobileOpen && (
+        <div 
+          className="fixed inset-0 bg-brand-dark/40 z-[60] md:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+        className={`fixed inset-y-0 left-0 w-[280px] sm:w-[320px] bg-white z-[70] transform transition-transform duration-300 ease-in-out md:hidden flex flex-col shadow-2xl ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <nav className="px-4 pb-4 space-y-1 bg-white/95 backdrop-blur-lg border-t border-brand-primary/10">
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <Image
+            src="/images/logo.png"
+            alt="Luwia Skin Science"
+            width={100}
+            height={40}
+            className="h-8 w-auto"
+          />
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="p-2 text-gray-500 hover:text-brand-primary transition-colors bg-gray-50 hover:bg-brand-bg rounded-full"
+            aria-label="Close menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="block py-3 px-3 text-sm font-medium text-gray-700 hover:text-brand-primary hover:bg-brand-bg rounded-lg transition-all duration-200"
+              className="block py-3 px-4 text-base font-medium text-gray-700 hover:text-brand-primary hover:bg-brand-bg rounded-xl transition-all duration-200"
             >
               {link.label}
             </Link>
           ))}
-          {/* Sign In / Sign Out in mobile menu */}
-          {user ? (
-            <button
-              onClick={async () => { setMobileOpen(false); await signOut(); }}
-              className="w-full flex items-center gap-2 py-3 px-3 text-sm font-medium text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </button>
-          ) : (
-            <button
-              id="mobile-signin-btn"
-              onClick={() => { setMobileOpen(false); openAuthModal(); }}
-              className="w-full py-3 px-3 text-sm font-semibold text-white rounded-xl text-left"
-              style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
-            >
-              Sign In
-            </button>
-          )}
+          
+          <div className="pt-4 mt-2 border-t border-gray-100 space-y-1">
+            {user ? (
+              <>
+                <Link
+                  href="/my-orders"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 py-3 px-4 text-base font-medium text-gray-700 hover:text-brand-primary hover:bg-brand-bg rounded-xl transition-all duration-200"
+                >
+                  <ClipboardList className="w-5 h-5" />
+                  My Orders
+                </Link>
+                <button
+                  onClick={async () => { setMobileOpen(false); await signOut(); }}
+                  className="w-full flex items-center gap-3 py-3 px-4 text-base font-medium text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200"
+                >
+                  <LogOut className="w-5 h-5" />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                id="mobile-signin-btn"
+                onClick={() => { setMobileOpen(false); openAuthModal(); }}
+                className="w-full py-3.5 px-4 text-base font-bold text-white rounded-xl text-center shadow-md"
+                style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
+              >
+                Sign In / Register
+              </button>
+            )}
+          </div>
         </nav>
       </div>
-    </header>
+    </>
   );
 }
