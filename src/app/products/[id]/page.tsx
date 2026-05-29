@@ -19,6 +19,8 @@ import InstagramFeed from "@/components/home/InstagramFeed";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import SalesBanner from "@/components/home/SalesBanner";
 
+const WA_NUMBER = "917025459137";
+
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -171,6 +173,34 @@ export default function ProductPage({ params }: ProductPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <ProductFAQ />
       </div>
+
+      {/* Floating WhatsApp Enquiry Button */}
+      <a
+        href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+          `Hi Luwia! I have a question about ${product.name}. Can you help me?`
+        )}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        className="fixed bottom-6 right-5 z-50 group flex items-center gap-2"
+      >
+        {/* Tooltip */}
+        <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-semibold text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+          Chat with us
+          <span className="absolute right-[-4px] top-1/2 -translate-y-1/2 border-4 border-transparent border-l-gray-900" />
+        </span>
+
+        {/* Pulse ring */}
+        <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-30 animate-ping" />
+
+        {/* Button */}
+        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg shadow-[#25D366]/40 transition-transform duration-200 group-hover:scale-110 group-hover:shadow-xl">
+          {/* WhatsApp SVG icon */}
+          <svg viewBox="0 0 32 32" className="h-7 w-7 fill-white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.004 2.667C8.64 2.667 2.667 8.64 2.667 16c0 2.347.64 4.64 1.853 6.64L2.667 29.333l6.907-1.813A13.28 13.28 0 0 0 16.004 29.333C23.36 29.333 29.333 23.36 29.333 16S23.36 2.667 16.004 2.667Zm0 24a11.6 11.6 0 0 1-5.92-1.627l-.427-.253-4.093 1.08 1.08-4-.28-.44A11.573 11.573 0 0 1 4.4 16c0-6.4 5.2-11.6 11.6-11.6S27.6 9.6 27.6 16s-5.2 11.667-11.596 11.667Zm6.373-8.693c-.347-.174-2.053-1.014-2.373-1.12-.32-.12-.547-.174-.773.174-.227.347-.88 1.12-1.08 1.347-.2.213-.4.24-.747.08-.347-.174-1.467-.547-2.787-1.733-1.027-.92-1.72-2.053-1.92-2.4-.2-.347-.013-.534.16-.707.146-.16.347-.413.52-.613.174-.2.227-.347.347-.573.12-.24.067-.44-.027-.614-.094-.173-.773-1.866-1.067-2.546-.28-.667-.56-.573-.773-.587h-.667c-.226 0-.586.08-.894.413-.306.333-1.186 1.16-1.186 2.827s1.213 3.28 1.386 3.507c.174.213 2.387 3.64 5.787 5.106.813.347 1.44.56 1.933.72.813.253 1.547.213 2.134.133.653-.094 2.013-.813 2.293-1.6.28-.787.28-1.467.2-1.6-.094-.147-.32-.24-.667-.414Z"/>
+          </svg>
+        </span>
+      </a>
 
       {/* Magic link modal for Meta Ads conversion */}
     </main>

@@ -341,12 +341,12 @@ export default function ProductInfo({ product, reviews }: ProductInfoProps) {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 bg-orange-50/80 border border-orange-100/50 rounded-xl py-3 px-4 text-brand-dark font-extrabold text-[13px] sm:text-sm">
         <div className="flex items-center gap-1.5">
           <Flame className="w-4 h-4 text-red-500 stroke-[2.5]" />
-          <span>100K+ sold recently</span>
+          <span>10K+ sold recently</span>
         </div>
         <span className="hidden sm:inline text-gray-300 font-normal">|</span>
         <div className="flex items-center gap-1.5">
           <Eye className="w-4 h-4 text-gray-500 stroke-[2.5]" />
-          <span>10k+ views today</span>
+          <span>25k+ views today</span>
         </div>
       </div>
 

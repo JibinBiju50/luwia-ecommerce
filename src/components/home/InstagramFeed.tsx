@@ -46,7 +46,7 @@ export default function InstagramFeed() {
           Follow Us On Instagram
         </h2>
         <p className="text-sm text-gray-500">
-          Tag us <span className="font-semibold text-pink-500">@luwia.skincare</span> to get featured
+          Tag us <span className="font-semibold text-pink-500">@getluwia.In</span> to get featured
         </p>
       </div>
 

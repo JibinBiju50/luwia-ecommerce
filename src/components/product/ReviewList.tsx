@@ -24,9 +24,19 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
     ? (reviews.reduce((sum, r) => sum + r.star_rating, 0) / reviews.length).toFixed(1)
     : "0.0";
 
-  // Filter out reviews that don't have both name and text for display
-  const validReviews = reviews.filter(r => r.reviewer_name?.trim() && r.review_text?.trim());
-  const displayedReviews = showAll ? validReviews : validReviews.slice(0, 3);
+  // Sort: text+media first → text only → rating only
+  const sortedReviews = [...reviews].sort((a, b) => {
+    const weight = (r: Review) => {
+      const hasText = r.review_text?.trim().length > 0;
+      const hasMedia = r.image_urls && r.image_urls.length > 0;
+      if (hasText && hasMedia) return 0;
+      if (hasText) return 1;
+      return 2;
+    };
+    return weight(a) - weight(b);
+  });
+
+  const displayedReviews = showAll ? sortedReviews : sortedReviews.slice(0, 3);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -140,9 +150,11 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
                   </span>
                 </div>
 
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  &ldquo;{review.review_text}&rdquo;
-                </p>
+                {review.review_text?.trim() && (
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    &ldquo;{review.review_text}&rdquo;
+                  </p>
+                )}
 
                 {/* Review images */}
                 {hasImages && (
@@ -171,12 +183,12 @@ export default function ReviewList({ reviews, loading }: ReviewListProps) {
           })}
 
           {/* See more / less toggle */}
-          {validReviews.length > 3 && (
+          {sortedReviews.length > 3 && (
             <button
               onClick={() => setShowAll((prev) => !prev)}
               className="w-full py-3 text-sm font-semibold text-brand-primary border border-brand-primary/20 rounded-full hover:bg-brand-bg transition-all"
             >
-              {showAll ? "Show Less" : `See All ${validReviews.length} Reviews`}
+              {showAll ? "Show Less" : `See All ${sortedReviews.length} Reviews`}
             </button>
           )}
         </div>

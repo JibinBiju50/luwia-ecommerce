@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 
 export default function SalesBanner() {
   const [dismissed, setDismissed] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ hours: 2, minutes: 45, seconds: 12 });
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 35, seconds: 0 });
 
   useEffect(() => {
 

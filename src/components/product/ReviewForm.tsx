@@ -129,6 +129,16 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
       return;
     }
 
+    if (!name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+
+    if (reviewText.trim().length > 2000) {
+      setError("Review must be under 2000 characters.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -146,7 +156,10 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
         .select()
         .single();
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error("[ReviewForm] DB insert error:", dbError);
+        throw dbError;
+      }
 
       // 2. Upload images (if any) using the review ID as folder name
       let imageUrls: string[] = [];
@@ -158,7 +171,10 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
           .from("reviews")
           .update({ image_urls: imageUrls })
           .eq("id", inserted.id);
-        if (updateError) throw updateError;
+        if (updateError) {
+          console.error("[ReviewForm] DB update error:", updateError);
+          throw updateError;
+        }
       }
 
       const finalReview: Review = { ...inserted, image_urls: imageUrls };
@@ -171,7 +187,8 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
       setImages([]);
 
       setTimeout(() => setSubmitted(false), 5000);
-    } catch {
+    } catch (err) {
+      console.error("[ReviewForm] Submit failed:", err);
       setError("Unable to submit review. Please try again later.");
     } finally {
       setSubmitting(false);
@@ -230,7 +247,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
         {/* Name */}
         <div>
           <label htmlFor="reviewer-name" className="block text-sm font-medium text-gray-700 mb-1.5">
-            Your Name
+            Your Name <span className="text-red-400">*</span>
           </label>
           <input
             id="reviewer-name"
@@ -238,6 +255,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
+            required
             className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary transition-all"
           />
         </div>
@@ -284,6 +302,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
             onChange={(e) => setReviewText(e.target.value)}
             placeholder="Share your experience with Luwia Cream..."
             rows={4}
+            maxLength={2000}
             className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary transition-all"
           />
         </div>

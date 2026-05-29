@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import { ShoppingCart, Menu, X, User, LogOut, ChevronDown, ClipboardList } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -19,21 +20,57 @@ export default function Navbar() {
   const { quantity } = useCart();
   const { user, signOut, openAuthModal } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const userMenuRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const avatarBtnRef = useRef<HTMLButtonElement>(null);
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, right: 0 });
+  const [mounted, setMounted] = useState(false);
 
   const [showPopup, setShowPopup] = useState(false);
   const prevQuantityRef = useRef(quantity);
 
-  // Close user dropdown when clicking outside
+  useEffect(() => { setMounted(true); }, []);
+
+  // Calculate dropdown position from the avatar button
+  const updatePos = () => {
+    if (!avatarBtnRef.current) return;
+    const rect = avatarBtnRef.current.getBoundingClientRect();
+    setDropdownPos({
+      top: rect.bottom + 8,
+      right: window.innerWidth - rect.right,
+    });
+  };
+
+  const openMenu = () => {
+    updatePos();
+    setUserMenuOpen(true);
+  };
+
+  // Close on outside click
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+    if (!userMenuOpen) return;
+    const handle = (e: MouseEvent) => {
+      if (
+        dropdownRef.current && !dropdownRef.current.contains(e.target as Node) &&
+        avatarBtnRef.current && !avatarBtnRef.current.contains(e.target as Node)
+      ) {
         setUserMenuOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    document.addEventListener("mousedown", handle);
+    return () => document.removeEventListener("mousedown", handle);
+  }, [userMenuOpen]);
+
+  // Reposition on scroll / resize
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    window.addEventListener("scroll", updatePos, true);
+    window.addEventListener("resize", updatePos);
+    return () => {
+      window.removeEventListener("scroll", updatePos, true);
+      window.removeEventListener("resize", updatePos);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userMenuOpen]);
 
   useEffect(() => {
     if (quantity > prevQuantityRef.current) {
@@ -84,33 +121,42 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Cart + Auth + Mobile Toggle */}
+          {/* Cart + Auth */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Sign In / User Avatar */}
             {user ? (
-              <div className="relative" ref={userMenuRef}>
+              <div className="relative">
                 <button
+                  ref={avatarBtnRef}
                   id="navbar-user-menu-btn"
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  onClick={() => userMenuOpen ? setUserMenuOpen(false) : openMenu()}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-primary/20 hover:border-brand-primary/40 hover:bg-brand-bg transition-all"
                   aria-label="User menu"
+                  aria-expanded={userMenuOpen}
                 >
-                  <span className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                    style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}>
+                  <span
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                    style={{ background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }}
+                  >
                     {user.email?.[0].toUpperCase() ?? <User className="w-3 h-3" />}
                   </span>
-                  <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`} />
                 </button>
 
-                {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                {/* Dropdown via portal — escapes the sticky header stacking context */}
+                {userMenuOpen && mounted && ReactDOM.createPortal(
+                  <div
+                    ref={dropdownRef}
+                    style={{ position: "fixed", top: dropdownPos.top, right: dropdownPos.right }}
+                    className="w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-[9999]"
+                  >
                     <div className="px-3 py-2 border-b border-gray-50">
                       <p className="text-xs text-gray-400 truncate">{user.email}</p>
                     </div>
                     <Link
                       href="/my-orders"
                       onClick={() => setUserMenuOpen(false)}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-brand-primary transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-brand-primary transition-colors"
                     >
                       <ClipboardList className="w-4 h-4" />
                       My Orders
@@ -123,7 +169,8 @@ export default function Navbar() {
                       <LogOut className="w-4 h-4" />
                       Sign Out
                     </button>
-                  </div>
+                  </div>,
+                  document.body
                 )}
               </div>
             ) : (
