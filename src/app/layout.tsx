@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import AuthModal from "@/components/auth/AuthModal";
 import MagicLinkModal from "@/components/auth/MagicLinkModal";
 import Script from "next/script";
+import NextTopLoader from "nextjs-toploader";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -105,6 +106,13 @@ height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe>
         {/* End Google Tag Manager (noscript) */}
         <AuthProvider>
           <CartProvider>
+            <NextTopLoader
+              color="#1E3A8A"
+              height={3}
+              showSpinner={false}
+              easing="ease"
+              speed={200}
+            />
             <Navbar />
             <main className="min-h-screen">{children}</main>
             <Footer />

@@ -20,12 +20,12 @@ interface LightboxState {
   index: number;
 }
 
-/** Returns page numbers with "…" ellipsis for long page ranges */
-function getPageNumbers(current: number, total: number): (number | "…")[] {
-  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-  if (current <= 4) return [1, 2, 3, 4, 5, "…", total];
-  if (current >= total - 3) return [1, "…", total - 4, total - 3, total - 2, total - 1, total];
-  return [1, "…", current - 1, current, current + 1, "…", total];
+/** Returns exactly 3 consecutive page numbers, sliding as the user navigates */
+function getPageNumbers(current: number, total: number): number[] {
+  if (total <= 3) return Array.from({ length: total }, (_, i) => i + 1);
+  if (current === 1) return [1, 2, 3];
+  if (current === total) return [total - 2, total - 1, total];
+  return [current - 1, current, current + 1];
 }
 
 export default function ReviewList({
@@ -264,32 +264,26 @@ export default function ReviewList({
             </button>
 
             {/* Page numbers */}
-            {getPageNumbers(page, totalPages).map((p, i) =>
-              p === "…" ? (
-                <span key={`ellipsis-${i}`} className="px-1 text-gray-400 text-xs select-none">
-                  …
-                </span>
-              ) : (
-                <button
-                  key={p}
-                  onClick={() => goToPage(p as number)}
-                  className={`w-8 h-8 text-xs font-semibold rounded-lg transition-all ${
-                    page === p
-                      ? "text-white shadow-sm"
-                      : "text-gray-600 border border-gray-200 hover:bg-gray-50"
-                  }`}
-                  style={
-                    page === p
-                      ? { background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }
-                      : {}
-                  }
-                  aria-label={`Page ${p}`}
-                  aria-current={page === p ? "page" : undefined}
-                >
-                  {p}
-                </button>
-              )
-            )}
+            {getPageNumbers(page, totalPages).map((p) => (
+              <button
+                key={p}
+                onClick={() => goToPage(p)}
+                className={`w-8 h-8 text-xs font-semibold rounded-lg transition-all ${
+                  page === p
+                    ? "text-white shadow-sm"
+                    : "text-gray-600 border border-gray-200 hover:bg-gray-50"
+                }`}
+                style={
+                  page === p
+                    ? { background: "linear-gradient(135deg, #1E3A8A 0%, #172554 100%)" }
+                    : {}
+                }
+                aria-label={`Page ${p}`}
+                aria-current={page === p ? "page" : undefined}
+              >
+                {p}
+              </button>
+            ))}
 
             {/* Next */}
             <button
