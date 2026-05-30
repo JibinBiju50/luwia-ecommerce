@@ -5,18 +5,9 @@ import { Star, MessageSquare, ImagePlus, X, Loader2, LogIn } from "lucide-react"
 import { supabase } from "@/lib/supabase-client";
 import { useAuth } from "@/context/AuthContext";
 
-interface Review {
-  id: string;
-  reviewer_name: string;
-  star_rating: number;
-  review_text: string;
-  image_urls: string[];
-  created_at: string;
-}
-
 interface ReviewFormProps {
   productId: string;
-  onReviewSubmitted: (review: Review) => void;
+  onReviewSubmitted: () => void;
 }
 
 interface ImageFile {
@@ -177,8 +168,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }: ReviewFormP
         }
       }
 
-      const finalReview: Review = { ...inserted, image_urls: imageUrls };
-      onReviewSubmitted(finalReview);
+      onReviewSubmitted();
       setSubmitted(true);
       setName("");
       setRating(0);

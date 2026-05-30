@@ -7,7 +7,7 @@ import Image from "next/image";
 import { PRODUCTS } from "@/lib/products";
 import { supabase } from "@/lib/supabase-client";
 import ProductGallery from "@/components/product/ProductGallery";
-import ProductInfo, { type Review } from "@/components/product/ProductInfo";
+import ProductInfo from "@/components/product/ProductInfo";
 import ProductDescription from "@/components/product/ProductDescription";
 import ReviewList from "@/components/product/ReviewList";
 import ReviewForm from "@/components/product/ReviewForm";
@@ -32,27 +32,29 @@ export default function ProductPage({ params }: ProductPageProps) {
   const pathname = usePathname();
   const otherProducts = PRODUCTS.filter((p) => p.id !== id);
 
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loadingReviews, setLoadingReviews] = useState(true);
+  const [ratingInfo, setRatingInfo] = useState({ avgRating: 0, totalCount: 0 });
+  const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
 
   useEffect(() => {
-    async function fetchReviews() {
-      setLoadingReviews(true);
-      const { data } = await supabase
+    async function fetchRatingInfo() {
+      const { data, count } = await supabase
         .from("reviews")
-        .select("*")
-        .eq("product_id", id)
-        .order("created_at", { ascending: false });
-      setReviews((data as Review[]) || []);
-      setLoadingReviews(false);
+        .select("star_rating", { count: "exact" })
+        .eq("product_id", id);
+      const total = count || 0;
+      const avg =
+        total > 0
+          ? (data?.reduce((s: number, r: { star_rating: number }) => s + r.star_rating, 0) || 0) / total
+          : 0;
+      setRatingInfo({ avgRating: avg, totalCount: total });
     }
-    fetchReviews();
-  }, [id]);
+    fetchRatingInfo();
+  }, [id, reviewRefreshKey]);
 
   if (!product) return notFound();
 
-  const handleReviewSubmitted = (review: Review) => {
-    setReviews((prev) => [review, ...prev]);
+  const handleReviewSubmitted = () => {
+    setReviewRefreshKey((k) => k + 1);
   };
 
   return (
@@ -74,7 +76,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             <ProductGallery images={product.gallery} />
           </div>
           <div className="min-w-0">
-            <ProductInfo product={product} reviews={reviews} />
+            <ProductInfo product={product} avgRating={ratingInfo.avgRating} totalCount={ratingInfo.totalCount} />
           </div>
         </div>
 
@@ -164,7 +166,12 @@ export default function ProductPage({ params }: ProductPageProps) {
       <section className="w-full bg-brand-light/10 border-y border-brand-primary/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
-            <ReviewList reviews={reviews} loading={loadingReviews} />
+            <ReviewList
+              productId={product.id}
+              avgRating={ratingInfo.avgRating}
+              totalCount={ratingInfo.totalCount}
+              refreshKey={reviewRefreshKey}
+            />
             <ReviewForm productId={product.id} onReviewSubmitted={handleReviewSubmitted} />
           </div>
         </div>
