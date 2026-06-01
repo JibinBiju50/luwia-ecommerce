@@ -138,7 +138,7 @@ export default function ReviewList({
   const rangeEnd = Math.min(page * PAGE_SIZE, displayedTotal);
 
   return (
-    <div className="space-y-8" ref={sectionRef}>
+    <div className="space-y-2" ref={sectionRef}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl md:text-2xl font-bold text-brand-text">Real Reviews</h2>

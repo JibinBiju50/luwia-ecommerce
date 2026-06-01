@@ -48,7 +48,7 @@ export default function ProductCarousel({
   };
 
   return (
-    <section className="py-12 md:py-16 bg-white overflow-hidden">
+    <section className="py-4 md:py-6 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-brand-text">
@@ -78,33 +78,7 @@ export default function ProductCarousel({
           ))}
         </div>
 
-        {/* Navigation Arrows for small/medium screens */}
-        <div className="flex lg:hidden items-center justify-center gap-4 mt-2">
-          <button
-            onClick={() => scroll("left")}
-            disabled={isAtStart}
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm ${
-              isAtStart
-                ? "bg-brand-light/10 text-brand-primary/40 cursor-not-allowed opacity-50"
-                : "bg-brand-light/20 text-brand-primary hover:bg-brand-primary hover:text-white active:bg-brand-primary active:text-white active:shadow-[0_0_15px_rgba(30,58,138,0.6)] cursor-pointer"
-            }`}
-            aria-label="Previous product"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            disabled={isAtEnd}
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm ${
-              isAtEnd
-                ? "bg-brand-light/10 text-brand-primary/40 cursor-not-allowed opacity-50"
-                : "bg-brand-light/20 text-brand-primary hover:bg-brand-primary hover:text-white active:bg-brand-primary active:text-white active:shadow-[0_0_15px_rgba(30,58,138,0.6)] cursor-pointer"
-            }`}
-            aria-label="Next product"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
+
       </div>
       <style jsx global>{`
         .hide-scrollbar::-webkit-scrollbar {

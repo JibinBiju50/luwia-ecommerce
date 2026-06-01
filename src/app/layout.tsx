@@ -29,6 +29,7 @@ const nunito = Nunito({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "Luwia Skin Science — Pearl Radiance Cream | Skin Bright & Repair",
   description:
     "Reveal radiant, healthy skin with Luwia Cream. Powered by Niacinamide, Glutathione & Shea Butter. Brightens, hydrates, and restores your natural glow. Free delivery across India.",

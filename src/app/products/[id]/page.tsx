@@ -60,7 +60,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   return (
     <main className="bg-white min-h-screen">
       <SalesBanner />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-400 mb-6 flex items-center gap-2">
           <a href="/" className="hover:text-brand-primary transition-colors">Home</a>
@@ -71,7 +71,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         </nav>
 
         {/* Product Section */}
-        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 mb-16">
+        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 mb-8 md:mb-12">
           <div className="min-w-0">
             <ProductGallery images={product.gallery} />
           </div>
@@ -85,7 +85,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         <ProductFeatures />
 
         {/* Product Description */}
-        <div className="mb-16">
+        <div className="mb-4 md:mb-6">
           <h2 className="text-xl md:text-2xl font-bold text-brand-text mb-6">
             Product Details
           </h2>
@@ -95,7 +95,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
       {/* Cream Bar Infographic — product-specific, full-width section */}
       {(product.id === "luwia-core" || product.id === "luwia-prime") && (
-        <section className="w-full py-6 md:py-8 px-4 sm:px-6 lg:px-8"
+        <section className="w-full py-4 md:py-6 px-4 sm:px-6 lg:px-8"
           style={{ background: "linear-gradient(135deg, #fdf6ee 0%, #fef3e8 50%, #fdf6ee 100%)" }}>
           <div className="max-w-xl lg:max-w-lg mx-auto">
             {/* Decorative top label */}
@@ -143,7 +143,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
       {/* Custom Image Section — Only for Luwia Core */}
       {product.id === "luwia-core" && (
-        <section className="w-full py-8 md:py-12 px-4 sm:px-6 lg:px-8 bg-gray-50/80 border-y border-gray-100">
+        <section className="w-full py-6 md:py-10 px-4 sm:px-6 lg:px-8 bg-gray-50/80 border-y border-gray-100">
           <div className="max-w-xl lg:max-w-lg mx-auto">
             <div className="relative rounded-3xl overflow-hidden shadow-xl ring-1 ring-brand-primary/10 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(30,58,138,0.5)] hover:-translate-y-2 group cursor-pointer">
               <Image
@@ -164,8 +164,8 @@ export default function ProductPage({ params }: ProductPageProps) {
 
       {/* Reviews Section */}
       <section className="w-full bg-brand-light/10 border-y border-brand-primary/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+          <div className="grid md:grid-cols-2 gap-4 lg:gap-8">
             <ReviewList
               productId={product.id}
               avgRating={ratingInfo.avgRating}
@@ -177,7 +177,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
       {/* FAQ Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
         <ProductFAQ />
       </div>
 

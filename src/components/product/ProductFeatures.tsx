@@ -35,7 +35,7 @@ const features = [
 
 export default function ProductFeatures() {
   return (
-    <div className="w-full bg-[#FDFBF7] py-12 md:py-16 my-12 rounded-3xl border border-brand-primary/10">
+    <div className="w-full bg-[#FDFBF7] py-8 md:py-12 my-8 rounded-3xl border border-brand-primary/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-brand-text mb-10 md:mb-14">
           The Luwia Advantage
