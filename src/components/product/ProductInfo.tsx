@@ -147,7 +147,13 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
           </h1>
 
           {/* Star rating */}
-          <div className="flex items-center gap-2 mt-2">
+          <button 
+            onClick={() => {
+              document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="flex items-center gap-2 mt-2 hover:opacity-75 transition-opacity text-left cursor-pointer"
+            aria-label="Scroll to reviews"
+          >
             <div className="flex items-center gap-0.5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
@@ -160,10 +166,10 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
                 />
               ))}
             </div>
-            <span className="text-sm text-gray-500">
-              {reviewCount > 0 ? `(${reviewCount})` : "(No reviews yet)"}
+            <span className="text-sm text-gray-500 underline decoration-gray-300 underline-offset-2">
+              {reviewCount > 0 ? `(${reviewCount} reviews)` : "(No reviews yet)"}
             </span>
-          </div>
+          </button>
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">

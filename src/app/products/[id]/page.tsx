@@ -163,7 +163,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       {product.id === "luwia-prime" && <InstagramFeed />}
 
       {/* Reviews Section */}
-      <section className="w-full bg-brand-light/10 border-y border-brand-primary/10">
+      <section id="reviews" className="w-full bg-brand-light/10 border-y border-brand-primary/10 scroll-mt-16 md:scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           <div className="grid md:grid-cols-2 gap-4 lg:gap-8">
             <ReviewList

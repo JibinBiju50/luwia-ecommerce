@@ -25,22 +25,7 @@ export default function MagicLinkModal({ returnPath }: MagicLinkModalProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // 20-second auto-trigger (once per session, suppressed if already dismissed)
-  useEffect(() => {
-    if (user) return; // already signed in — never show
-    if (typeof window === "undefined") return;
 
-    const wasDismissed = sessionStorage.getItem(DISMISSED_KEY);
-    if (wasDismissed) return;
-
-    timerRef.current = setTimeout(() => {
-      openMagicLinkModal();
-    }, 20_000);
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [user, openMagicLinkModal]);
 
   const handleDismiss = () => {
     sessionStorage.setItem(DISMISSED_KEY, "1");
