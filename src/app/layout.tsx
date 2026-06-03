@@ -117,15 +117,6 @@ fbq('init', '1531746671789593');
 fbq('track', 'PageView');`
           }}
         />
-        {/* End Meta Pixel Code */}
-      </head>
-      <body className={`${dmSans.variable} ${inter.variable} ${nunito.variable} font-sans antialiased`}>
-        {/* Google Tag Manager (noscript) */}
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJVJ5NTC"
-height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe></noscript>
-        {/* End Google Tag Manager (noscript) */}
-
-        {/* Meta Pixel Code (noscript) */}
         <noscript>
           <img 
             height="1" 
@@ -135,7 +126,13 @@ height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe>
             alt=""
           />
         </noscript>
-        {/* End Meta Pixel Code (noscript) */}
+        {/* End Meta Pixel Code */}
+      </head>
+      <body className={`${dmSans.variable} ${inter.variable} ${nunito.variable} font-sans antialiased`}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJVJ5NTC"
+height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe></noscript>
+        {/* End Google Tag Manager (noscript) */}
         <AuthProvider>
           <CartProvider>
             <NextTopLoader
