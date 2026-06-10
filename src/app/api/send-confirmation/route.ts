@@ -14,9 +14,14 @@ export async function POST(request: NextRequest) {
       amount,
       paymentMethod,
       address,
+      items,
     } = await request.json();
 
-    const productName = "Luwia — Skin Bright & Repair (Pearl Radiance Cream)";
+    let productName = "Luwia — Skin Bright & Repair (Pearl Radiance Cream)";
+    if (items && Array.isArray(items) && items.length > 0) {
+      productName = items.map((item: any) => `${item.productId} (x${item.quantity})`).join(", ");
+    }
+    
     const paymentLabel = paymentMethod === "cod" ? "Cash on Delivery" : "Paid Online";
 
     // Customer confirmation email

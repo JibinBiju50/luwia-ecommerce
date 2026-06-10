@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
           address: `${orderDetails.addressLine1}${
             orderDetails.addressLine2 ? ", " + orderDetails.addressLine2 : ""
           }, ${orderDetails.city}, ${orderDetails.state} - ${orderDetails.pincode}`,
+          items: orderDetails.items,
         }),
       });
     } catch (emailError) {
