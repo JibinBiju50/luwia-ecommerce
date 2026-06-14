@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { PRODUCTS } from "@/lib/products";
 import { supabase } from "@/lib/supabase-client";
+import { viewContent } from "@/lib/fbpixel";
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductDescription from "@/components/product/ProductDescription";
@@ -50,6 +51,18 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
     fetchRatingInfo();
   }, [id, reviewRefreshKey]);
+
+  // Fire ViewContent when the product page is viewed
+  useEffect(() => {
+    if (!product) return;
+    viewContent({
+      content_name: product.name,
+      content_ids: [product.id],
+      content_type: "product",
+      value: product.onlinePrice,
+      currency: "INR",
+    });
+  }, [product]);
 
   if (!product) return notFound();
 

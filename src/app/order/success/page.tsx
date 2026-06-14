@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle, Package, MapPin, CreditCard, Banknote } from "lucide-react";
+import { purchase } from "@/lib/fbpixel";
 
 interface OrderInfo {
   orderId: string;
@@ -24,8 +25,17 @@ export default function OrderSuccessPage() {
   useEffect(() => {
     const stored = sessionStorage.getItem("luwia-order");
     if (stored) {
-      setOrder(JSON.parse(stored));
+      const parsed: OrderInfo & { items?: { productId: string; quantity: number }[] } = JSON.parse(stored);
+      setOrder(parsed);
       sessionStorage.removeItem("luwia-order");
+      // Fire Meta Pixel Purchase event
+      purchase({
+        value: parsed.amount,
+        currency: "INR",
+        num_items: parsed.quantity,
+        content_ids: parsed.items?.map((i) => i.productId) ?? [],
+        content_type: "product",
+      });
     }
   }, []);
 

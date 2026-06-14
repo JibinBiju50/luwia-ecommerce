@@ -7,6 +7,7 @@ import { Heart, Share2, Minus, Plus, Truck, Star, Flame, Eye } from "lucide-reac
 import confetti from "canvas-confetti";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { addToCart as fbAddToCart, initiateCheckout } from "@/lib/fbpixel";
 import type { Product } from "@/lib/products";
 
 export interface Review {
@@ -76,6 +77,15 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
       return;
     }
     addToCart(product.id, selectedQty);
+    // Fire Meta Pixel AddToCart
+    fbAddToCart({
+      content_name: product.name,
+      content_ids: [product.id],
+      content_type: "product",
+      value: product.onlinePrice * selectedQty,
+      currency: "INR",
+      num_items: selectedQty,
+    });
   };
 
   const handleBuyNow = () => {
@@ -84,6 +94,12 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
       "luwia-direct-buy",
       JSON.stringify({ productId: product.id, quantity: selectedQty })
     );
+    // Fire Meta Pixel InitiateCheckout
+    initiateCheckout({
+      num_items: selectedQty,
+      value: product.onlinePrice * selectedQty,
+      currency: "INR",
+    });
     router.push("/checkout");
   };
 

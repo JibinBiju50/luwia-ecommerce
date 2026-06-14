@@ -2,10 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Minus, Plus, ShoppingBag, Truck, CreditCard } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { initiateCheckout } from "@/lib/fbpixel";
 
 export default function CartPage() {
+  const router = useRouter();
   const { items, quantity, updateQuantity, getOnlineTotal, getCodTotal, getProductDetails } = useCart();
 
   if (quantity === 0 || items.length === 0) {
@@ -167,12 +170,19 @@ export default function CartPage() {
                 COD price: {currencySymbol}{codTotal}
               </p>
 
-              <Link
-                href="/checkout"
+              <button
+                onClick={() => {
+                  initiateCheckout({
+                    num_items: quantity,
+                    value: onlineTotal,
+                    currency: "INR",
+                  });
+                  router.push("/checkout");
+                }}
                 className="mt-5 block w-full py-3.5 text-sm font-semibold text-center text-white gradient-brand rounded-full hover:opacity-90 transition-opacity shadow-brand"
               >
                 Proceed to Checkout
-              </Link>
+              </button>
             </div>
           </div>
         </div>
