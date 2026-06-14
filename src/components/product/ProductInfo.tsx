@@ -144,7 +144,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
           <div className="bg-white rounded-3xl p-8 max-w-sm w-[90%] text-center shadow-2xl animate-in zoom-in duration-300 ring-1 ring-brand-primary/10">
             <span className="text-5xl animate-bounce inline-block mb-4">🎉</span>
             <h2 className="text-2xl font-bold text-brand-text mb-2">Coupon Applied!</h2>
-            <p className="text-gray-500 mb-6 text-sm">We've automatically applied <span className="font-bold text-brand-primary">LUWIAGLOW20</span> for you!</p>
+            <p className="text-gray-500 mb-6 text-sm">We've automatically applied <span className="font-bold text-brand-primary">LUWIAGLOW53</span> for you!</p>
             <div className="bg-green-50/80 border border-green-200 rounded-xl p-4 shadow-inner">
               <p className="text-xs text-green-700 font-bold uppercase tracking-wider">Discounted Price</p>
               <p className="text-3xl font-bold text-green-600 mt-1">
@@ -266,7 +266,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
             <p className="text-sm font-bold text-brand-text flex items-center gap-1.5">
               <span className="text-base">🎁</span> Have a coupon?
             </p>
-            <p className="text-xs text-gray-500 mt-0.5">Apply code <span className="font-bold text-brand-primary">LUWIAGLOW20</span> for 20% OFF!</p>
+            <p className="text-xs text-gray-500 mt-0.5">Apply code <span className="font-bold text-brand-primary">LUWIAGLOW53</span> for 53% OFF!</p>
           </div>
           <button
             onClick={handleApplyCoupon}
@@ -280,8 +280,8 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
           <div className="flex items-center gap-3 text-green-700">
             <span className="text-2xl animate-bounce">🎉</span>
             <div>
-              <p className="text-sm font-bold">LUWIAGLOW20 Applied!</p>
-              <p className="text-xs text-green-600">You got a 20% discount on this product.</p>
+              <p className="text-sm font-bold">LUWIAGLOW53 Applied!</p>
+              <p className="text-xs text-green-600">You got a 53% discount on this product.</p>
             </div>
           </div>
         </div>
