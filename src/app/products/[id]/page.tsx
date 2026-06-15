@@ -106,20 +106,58 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
       </div>
 
-      {/* Cream Bar Infographic — product-specific, full-width section */}
-      {(product.id === "luwia-core" || product.id === "luwia-prime") && (
+      {/* Women product images + Cream Bar — Luwia Prime only */}
+      {product.id === "luwia-prime" && (
+        <section className="w-full flex flex-col">
+          <Image
+            src="/images/luwia_women1.jpg"
+            alt="Luwia Prime — Women skin brightening result 1"
+            width={1080}
+            height={1080}
+            className="w-full h-auto object-cover block"
+            priority={false}
+          />
+          <Image
+            src="/images/luwia_women2.jpg"
+            alt="Luwia Prime — Women skin brightening result 2"
+            width={1080}
+            height={1080}
+            className="w-full h-auto object-cover block"
+            priority={false}
+          />
+          <Image
+            src="/images/luiwa_women3.jpg"
+            alt="Luwia Prime — Women skin brightening result 3"
+            width={1080}
+            height={1080}
+            className="w-full h-auto object-cover block"
+            priority={false}
+          />
+          <Image
+            src="/images/luwia_women4.jpg"
+            alt="Luwia Prime — Women skin brightening result 4"
+            width={1080}
+            height={1080}
+            className="w-full h-auto object-cover block"
+            priority={false}
+          />
+          <Image
+            src="/images/women_cream_bar.jpeg"
+            alt="Luwia Prime — Tested & Loved visible results for women"
+            width={1080}
+            height={1080}
+            className="w-full h-auto object-cover block"
+            priority={false}
+          />
+        </section>
+      )}
+
+      {/* Cream Bar — Luwia Core only */}
+      {product.id === "luwia-core" && (
         <section className="w-full">
           <Image
-            src={
-              product.id === "luwia-core"
-                ? "/images/men_cream_bar.jpeg"
-                : "/images/women_cream_bar.jpeg"
-            }
-            alt={
-              product.id === "luwia-core"
-                ? "Luwia Core — Tested & Loved visible results for men"
-                : "Luwia Prime — Tested & Loved visible results for women"
-            }
+            src="/images/men_cream_bar.jpeg"
+            alt="Luwia Core — Tested & Loved visible results for men"
             width={1080}
             height={1080}
             className="w-full h-auto object-cover"
