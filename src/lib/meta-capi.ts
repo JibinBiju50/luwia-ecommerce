@@ -32,6 +32,10 @@ interface CAPIPurchaseParams {
  * Fire-and-forget — errors are logged but never thrown to avoid failing the order response.
  */
 export async function sendCAPIPurchase(params: CAPIPurchaseParams): Promise<void> {
+  console.log("[CAPI] sendCAPIPurchase called. Event ID:", params.eventId);
+  console.log("[CAPI] ACCESS_TOKEN present:", !!ACCESS_TOKEN);
+  console.log("[CAPI] PIXEL_ID:", PIXEL_ID);
+
   if (!ACCESS_TOKEN) {
     console.warn("[CAPI] META_CAPI_ACCESS_TOKEN is not set — skipping.");
     return;
@@ -62,19 +66,21 @@ export async function sendCAPIPurchase(params: CAPIPurchaseParams): Promise<void
   };
 
   try {
+    console.log("[CAPI] Sending to Meta API:", API_URL);
     const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
+    const responseText = await res.text();
     if (!res.ok) {
-      const err = await res.text();
-      console.error("[CAPI] Meta API error:", err);
+      console.error("[CAPI] Meta API error (status", res.status, "):", responseText);
     } else {
-      console.log("[CAPI] Purchase event sent successfully. Event ID:", params.eventId);
+      console.log("[CAPI] ✅ Purchase event sent successfully. Event ID:", params.eventId);
+      console.log("[CAPI] Meta response:", responseText);
     }
   } catch (err) {
-    console.error("[CAPI] Failed to send Purchase event:", err);
+    console.error("[CAPI] ❌ Fetch failed:", err);
   }
 }

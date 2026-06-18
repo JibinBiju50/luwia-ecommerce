@@ -3,8 +3,10 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { sendCAPIPurchase } from "@/lib/meta-capi";
 
 export async function POST(request: NextRequest) {
+  console.log("[COD] place-cod-order route hit");
   try {
     const { orderDetails } = await request.json();
+    console.log("[COD] orderDetails received:", !!orderDetails);
 
     if (!orderDetails) {
       return NextResponse.json({ error: "Missing order details" }, { status: 400 });
