@@ -48,11 +48,18 @@ export function initiateCheckout(params: {
 
 /** Order placed successfully */
 export function purchase(params: {
+  eventId: string;      // order ID — must match the CAPI event_id
   value: number;
   currency: string;
   num_items: number;
   content_ids: string[];
   content_type: string;
 }) {
-  fbq("track", "Purchase", params);
+  fbq("track", "Purchase", {
+    value: params.value,
+    currency: params.currency,
+    num_items: params.num_items,
+    content_ids: params.content_ids,
+    content_type: params.content_type,
+  }, { eventID: params.eventId });
 }

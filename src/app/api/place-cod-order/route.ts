@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { sendCAPIPurchase } from "@/lib/meta-capi";
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,6 +63,19 @@ export async function POST(request: NextRequest) {
     } catch (emailError) {
       console.error("Email trigger error:", emailError);
     }
+
+    // Send Purchase event via Meta Conversions API (server-side, bypasses ad blockers)
+    sendCAPIPurchase({
+      eventId: order.id,
+      email: orderDetails.email,
+      phone: orderDetails.phone,
+      amount: orderDetails.amount,
+      currency: "INR",
+      contentIds: (orderDetails.items ?? []).map(
+        (i: { productId: string }) => i.productId
+      ),
+      numItems: orderDetails.quantity,
+    }).catch((err) => console.error("[CAPI] Unexpected error:", err));
 
     return NextResponse.json({
       success: true,

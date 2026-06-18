@@ -28,8 +28,9 @@ export default function OrderSuccessPage() {
       const parsed: OrderInfo & { items?: { productId: string; quantity: number }[] } = JSON.parse(stored);
       setOrder(parsed);
       sessionStorage.removeItem("luwia-order");
-      // Fire Meta Pixel Purchase event
+      // Fire Meta Pixel Purchase event (eventId matches CAPI for deduplication)
       purchase({
+        eventId: parsed.orderId,
         value: parsed.amount,
         currency: "INR",
         num_items: parsed.quantity,
