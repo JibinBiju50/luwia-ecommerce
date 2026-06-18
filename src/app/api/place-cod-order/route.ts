@@ -66,8 +66,9 @@ export async function POST(request: NextRequest) {
       console.error("Email trigger error:", emailError);
     }
 
-    // Send Purchase event via Meta Conversions API (server-side, bypasses ad blockers)
-    sendCAPIPurchase({
+    // Send Purchase event via Meta Conversions API
+    // Must be awaited — serverless functions shut down immediately after response
+    await sendCAPIPurchase({
       eventId: order.id,
       email: orderDetails.email,
       phone: orderDetails.phone,
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
         (i: { productId: string }) => i.productId
       ),
       numItems: orderDetails.quantity,
-    }).catch((err) => console.error("[CAPI] Unexpected error:", err));
+    });
 
     return NextResponse.json({
       success: true,
