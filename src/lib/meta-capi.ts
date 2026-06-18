@@ -67,11 +67,22 @@ export async function sendCAPIPurchase(params: CAPIPurchaseParams): Promise<void
 
   try {
     console.log("[CAPI] Sending to Meta API:", API_URL);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+      console.error("[CAPI] ❌ Request timed out after 8 seconds");
+    }, 8000);
+
     const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
+    console.log("[CAPI] Got response. Status:", res.status);
 
     const responseText = await res.text();
     if (!res.ok) {
@@ -81,6 +92,10 @@ export async function sendCAPIPurchase(params: CAPIPurchaseParams): Promise<void
       console.log("[CAPI] Meta response:", responseText);
     }
   } catch (err) {
-    console.error("[CAPI] ❌ Fetch failed:", err);
+    if (err instanceof Error && err.name === "AbortError") {
+      console.error("[CAPI] ❌ Fetch aborted — Meta API did not respond in time.");
+    } else {
+      console.error("[CAPI] ❌ Fetch failed:", err);
+    }
   }
 }

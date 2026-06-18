@@ -22,7 +22,9 @@ export function viewContent(params: {
   value: number;
   currency: string;
 }) {
-  fbq("track", "ViewContent", params);
+  // Deduplication key: product ID + timestamp (unique per view session)
+  const eventID = `vc-${params.content_ids[0]}-${Date.now()}`;
+  fbq("track", "ViewContent", params, { eventID });
 }
 
 /** Item added to cart */
@@ -34,7 +36,8 @@ export function addToCart(params: {
   currency: string;
   num_items: number;
 }) {
-  fbq("track", "AddToCart", params);
+  const eventID = `atc-${params.content_ids[0]}-${Date.now()}`;
+  fbq("track", "AddToCart", params, { eventID });
 }
 
 /** User clicked Proceed to Checkout or Buy Now */
@@ -43,7 +46,8 @@ export function initiateCheckout(params: {
   value: number;
   currency: string;
 }) {
-  fbq("track", "InitiateCheckout", params);
+  const eventID = `ic-${Date.now()}`;
+  fbq("track", "InitiateCheckout", params, { eventID });
 }
 
 /** Order placed successfully */
