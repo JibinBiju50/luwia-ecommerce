@@ -108,59 +108,83 @@ export default function ProductPage({ params }: ProductPageProps) {
 
       {/* Women product images + Cream Bar — Luwia Prime only */}
       {product.id === "luwia-prime" && (
-        <section className="w-full flex flex-col">
-          <Image
-            src="/images/luwia_women1.jpg"
-            alt="Luwia Prime — Women skin brightening result 1"
-            width={1080}
-            height={1080}
-            className="w-full h-auto object-cover block"
-            priority={false}
-          />
-          <Image
-            src="/images/luwia_women2.jpg"
-            alt="Luwia Prime — Women skin brightening result 2"
-            width={1080}
-            height={1080}
-            className="w-full h-auto object-cover block"
-            priority={false}
-          />
-          <Image
-            src="/images/luiwa_women3.jpg"
-            alt="Luwia Prime — Women skin brightening result 3"
-            width={1080}
-            height={1080}
-            className="w-full h-auto object-cover block"
-            priority={false}
-          />
-          <Image
-            src="/images/luwia_women4.jpg"
-            alt="Luwia Prime — Women skin brightening result 4"
-            width={1080}
-            height={1080}
-            className="w-full h-auto object-cover block"
-            priority={false}
-          />
-          <Image
-            src="/images/women_cream_bar.jpeg"
-            alt="Luwia Prime — Tested & Loved visible results for women"
-            width={1080}
-            height={1080}
-            className="w-full h-auto object-cover block"
-            priority={false}
-          />
+        <section className="w-full max-w-7xl mx-auto px-0 md:px-4 lg:px-8 md:my-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:gap-6">
+            <Image
+              src="/images/luwia_women1.jpg"
+              alt="Luwia Prime — Women skin brightening result 1"
+              width={1080}
+              height={1080}
+              className="w-full h-auto object-cover block md:rounded-xl"
+              priority={false}
+            />
+            <Image
+              src="/images/luwia_women2.jpg"
+              alt="Luwia Prime — Women skin brightening result 2"
+              width={1080}
+              height={1080}
+              className="w-full h-auto object-cover block md:rounded-xl"
+              priority={false}
+            />
+            <Image
+              src="/images/luiwa_women3.jpg"
+              alt="Luwia Prime — Women skin brightening result 3"
+              width={1080}
+              height={1080}
+              className="w-full h-auto object-cover block md:rounded-xl"
+              priority={false}
+            />
+            <Image
+              src="/images/luwia_women4.jpg"
+              alt="Luwia Prime — Women skin brightening result 4"
+              width={1080}
+              height={1080}
+              className="w-full h-auto object-cover block md:rounded-xl"
+              priority={false}
+            />
+          </div>
+          <div className="md:mt-6 max-w-7xl mx-auto">
+            {/* Mobile Image */}
+            <Image
+              src="/images/women_cream_bar.jpeg"
+              alt="Luwia Prime — Tested & Loved visible results for women"
+              width={1080}
+              height={1080}
+              className="w-full h-auto object-cover block md:hidden"
+              priority={false}
+            />
+            {/* Desktop Image */}
+            <Image
+              src="/images/women_cream_bar_widescreen.jpeg"
+              alt="Luwia Prime — Tested & Loved visible results for women"
+              width={1920}
+              height={1080}
+              className="w-full h-auto object-cover hidden md:block md:rounded-xl"
+              priority={false}
+            />
+          </div>
         </section>
       )}
 
       {/* Cream Bar — Luwia Core only */}
       {product.id === "luwia-core" && (
-        <section className="w-full">
+        <section className="w-full max-w-7xl mx-auto px-0 md:px-4 lg:px-8 md:my-6">
+          {/* Mobile Image */}
           <Image
             src="/images/men_cream_bar.jpeg"
             alt="Luwia Core — Tested & Loved visible results for men"
             width={1080}
             height={1080}
-            className="w-full h-auto object-cover"
+            className="w-full h-auto object-cover block md:hidden"
+            priority={false}
+          />
+          {/* Desktop Image */}
+          <Image
+            src="/images/men_cream_bar_widescreen.jpeg"
+            alt="Luwia Core — Tested & Loved visible results for men"
+            width={1920}
+            height={1080}
+            className="w-full h-auto object-cover hidden md:block md:rounded-xl"
             priority={false}
           />
         </section>
@@ -184,14 +208,23 @@ export default function ProductPage({ params }: ProductPageProps) {
       {/* Custom Image Section — Only for Luwia Core */}
       {product.id === "luwia-core" && (
         <section className="w-full py-3 md:py-5 px-4 sm:px-6 lg:px-8 bg-gray-50/80 border-y border-gray-100">
-          <div className="max-w-xl lg:max-w-lg mx-auto">
+          <div className="max-w-xl lg:max-w-6xl mx-auto">
             <div className="relative rounded-3xl overflow-hidden shadow-xl ring-1 ring-brand-primary/10 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(30,58,138,0.5)] hover:-translate-y-2 group cursor-pointer">
+              {/* Mobile Image */}
               <Image
                 src="/images/cream_men.jpeg"
                 alt="Luwia Core for Men"
                 width={1080}
                 height={1080}
-                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105 block md:hidden"
+              />
+              {/* Desktop Image */}
+              <Image
+                src="/images/cream_men_widescreen.png"
+                alt="Luwia Core for Men"
+                width={1920}
+                height={1080}
+                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105 hidden md:block"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
