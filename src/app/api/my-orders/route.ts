@@ -1,26 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseServerClient } from "@/lib/supabase-server-ssr";
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify the user's session using the anon key + Authorization header
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const token = authHeader.replace("Bearer ", "");
-
-    // Use the anon client to validate the JWT
-    const supabaseClient = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    // Verify the user's session via cookies (set by @supabase/ssr)
+    const supabaseClient = await createSupabaseServerClient();
     const {
       data: { user },
       error: authError,
-    } = await supabaseClient.auth.getUser(token);
+    } = await supabaseClient.auth.getUser();
 
     if (authError || !user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -39,6 +39,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pendingCartAction = useRef<(() => void) | null>(null);
 
   useEffect(() => {
+    // Clean up stale Supabase auth data from localStorage.
+    // The old createClient stored sessions in localStorage; the new
+    // cookie-based createBrowserClient no longer uses it.
+    if (typeof window !== "undefined") {
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith("sb-") && key.includes("-auth-token")) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);

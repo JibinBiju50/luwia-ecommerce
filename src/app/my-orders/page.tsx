@@ -309,11 +309,7 @@ export default function MyOrdersPage() {
           return;
         }
 
-        const res = await fetch("/api/my-orders", {
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-          },
-        });
+        const res = await fetch("/api/my-orders");
 
         if (!res.ok) throw new Error("Failed to fetch orders");
         const data = await res.json();

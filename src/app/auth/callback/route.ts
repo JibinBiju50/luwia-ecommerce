@@ -1,39 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
+import { createSupabaseServerClient } from "@/lib/supabase-server-ssr";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/";
 
-  // Supabase sends error params directly when OAuth fails on its end
-  const supabaseError = searchParams.get("error");
-  const supabaseErrorDesc = searchParams.get("error_description");
+  if (code) {
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-  const redirectTo = next.startsWith("/") ? `${origin}${next}` : origin;
-
-  if (supabaseError) {
-    console.error("Supabase OAuth error:", supabaseError, supabaseErrorDesc);
-    return NextResponse.redirect(`${origin}/?auth_error=${encodeURIComponent(supabaseError)}`);
+    if (!error) {
+      // Successful auth — redirect to the intended page
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
 
-  if (!code) {
-    return NextResponse.redirect(redirectTo);
-  }
-
-  // Exchange the auth code for a session
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-  if (error) {
-    console.error("Auth callback exchange error:", error.message);
-    return NextResponse.redirect(`${origin}/?auth_error=exchange_failed`);
-  }
-
-  // Redirect back; the client-side AuthContext listener picks up the session
-  return NextResponse.redirect(redirectTo);
+  // If no code or exchange failed, redirect to home with an error indicator
+  return NextResponse.redirect(`${origin}/?auth_error=true`);
 }

@@ -1,6 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+/**
+ * Re-exports the SSR-aware browser client so all existing imports
+ * (`import { supabase } from "@/lib/supabase-client"`) continue
+ * working without changes across all components.
+ */
+export { supabase } from "./supabase-browser";
