@@ -1,10 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { sendCAPIPurchase } from "@/lib/meta-capi";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(5, "1 m"),
+  analytics: true,
+  prefix: "luwia:place-cod-order",
+});
 
 export async function POST(request: NextRequest) {
   console.log("[COD] place-cod-order route hit");
   try {
+    const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
+    const { success, limit, remaining, reset } = await ratelimit.limit(ip);
+    
+    if (!success) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        {
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": limit.toString(),
+            "X-RateLimit-Remaining": remaining.toString(),
+            "X-RateLimit-Reset": new Date(reset).toISOString(),
+          },
+        }
+      );
+    }
+
     const { orderDetails } = await request.json();
     console.log("[COD] orderDetails received:", !!orderDetails);
 
