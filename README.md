@@ -1,6 +1,8 @@
 # Luwia Skin Science - E-commerce Platform
 
-A full-stack e-commerce platform built for a premium skincare brand. Designed with a focus on modern web standards, secure transactions, and a seamless user experience.
+**🔗 Live Site:** [https://luwia.in](https://luwia.in)
+
+A full-stack, high-performance e-commerce platform built for a premium skincare brand. Designed with a focus on modern web standards, secure transactions, and a seamless user experience.
 
 ## 🚀 Tech Stack
 
