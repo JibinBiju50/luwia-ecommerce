@@ -25,8 +25,8 @@ export const PRODUCTS: Product[] = [
     id: "luwia-prime",
     name: "Luwia Prime - for women (Skin brightening & Repair)",
     originalPrice: 849,
-    onlinePrice: 399,
-    codPrice: 499,
+    onlinePrice: 649,
+    codPrice: 699,
     cardImage: "/images/luwia_women_with_pack.jpeg",
     image: "/images/luwia_women_with_pack.jpeg",
     gallery: [
@@ -59,8 +59,8 @@ export const PRODUCTS: Product[] = [
     id: "luwia-core",
     name: "Luwia Core - for Men (Skin brightening and Repair)",
     originalPrice: 849,
-    onlinePrice: 399,
-    codPrice: 499,
+    onlinePrice: 649,
+    codPrice: 699,
     cardImage: "/images/luwia_men_with_pack.jpeg",
     image: "/images/luwia_men_with_pack.jpeg",
     gallery: [

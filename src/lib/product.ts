@@ -2,7 +2,7 @@ export const PRODUCT = {
   name: "Luwia — Skin Bright & Repair (Pearl Radiance Cream)",
   originalPrice: 849,
   onlinePrice: 649,
-  codPrice: 849,
+  codPrice: 699,
   maxQuantity: 10,
   currency: "INR",
   currencySymbol: "₹",
