@@ -45,7 +45,7 @@ export default function CustomerResults() {
 
 
   return (
-    <section className="py-8 md:py-12 bg-brand-bg/30">
+    <section className="py-8 md:py-12 lg:flex flex-col bg-brand-bg/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-brand-text">
           Real Customer Results
