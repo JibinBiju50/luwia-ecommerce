@@ -92,8 +92,8 @@ export const PRODUCTS: Product[] = [
     id: "luwia-combo",
     name: "Luwia ultimate Combo - for Men and Women",
     originalPrice: 1699,
-    onlinePrice: 749,
-    codPrice: 999,
+    onlinePrice: 1199,
+    codPrice: 1199,
     cardImage: "/images/luwia_combo.jpeg",
     image: "/images/luwia_combo.jpeg",
     gallery: [
