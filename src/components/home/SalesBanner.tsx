@@ -54,11 +54,11 @@ export default function SalesBanner() {
 
       {/* Existing Banner */}
       <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white shadow-[0_0_35px_rgba(139,143,191,1)] font-nunito">
-        <div className="max-w-7xl mx-auto px-8 py-2 md:py-3 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5">
-          <span className="font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] text-lg sm:text-xl tracking-wide">
+        <div className="max-w-7xl mx-auto px-2 py-2 md:py-3 flex flex-wrap items-center justify-center gap-x-1 gap-y-1">
+          <span className="font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] text-md sm:text-lg tracking-wide">
             FLAT 24% OFF
           </span>
-          <span className="font-edu text-[#FFE400] text-xl sm:text-2xl pt-1">
+          <span className="font-edu text-[#FFE400] text-md sm:text-xl">
             +Free Shipping Ends In
           </span>
           

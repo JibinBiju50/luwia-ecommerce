@@ -56,7 +56,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
     <div className="w-full flex flex-col gap-4">
       {/* Main Image */}
       <div
-        className="relative w-full h-[400px] sm:h-[500px] md:h-[550px] rounded-2xl overflow-hidden bg-brand-bg cursor-zoom-in group"
+        className="relative w-full h-[300px] sm:h-[500px] md:h-[550px] rounded-2xl overflow-hidden bg-brand-bg cursor-zoom-in group"
         onClick={() => setIsLightboxOpen(true)}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -72,7 +72,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                 src={src}
                 alt={`Luwia product photo ${i + 1}`}
                 fill
-                className="object-contain transition-transform duration-300"
+                className="object-cover transition-transform duration-300"
                 priority={i === 0}
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
@@ -129,7 +129,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
             <button
               key={src}
               onClick={() => setActiveIndex(i)}
-              className={`relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+              className={`relative flex-shrink-0 w-12 h-12 object-cover rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                 i === activeIndex
                   ? "border-brand-primary shadow-brand"
                   : "border-gray-200 hover:border-brand-primary/40 opacity-70 hover:opacity-100"
