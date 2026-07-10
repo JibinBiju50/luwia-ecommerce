@@ -95,7 +95,7 @@ export default function CustomerVideos() {
           {videos.map((src, i) => (
             <div
               key={`${src}-${i}`}
-              className="flex-shrink-0 w-[60vw] sm:w-[35vw] md:w-[25vw] lg:w-[18vw] relative rounded-2xl overflow-hidden shadow-brand snap-start"
+              className="flex-shrink-0 w-[40vw] sm:w-[35vw] md:w-[25vw] lg:w-[18vw] relative rounded-2xl overflow-hidden shadow-brand snap-start"
             >
               <div className="relative w-full flex items-center justify-center rounded-2xl">
                 <video

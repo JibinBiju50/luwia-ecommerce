@@ -36,17 +36,14 @@ const features = [
 export default function ProductFeatures() {
   return (
     <div className="w-full bg-[#FDFBF7] py-8 md:py-12 my-8 rounded-3xl border border-brand-primary/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-brand-text mb-10 md:mb-14">
-          The Luwia Advantage
-        </h2>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-10 gap-x-4">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+  
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-10 gap-x-4">
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
               <div key={idx} className="flex flex-col items-center">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-brand-primary/10 flex items-center justify-center mb-4 text-brand-primary transition-transform hover:scale-110 duration-300">
+                <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-brand-primary/10 flex items-center justify-center mb-4 text-brand-primary transition-transform hover:scale-110 duration-300">
                   <Icon className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1.5} />
                 </div>
                 <h3 className="text-xs md:text-sm font-bold text-brand-text mb-2 uppercase tracking-wide text-center">

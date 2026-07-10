@@ -48,17 +48,12 @@ export default function ProductCarousel({
   };
 
   return (
-    <section className="py-4 md:py-6 bg-white overflow-hidden">
+    <section className="py-4 mt-4 md:py-6 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-brand-text">
+        <div className="text-center mb-4">
+          <h2 className="text-xl md:text-3xl font-bold text-brand-text">
             {title}
           </h2>
-          {subtitle && (
-            <p className="text-gray-500 mt-2 text-sm max-w-xl mx-auto">
-              {subtitle}
-            </p>
-          )}
         </div>
 
         <div 

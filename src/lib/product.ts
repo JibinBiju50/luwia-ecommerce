@@ -16,12 +16,20 @@ export const PRODUCT = {
   // Copy
   shortDescription:
     "Advanced formula with 5% Niacinamide and Ceramide complex for a healthy, dewy glow.",
-  description: `Reveal radiant, healthy skin with Luwia Cream, a powerful blend of skin-loving ingredients designed to brighten, hydrate, and restore your natural glow.
-
-Infused with Niacinamide, it helps reduce dark spots, control excess oil, and improve overall skin texture. Glutathione, known for its skin-brightening properties, works deeply to even out skin tone and reduce tan, giving you a luminous, clear complexion. Enriched with Shea Butter, this cream delivers intense hydration, leaving your skin soft, smooth, and nourished all day long.
-
-Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect companion for achieving naturally glowing, healthy skin.`,
-  tagline: "Glow confidently. Glow with Luwia.",
+  description: `Thoughtfully formulated with high-performance brightening and barrier-support ingredients:
+Niacinamide (3%) - Refines pores, balances oil & strengthens the skin barrier.
+Glycerin (3%) - Deeply hydrates for long-lasting moisture.
+Alpha Arbutin (1%) – Helps reduce tanning, pigmentation & uneven skin tone.
+Kojic Acid (1%) – Visibly fades dark spots and post-acne marks.
+Glutathione (1%) – Promotes a brighter, more radiant complexion.
+Licorice Extract – Helps soothe skin while enhancing brightness.
+Shea Butter – Nourishes and locks in moisture.
+Sandalwood Extract (1%) – Calms irritation and supports an even complexion.
+Turmeric Extract (1%) – Helps fight acne and improves skin clarity.
+Biotin (1%) – Supports a healthy skin barrier.
+Collagen (1%) – Improves firmness and elasticity.
+Vitamins A, C & E – Help protect, repair and renew skin overnight.
+One formula. One nightly ritual. Wake up to healthier, brighter, glass-like skin.`,
 
   benefits: [
     { emoji: "🌟", text: "Visibly reduces tan and dullness" },
@@ -86,23 +94,15 @@ Lightweight, non-greasy, and suitable for daily use, Luwia Cream is your perfect
     }
   ],
 
-  visibleResults: [
-    {
-      stat: "+92%",
-      title: "Barrier Strength",
-      description: "increase in hydration retention",
-    },
-    {
-      stat: "-75%",
-      title: "Pore Refinement",
-      description: "visible reduction in pore diameter",
-    },
-    {
-      stat: "9/10",
-      title: "Redness Control",
-      description: "users reported immediate soothing",
-    },
-  ],
+  usage: `How to Use
+Step 1 — Cleanse your face thoroughly and pat dry.
+Step 2 — Apply a pea-sized amount of Luwia Prime evenly over your face and neck.
+Step 3 — Gently massage until fully absorbed.
+Step 4 — Leave it on overnight.
+Morning Routine
+Wash your face with a gentle cleanser.
+Follow with sunscreen before sun exposure.
+Frequency: Every night for best results.`,
 
   reviewImages: [
     "/images/customer_review_1.jpeg",

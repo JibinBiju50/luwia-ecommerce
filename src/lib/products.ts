@@ -17,7 +17,7 @@ export type Product = {
   tagline?: string;
   benefits: { emoji: string; text: string }[];
   ingredients: { name: string; description: string }[];
-  visibleResults: { stat: string; title: string; description: string }[];
+  usage?: string;
 };
 
 export const PRODUCTS: Product[] = [
@@ -53,7 +53,7 @@ export const PRODUCTS: Product[] = [
       { emoji: "🛡️", text: "Helps repair and protect skin barrier" },
     ],
     ingredients: PRODUCT.ingredients,
-    visibleResults: PRODUCT.visibleResults,
+    usage: PRODUCT.usage,
   },
   {
     id: "luwia-core",
@@ -86,7 +86,7 @@ export const PRODUCTS: Product[] = [
       { emoji: "🛡️", text: "Helps repair and protect skin barrier" },
     ],
     ingredients: PRODUCT.ingredients,
-    visibleResults: PRODUCT.visibleResults,
+    usage: PRODUCT.usage,
   },
   {
     id: "luwia-combo",
@@ -126,6 +126,6 @@ Perfect as a couple's skincare routine or as a thoughtful gift. One formula for 
       { emoji: "🛡️", text: "Helps repair and protect skin barrier" },
     ],
     ingredients: PRODUCT.ingredients,
-    visibleResults: PRODUCT.visibleResults,
+    usage: PRODUCT.usage,
   },
 ];

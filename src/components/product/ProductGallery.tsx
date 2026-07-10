@@ -80,15 +80,6 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
           ))}
         </div>
 
-        {/* Tags */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <span className="bg-brand-primary/90 text-white text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm">
-            SKIN SCIENCE
-          </span>
-          <span className="bg-white/90 text-brand-primary text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm">
-            NEW FORMULA
-          </span>
-        </div>
 
         {/* Navigation Arrows */}
         {safeImages.length > 1 && (

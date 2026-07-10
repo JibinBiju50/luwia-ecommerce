@@ -38,19 +38,6 @@ export default function SalesBanner() {
 
   return (
     <div className="flex flex-col w-full relative z-[60]">
-      {/* Infinite scrolling banner */}
-      <div className="w-full bg-[#FFD700] text-black py-2 overflow-hidden flex items-center border-b border-black/5">
-        <div className="flex whitespace-nowrap animate-scroll [--scroll-duration:25s] min-w-max">
-          {[...Array(8)].map((_, i) => (
-            <span key={i} className="px-4 font-bold text-xs sm:text-[13px] uppercase tracking-[0.15em] flex items-center gap-4 shrink-0 font-inter">
-              ⚡ EXCLUSIVE OFFER: CODE 'LUWIAGLOW24' GIVES 24% DISCOUNT
-              <span className="opacity-30 px-2">•</span>
-              FREE SHIPPING ON ALL ORDERS
-              <span className="opacity-30 px-2">•</span>
-            </span>
-          ))}
-        </div>
-      </div>
 
       {/* Existing Banner */}
       <div className="relative bg-gradient-to-r from-brand-dark via-brand-primary to-brand-dark text-white shadow-[0_0_35px_rgba(139,143,191,1)] font-nunito">

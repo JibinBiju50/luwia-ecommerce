@@ -92,57 +92,43 @@ export default function ProductPage({ params }: ProductPageProps) {
             <ProductInfo product={product} avgRating={ratingInfo.avgRating} totalCount={ratingInfo.totalCount} />
           </div>
         </div>
-
-
-        {/* Features Section */}
-        <ProductFeatures />
-
-        {/* Product Description */}
-        <div className="mb-2 md:mb-4">
-          <h2 className="text-xl md:text-2xl font-bold text-brand-text mb-3">
-            Product Details
-          </h2>
-          <ProductDescription product={product} />
-        </div>
+        {/* Features Section for Non-Prime */}
+        {product.id !== "luwia-prime" && (
+          <ProductFeatures />
+        )}
       </div>
+
+      {/* Combined Image and Descriptions Section */}
+      <section className="w-full bg-brand-light/5 py-8 md:py-12 border-y border-brand-primary/5 mt-4 md:mt-8 mb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {product.id === "luwia-prime" ? (
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+              {/* Left Side: Image */}
+              <div className="w-full md:sticky md:top-24">
+                <Image
+                  src="/images/visible_result.png"
+                  alt="Luwia Prime Visible Results"
+                  width={1920}
+                  height={1080}
+                  className="w-full h-auto rounded-3xl shadow-[0_4px_20px_-5px_rgba(30,58,138,0.1)] border border-white object-cover"
+                />
+              </div>
+              {/* Right Side: Descriptions */}
+              <div className="w-full">
+                <ProductDescription product={product} />
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto">
+              <ProductDescription product={product} />
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Women product images + Cream Bar — Luwia Prime only */}
       {product.id === "luwia-prime" && (
         <section className="w-full max-w-7xl mx-auto px-0 md:px-4 lg:px-8 md:my-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:gap-6">
-            <Image
-              src="/images/luwia_women1.jpg"
-              alt="Luwia Prime — Women skin brightening result 1"
-              width={1080}
-              height={1080}
-              className="w-full h-auto object-cover block md:rounded-xl"
-              priority={false}
-            />
-            <Image
-              src="/images/luwia_women2.jpg"
-              alt="Luwia Prime — Women skin brightening result 2"
-              width={1080}
-              height={1080}
-              className="w-full h-auto object-cover block md:rounded-xl"
-              priority={false}
-            />
-            <Image
-              src="/images/luiwa_women3.jpg"
-              alt="Luwia Prime — Women skin brightening result 3"
-              width={1080}
-              height={1080}
-              className="w-full h-auto object-cover block md:rounded-xl"
-              priority={false}
-            />
-            <Image
-              src="/images/luwia_women4.jpg"
-              alt="Luwia Prime — Women skin brightening result 4"
-              width={1080}
-              height={1080}
-              className="w-full h-auto object-cover block md:rounded-xl"
-              priority={false}
-            />
-          </div>
           <div className="md:mt-6 max-w-7xl mx-auto">
             {/* Mobile Image */}
             <Image
@@ -189,9 +175,6 @@ export default function ProductPage({ params }: ProductPageProps) {
           />
         </section>
       )}
-
-      {/* Features Section from Homepage */}
-      <FeaturesSection />
 
       {/* Customers Also Bought */}
       <div className="border-t border-brand-primary/10">
