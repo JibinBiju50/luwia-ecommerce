@@ -206,7 +206,7 @@ export default function ReviewList({
                 key={idx}
                 type="button"
                 onClick={() => openLightbox(galleryItems, idx)}
-                className="shrink-0 snap-start relative w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
+                className="shrink-0 snap-start snap-always relative w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
                 aria-label={`View photo ${idx + 1}`}
               >
                 <Image src={item.url} alt={`Review photo`} fill className="object-cover" sizes="96px" />
@@ -377,7 +377,7 @@ export default function ReviewList({
                 }}
               >
                 {lightbox.items.map((item, idx) => (
-                  <div key={idx} className="relative w-full h-full flex-shrink-0 snap-center">
+                  <div key={idx} className="relative w-full h-full flex-shrink-0 snap-center snap-always">
                     <Image
                       src={item.url}
                       alt={`Review photo ${idx + 1}`}
