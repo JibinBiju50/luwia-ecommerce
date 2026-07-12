@@ -59,12 +59,12 @@ export default function ProductCarousel({
         <div 
           ref={scrollRef}
           onScroll={checkScrollPosition}
-          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 md:gap-6 pb-6 hide-scrollbar lg:justify-center"
+          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-3 md:gap-6 pb-6 hide-scrollbar lg:justify-center"
         >
           {products.map((product) => (
             <div 
               key={product.id}
-              className="w-[calc(50vw-1.5rem)] sm:w-[280px] lg:w-[300px] shrink-0 snap-start sm:snap-center flex"
+              className="w-[calc(50%-6px)] sm:w-[280px] lg:w-[300px] shrink-0 snap-start sm:snap-center flex"
             >
               <div className="w-full">
                 <ProductCard product={product} />
