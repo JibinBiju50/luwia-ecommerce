@@ -43,10 +43,11 @@ export async function middleware(request: NextRequest) {
   );
 
   // Refresh the session — this triggers setAll if the token was refreshed.
-  // IMPORTANT: Use getUser() not getSession() — getUser() validates with
-  // the Supabase Auth server, while getSession() only reads from cookies
-  // without verification.
-  await supabase.auth.getUser();
+  // Using getSession() here instead of getUser() because middleware runs on
+  // EVERY request. getSession() reads cookies locally (no network call),
+  // while getUser() hits the Supabase Auth server each time (200-500ms).
+  // Server-side user verification still happens in route handlers via getUser().
+  await supabase.auth.getSession();
 
   return supabaseResponse;
 }
