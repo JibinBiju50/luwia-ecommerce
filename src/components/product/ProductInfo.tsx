@@ -168,9 +168,9 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
         {/* Price */}
-        <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
+        <div className="flex items-baseline gap-2 sm:gap-3">
           <span className="text-3xl font-bold text-brand-text">
             {product.currencySymbol}{product.onlinePrice}
           </span>
@@ -179,33 +179,26 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
           </span>
         </div>
 
-        {/* Coupon Box */}
-        <div className="flex-1 max-w-sm">
-          {!couponApplied ? (
-            <div className="p-3 border border-brand-primary/20 bg-brand-light/5 rounded-xl flex items-center justify-between shadow-sm transition-all hover:shadow-md">
-              <div>
-                <p className="text-sm font-bold text-brand-text flex items-center gap-1.5">
-                  <span className="text-base">🎁</span> Have a coupon?
-                </p>
-                <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">Apply code <span className="font-bold text-brand-primary">LUWIAGLOW53</span> for 53% OFF!</p>
-              </div>
-              <button
-                onClick={applyCoupon}
-                className="px-3 py-1.5 text-xs font-bold text-white bg-brand-primary rounded-lg shadow-sm hover:opacity-90 transition-opacity flex-shrink-0"
-              >
-                Apply
-              </button>
+        {/* Coupon Inline */}
+        {!couponApplied ? (
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] sm:text-xs font-bold text-brand-primary">LUWIAGLOW53</span>
+            <button
+              onClick={applyCoupon}
+              className="text-[10px] sm:text-xs font-bold text-white bg-brand-primary px-2 py-1 rounded shadow-sm hover:opacity-90 transition-opacity"
+            >
+              Apply
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-1.5">
+            <span className="text-lg sm:text-xl animate-bounce">🎉</span>
+            <div className="flex flex-col">
+              <span className="text-[11px] sm:text-sm font-bold text-green-700 leading-tight">LUWIAGLOW24 Applied!</span>
+              <span className="text-[9px] sm:text-xs text-green-600 leading-tight">You got a 24% discount</span>
             </div>
-          ) : (
-            <div className="p-3 border border-green-200 bg-green-50 rounded-xl flex items-center gap-3 shadow-sm">
-              <span className="text-2xl animate-bounce">🎉</span>
-              <div>
-                <p className="text-sm font-bold text-green-700">LUWIAGLOW24 Applied!</p>
-                <p className="text-xs text-green-600">You got a 24% discount.</p>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <p className="text-xs md:text-sm text-gray-600 leading-relaxed mt-4">
