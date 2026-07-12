@@ -172,13 +172,11 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
         {/* Price */}
         <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
           <span className="text-3xl font-bold text-brand-text">
-            {product.currencySymbol}{couponApplied ? product.onlinePrice : product.originalPrice}
+            {product.currencySymbol}{product.onlinePrice}
           </span>
-          {couponApplied && (
-            <span className="text-lg text-gray-400 line-through">
-              {product.currencySymbol}{product.originalPrice}
-            </span>
-          )}
+          <span className="text-lg text-gray-400 line-through">
+            {product.currencySymbol}{product.originalPrice}
+          </span>
         </div>
 
         {/* Coupon Box */}

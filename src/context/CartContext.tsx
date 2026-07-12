@@ -130,19 +130,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return items.reduce((total, item) => {
       const product = findProduct(item.productId);
       if (!product) return total;
-      const price = couponApplied ? product.onlinePrice : product.originalPrice;
+      const price = product.onlinePrice;
       return total + (price * item.quantity);
     }, 0);
-  }, [items, couponApplied]);
+  }, [items]);
 
   const getCodTotal = useCallback(() => {
     return items.reduce((total, item) => {
       const product = findProduct(item.productId);
       if (!product) return total;
-      const price = couponApplied ? product.codPrice : product.originalPrice + 70;
+      const price = product.codPrice;
       return total + (price * item.quantity);
     }, 0);
-  }, [items, couponApplied]);
+  }, [items]);
 
   const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
 

@@ -44,20 +44,20 @@ type PaymentMethod = "online" | "cod";
 const currencySymbol = "₹";
 
 // Calculate totals from an items array
-function calcOnlineTotal(checkoutItems: CartItem[], couponApplied: boolean) {
+function calcOnlineTotal(checkoutItems: CartItem[]) {
   return checkoutItems.reduce((total, item) => {
     const product = PRODUCTS.find((p) => p.id === item.productId);
     if (!product) return total;
-    const price = couponApplied ? product.onlinePrice : product.originalPrice;
+    const price = product.onlinePrice;
     return total + (price * item.quantity);
   }, 0);
 }
 
-function calcCodTotal(checkoutItems: CartItem[], couponApplied: boolean) {
+function calcCodTotal(checkoutItems: CartItem[]) {
   return checkoutItems.reduce((total, item) => {
     const product = PRODUCTS.find((p) => p.id === item.productId);
     if (!product) return total;
-    const price = couponApplied ? product.codPrice : product.originalPrice + 70;
+    const price = product.codPrice;
     return total + (price * item.quantity);
   }, 0);
 }
@@ -104,8 +104,8 @@ export default function CheckoutPage() {
     }
   }, [checkoutQuantity, isSuccess, router, hydrated]);
 
-  const onlineTotal = calcOnlineTotal(checkoutItems, couponApplied);
-  const codTotal = calcCodTotal(checkoutItems, couponApplied);
+  const onlineTotal = calcOnlineTotal(checkoutItems);
+  const codTotal = calcCodTotal(checkoutItems);
   const total = paymentMethod === "online" ? onlineTotal : codTotal;
   const savings = paymentMethod === "online" ? codTotal - onlineTotal : 0;
 
