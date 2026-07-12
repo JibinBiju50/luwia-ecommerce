@@ -18,7 +18,7 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
   };
 
   return (
-    <div className="border border-brand-primary/10 rounded-2xl overflow-hidden bg-white shadow-sm flex flex-col">
+    <div className="w-full flex flex-col">
       {/* The Science Behind It */}
       <div className="border-b border-brand-primary/10">
         <button

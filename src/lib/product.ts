@@ -16,20 +16,16 @@ export const PRODUCT = {
   // Copy
   shortDescription:
     "Advanced formula with 5% Niacinamide and Ceramide complex for a healthy, dewy glow.",
-  description: `Thoughtfully formulated with high-performance brightening and barrier-support ingredients:
-Niacinamide (3%) - Refines pores, balances oil & strengthens the skin barrier.
-Glycerin (3%) - Deeply hydrates for long-lasting moisture.
-Alpha Arbutin (1%) – Helps reduce tanning, pigmentation & uneven skin tone.
-Kojic Acid (1%) – Visibly fades dark spots and post-acne marks.
-Glutathione (1%) – Promotes a brighter, more radiant complexion.
-Licorice Extract – Helps soothe skin while enhancing brightness.
-Shea Butter – Nourishes and locks in moisture.
-Sandalwood Extract (1%) – Calms irritation and supports an even complexion.
-Turmeric Extract (1%) – Helps fight acne and improves skin clarity.
-Biotin (1%) – Supports a healthy skin barrier.
-Collagen (1%) – Improves firmness and elasticity.
-Vitamins A, C & E – Help protect, repair and renew skin overnight.
-One formula. One nightly ritual. Wake up to healthier, brighter, glass-like skin.`,
+  description: `Powered by a premium blend of brightening, hydrating, and skin-supporting actives for healthier-looking skin.
+3% Niacinamide – Refines pores & strengthens the skin barrier.
+3% Glycerin – Delivers deep, long-lasting hydration.
+1% Alpha Arbutin – Helps reduce tanning & pigmentation.
+1% Kojic Acid – Helps fade dark spots and post-acne marks.
+1% Glutathione – Promotes a brighter-looking complexion.
+Licorice Extract & Shea Butter – Soothe, nourish & lock in moisture.
+Sandalwood & Turmeric Extracts – Help calm skin and improve clarity.
+Collagen & Biotin – Support smoother, firmer-looking skin.
+Vitamins A, C & E – Help protect, repair & renew skin overnight.`,
 
   benefits: [
     { emoji: "🌟", text: "Visibly reduces tan and dullness" },

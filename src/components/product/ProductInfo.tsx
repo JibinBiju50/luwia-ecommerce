@@ -202,15 +202,15 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
             <div className="p-3 border border-green-200 bg-green-50 rounded-xl flex items-center gap-3 shadow-sm">
               <span className="text-2xl animate-bounce">🎉</span>
               <div>
-                <p className="text-sm font-bold text-green-700">LUWIAGLOW53 Applied!</p>
-                <p className="text-xs text-green-600">You got a 53% discount.</p>
+                <p className="text-sm font-bold text-green-700">LUWIAGLOW24 Applied!</p>
+                <p className="text-xs text-green-600">You got a 24% discount.</p>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      <p className="text-sm text-gray-600 leading-relaxed mt-4 border-b border-gray-100 pb-5">
+      <p className="text-xs md:text-sm text-gray-600 leading-relaxed mt-4">
         Glass skin begins tonight. Advanced brightening actives meet deep overnight hydration for smoother, healthier, more luminous skin by morning. Perfect for all skin types
       </p>
 
@@ -257,26 +257,26 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
       </div>
 
       {/* Trust Badges Banner */}
-      <div className="mt-4 pt-2">
-        <div className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth sm:gap-2 pb-2 px-4 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="mt-6 pt-5 border-t border-gray-100 overflow-hidden relative -mx-4 md:mx-0">
+        <div className="flex w-max md:w-full gap-8 md:gap-4 md:grid md:grid-cols-3 animate-[scroll_12s_linear_infinite] md:animate-none hover:[animation-play-state:paused] md:hover:[animation-play-state:running]">
           
-          <div className="shrink-0 snap-center w-[160px] sm:w-[180px] md:w-auto flex flex-col items-center text-center">
-            <Image src="/images/booking.png" alt="Place an Order" width={32} height={32} className="mb-2.5 drop-shadow-sm opacity-90 object-contain h-[32px]" />
-            <p className="text-[14px] font-bold text-brand-text leading-tight">Place an Order</p>
-            <p className="text-[11px] text-gray-500 mt-1">100% Checkout</p>
-          </div>
-
-          <div className="shrink-0 snap-center w-[160px] sm:w-[180px] md:w-auto flex flex-col items-center text-center">
-            <Image src="/images/fast-delivery.png" alt="Fast Delivery" width={32} height={32} className="mb-2.5 drop-shadow-sm opacity-90 object-contain h-[32px]" />
-            <p className="text-[14px] font-bold text-brand-text leading-tight">Fast Delivery</p>
-            <p className="text-[11px] text-gray-500 mt-1">3-5 business days</p>
-          </div>
-
-          <div className="shrink-0 snap-center w-[160px] sm:w-[180px] md:w-auto flex flex-col items-center text-center">
-            <Image src="/images/medal-.png" alt="Trusted by Experts" width={32} height={32} className="mb-2.5 drop-shadow-sm opacity-90 object-contain h-[32px]" />
-            <p className="text-[13px] font-bold text-brand-text leading-tight">Trusted by Experts</p>
-            <p className="text-[11px] text-gray-500 mt-1 leading-tight">Preferred by Industry Professionals</p>
-          </div>
+          {[
+            { img: "/images/booking.png", title: "Place an Order", desc: "100% Checkout" },
+            { img: "/images/fast-delivery.png", title: "Fast Delivery", desc: "2-5 business days" },
+            { img: "/images/medal-.png", title: "Trusted by Experts", desc: "Preferred by Industry Professionals" }
+          ].flatMap((badge, index) => [
+            { ...badge, uniqueKey: `badge-1-${index}` },
+            { ...badge, uniqueKey: `badge-2-${index}`, isDuplicate: true }
+          ]).sort((a, b) => (a.isDuplicate ? 1 : 0) - (b.isDuplicate ? 1 : 0)).map((badge) => (
+            <div 
+              key={badge.uniqueKey}
+              className={`w-[180px] md:w-auto flex-col items-center text-center p-3] ${badge.isDuplicate ? 'flex md:hidden' : 'flex'}`}
+            >
+              <Image src={badge.img} alt={badge.title} width={32} height={32} className="mb-2.5 drop-shadow-sm opacity-90 object-contain h-[32px]" />
+              <p className="text-[13px] font-bold text-brand-text leading-tight">{badge.title}</p>
+              <p className="text-[11px] text-gray-500 mt-1">{badge.desc}</p>
+            </div>
+          ))}
 
         </div>
       </div>
