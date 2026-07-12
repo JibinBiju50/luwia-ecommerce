@@ -6,7 +6,7 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabase-client";
 import type { Review } from "@/components/product/ProductInfo";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 5;
 
 interface ReviewListProps {
   productId: string;
@@ -153,13 +153,10 @@ export default function ReviewList({
 
   // ── Skeleton cards ───────────────────────────────────────────
   const SkeletonCard = () => (
-    <div className="bg-gray-50 rounded-2xl p-5 animate-pulse">
-      <div className="flex items-center gap-3 mb-3">
-        <div className="w-8 h-8 rounded-full bg-gray-200" />
-        <div className="space-y-1.5 flex-1">
-          <div className="h-3 bg-gray-200 rounded w-28" />
-          <div className="h-2.5 bg-gray-200 rounded w-20" />
-        </div>
+    <div className="py-5 border-b border-gray-100 last:border-b-0 animate-pulse">
+      <div className="space-y-1.5 mb-3">
+        <div className="h-3 bg-gray-200 rounded w-28" />
+        <div className="h-2.5 bg-gray-200 rounded w-20" />
       </div>
       <div className="h-3 bg-gray-200 rounded w-full mb-2" />
       <div className="h-3 bg-gray-200 rounded w-3/4" />
@@ -199,25 +196,51 @@ export default function ReviewList({
 
       {/* Review Images Gallery */}
       {galleryItems.length > 0 && (
-        <div className="mt-4 mb-2 w-full overflow-hidden">
-          <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {galleryItems.map((item, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => openLightbox(galleryItems, idx)}
-                className="shrink-0 snap-start snap-always relative w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/40"
-                aria-label={`View photo ${idx + 1}`}
-              >
-                <Image src={item.url} alt={`Review photo`} fill className="object-cover" sizes="96px" />
-              </button>
-            ))}
+        <div className="mt-4 mb-2 w-full">
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+            {galleryItems.slice(0, 12).map((item, idx) => {
+              const isLastMobile = idx === 7;
+              const isLastDesktop = idx === 11;
+              const isHiddenMobile = idx > 7;
+              
+              const remainingMobile = galleryItems.length - 7;
+              const remainingDesktop = galleryItems.length - 11;
+              
+              const showOverlayMobile = isLastMobile && galleryItems.length > 8;
+              const showOverlayDesktop = isLastDesktop && galleryItems.length > 12;
+
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => openLightbox(galleryItems, idx)}
+                  className={`relative aspect-square rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/40 ${isHiddenMobile ? 'hidden md:block' : 'block'}`}
+                  aria-label={`View photo ${idx + 1}`}
+                >
+                  <Image src={item.url} alt={`Review photo`} fill className="object-cover" sizes="(max-width: 768px) 25vw, 16vw" />
+                  
+                  {/* Mobile Overlay */}
+                  {showOverlayMobile && (
+                    <div className="md:hidden absolute inset-0 bg-black/60 flex items-center justify-center text-white font-semibold text-lg backdrop-blur-[2px]">
+                      +{remainingMobile}
+                    </div>
+                  )}
+                  
+                  {/* Desktop Overlay */}
+                  {showOverlayDesktop && (
+                    <div className="hidden md:flex absolute inset-0 bg-black/60 items-center justify-center text-white font-semibold text-xl backdrop-blur-[2px]">
+                      +{remainingDesktop}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
 
       {/* Review Cards */}
-      <div className="space-y-3">
+      <div className="flex flex-col">
         {loading
           ? Array.from({ length: PAGE_SIZE }).map((_, i) => <SkeletonCard key={i} />)
           : reviews.map((review) => {
@@ -225,7 +248,7 @@ export default function ReviewList({
               return (
                 <div
                   key={review.id}
-                  className="bg-gray-50/80 rounded-xl p-4 border border-gray-100"
+                  className="py-5 border-b border-gray-100 last:border-b-0"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
@@ -366,7 +389,7 @@ export default function ReviewList({
             <div className="relative w-full h-[45vh] md:w-3/5 md:h-[80vh] bg-gray-50 flex flex-col group">
               <div 
                 ref={carouselRef}
-                className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                className="w-full h-full flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 onScroll={(e) => {
                   const el = e.currentTarget;
                   if (el.clientWidth === 0) return;
@@ -382,19 +405,14 @@ export default function ReviewList({
                       src={item.url}
                       alt={`Review photo ${idx + 1}`}
                       fill
-                      className="object-contain"
+                      className="object-cover"
                       priority={idx === lightbox.index}
                     />
                   </div>
                 ))}
               </div>
               
-              {/* Image Counter overlay */}
-              {lightbox.items.length > 1 && (
-                <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-white/90 bg-black/50 px-3 py-1 rounded-full pointer-events-none z-10">
-                  {lightbox.index + 1} / {lightbox.items.length}
-                </span>
-              )}
+              {/* Counter removed per user request */}
             </div>
 
             {/* Right/Bottom: Review Info */}
