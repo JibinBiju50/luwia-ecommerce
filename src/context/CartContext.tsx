@@ -43,7 +43,7 @@ const findProduct = (id: string) => {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponApplied, setCouponApplied] = useState(true);
   const [hydrated, setHydrated] = useState(false);
 
   // Hydrate from localStorage on mount
