@@ -265,7 +265,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
             { img: "/images/fast-delivery.png", title: "Fast Delivery", desc: "2-5 business days" },
             { img: "/images/medal-.png", title: "Trusted by Experts", desc: "Preferred by Industry Professionals" }
           ].flatMap((badge, index) => [
-            { ...badge, uniqueKey: `badge-1-${index}` },
+            { ...badge, uniqueKey: `badge-1-${index}`, isDuplicate: false },
             { ...badge, uniqueKey: `badge-2-${index}`, isDuplicate: true }
           ]).sort((a, b) => (a.isDuplicate ? 1 : 0) - (b.isDuplicate ? 1 : 0)).map((badge) => (
             <div 
