@@ -431,7 +431,7 @@ export default function MyOrdersPage() {
               products and start your glow journey!
             </p>
             <Link
-              href="/products"
+              href="/shop"
               className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white gradient-brand rounded-full shadow-brand hover:opacity-90 transition-opacity"
             >
               Shop Now

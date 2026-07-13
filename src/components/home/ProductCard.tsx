@@ -33,7 +33,7 @@ export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardPr
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-brand hover:shadow-brand-lg transition-shadow duration-300 flex flex-col h-full border border-gray-100">
       {/* Image */}
-      <Link href={'id' in product ? `/products/${product.id}` : "/products"} className="block relative w-full">
+      <Link href={'id' in product ? `/shop/${product.id}` : "/shop"} className="block relative w-full">
         <div className="relative w-full h-44 sm:h-60 overflow-hidden">
           <Image
             src={product.cardImage}
@@ -48,7 +48,7 @@ export default function ProductCard({ product = DEFAULT_PRODUCT }: ProductCardPr
 
       {/* Content */}
       <div className="p-3 sm:p-4 flex flex-col flex-grow">
-        <Link href={'id' in product ? `/products/${product.id}` : "/products"}>
+        <Link href={'id' in product ? `/shop/${product.id}` : "/shop"}>
           <h3 className="text-sm sm:text-base font-semibold text-brand-text line-clamp-2 hover:text-brand-primary transition-colors min-h-[2.5rem] sm:min-h-[3rem]">
             {product.name}
           </h3>

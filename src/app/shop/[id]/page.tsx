@@ -78,7 +78,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         <nav className="text-xs text-gray-400 mb-3 flex items-center gap-2">
           <a href="/" className="hover:text-brand-primary transition-colors">Home</a>
           <span>/</span>
-          <a href="/products" className="hover:text-brand-primary transition-colors">Products</a>
+          <a href="/shop" className="hover:text-brand-primary transition-colors">Shop</a>
           <span>/</span>
           <span className="text-gray-600">{product.name}</span>
         </nav>

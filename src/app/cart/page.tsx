@@ -22,7 +22,7 @@ export default function CartPage() {
           Looks like you haven&apos;t added anything yet.
         </p>
         <Link
-          href="/products"
+          href="/shop"
           className="px-8 py-3.5 text-sm font-semibold text-white gradient-brand rounded-full hover:opacity-90 transition-opacity shadow-brand"
         >
           Shop Now
@@ -66,7 +66,7 @@ export default function CartPage() {
 
                     {/* Details */}
                     <div className="flex-1 min-w-0">
-                      <Link href="/products" className="text-sm font-semibold text-brand-text hover:text-brand-primary transition-colors line-clamp-2">
+                      <Link href="/shop" className="text-sm font-semibold text-brand-text hover:text-brand-primary transition-colors line-clamp-2">
                         {product.name}
                       </Link>
 
@@ -124,7 +124,7 @@ export default function CartPage() {
 
             {/* Continue Shopping */}
             <Link
-              href="/products"
+              href="/shop"
               className="inline-flex items-center mt-4 text-sm text-brand-primary hover:text-brand-dark font-medium transition-colors"
             >
               ← Continue Shopping

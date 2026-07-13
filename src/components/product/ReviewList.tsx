@@ -138,18 +138,6 @@ export default function ReviewList({
     document.body.style.overflow = "";
   };
 
-  // ── Date formatting ──────────────────────────────────────────
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    const diffDays = Math.max(
-      0,
-      Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
-    );
-    if (diffDays === 0) return "Just now";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    return date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
-  };
 
   // ── Skeleton cards ───────────────────────────────────────────
   const SkeletonCard = () => (
@@ -267,9 +255,6 @@ export default function ReviewList({
                               }`}
                             />
                           ))}
-                          <span className="text-[10px] text-gray-400 ml-1">
-                            {formatDate(review.created_at)}
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -279,7 +264,7 @@ export default function ReviewList({
                   </div>
 
                   {review.review_text?.trim() && (
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                       &ldquo;{review.review_text}&rdquo;
                     </p>
                   )}
@@ -436,12 +421,9 @@ export default function ReviewList({
                     }`}
                   />
                 ))}
-                <span className="text-xs text-gray-400 ml-2">
-                  {formatDate(lightbox.items[lightbox.index].review.created_at)}
-                </span>
               </div>
               {lightbox.items[lightbox.index].review.review_text && (
-                <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                <p className="text-gray-700 text-xs md:text-sm leading-relaxed">
                   &ldquo;{lightbox.items[lightbox.index].review.review_text}&rdquo;
                 </p>
               )}
