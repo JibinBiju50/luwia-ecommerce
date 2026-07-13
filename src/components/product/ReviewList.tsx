@@ -300,8 +300,8 @@ export default function ReviewList({
                   </div>
 
                   {review.review_text?.trim() && (
-                    <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                      &ldquo;{review.review_text}&rdquo;
+                    <p className="text-xs md:text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
+                      {review.review_text}
                     </p>
                   )}
 
@@ -488,8 +488,8 @@ export default function ReviewList({
                 ))}
               </div>
               {lightbox.items[lightbox.index].review.review_text && (
-                <p className="text-gray-700 text-xs md:text-sm leading-relaxed">
-                  &ldquo;{lightbox.items[lightbox.index].review.review_text}&rdquo;
+                <p className="text-gray-700 text-xs md:text-sm leading-relaxed whitespace-pre-wrap">
+                  {lightbox.items[lightbox.index].review.review_text}
                 </p>
               )}
             </div>
