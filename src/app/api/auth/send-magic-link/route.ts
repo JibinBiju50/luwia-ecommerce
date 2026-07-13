@@ -52,12 +52,16 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (error || !data?.properties?.action_link) {
+    if (error || !data?.properties?.hashed_token) {
       console.error("Magic link generation error:", error);
       return NextResponse.json({ error: "Failed to generate magic link" }, { status: 500 });
     }
 
-    const magicLink = data.properties.action_link;
+    // Build a direct link to OUR callback with token_hash as a query param.
+    // We do NOT use Supabase's action_link because it redirects through
+    // Supabase's server, which puts tokens in a hash fragment (#access_token=...)
+    // that is invisible to our server-side route handler.
+    const magicLink = `${siteUrl}/auth/callback?token_hash=${encodeURIComponent(data.properties.hashed_token)}&type=magiclink&next=${encodeURIComponent(next)}`;
 
     const { error: emailError } = await resend.emails.send({
       from: "Luwia Skin Science <noreply@luwia.in>",

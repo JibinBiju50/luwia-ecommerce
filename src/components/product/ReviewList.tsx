@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase-client";
 import type { Review } from "@/components/product/ProductInfo";
 
 const PAGE_SIZE = 5;
+const PINNED_REVIEWERS = ["Ananya Menon", "Diya Thomas", "Mihika Balan"];
 
 interface ReviewListProps {
   productId: string;
@@ -41,10 +42,12 @@ export default function ReviewList({
 }: ReviewListProps) {
   const [page, setPage] = useState(1);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [pinnedReviews, setPinnedReviews] = useState<Review[]>([]);
   const [pageTotal, setPageTotal] = useState(totalCount);
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const [galleryItems, setGalleryItems] = useState<ReviewWithImage[]>([]);
+  const pinnedFetchedRef = useRef(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const prevLightboxOpenRef = useRef(false);
@@ -61,24 +64,54 @@ export default function ReviewList({
   const displayedTotal = pageTotal;
   const totalPages = Math.ceil(displayedTotal / PAGE_SIZE);
 
+  // ── Fetch pinned reviews once ───────────────────────────────
+  useEffect(() => {
+    async function fetchPinned() {
+      if (pinnedFetchedRef.current) return;
+      const formattedNames = `(${PINNED_REVIEWERS.map(n => `"${n}"`).join(",")})`;
+      const { data } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("product_id", productId)
+        .in("reviewer_name", PINNED_REVIEWERS);
+      if (data) {
+        const sorted = [...data].sort(
+          (a, b) => PINNED_REVIEWERS.indexOf(a.reviewer_name) - PINNED_REVIEWERS.indexOf(b.reviewer_name)
+        );
+        setPinnedReviews(sorted as Review[]);
+      }
+      pinnedFetchedRef.current = true;
+    }
+    fetchPinned();
+  }, [productId]);
+
   // ── Fetch a single page ─────────────────────────────────────
   const fetchPage = useCallback(
     async (pageNum: number) => {
       setLoading(true);
-      const from = (pageNum - 1) * PAGE_SIZE;
-      const to = from + PAGE_SIZE - 1;
+      const pinnedCount = PINNED_REVIEWERS.length;
+      let from, to;
+      if (pageNum === 1) {
+        from = 0;
+        to = PAGE_SIZE - pinnedCount - 1;
+      } else {
+        from = (PAGE_SIZE - pinnedCount) + (pageNum - 2) * PAGE_SIZE;
+        to = from + PAGE_SIZE - 1;
+      }
 
+      const formattedNames = `(${PINNED_REVIEWERS.map(n => `"${n}"`).join(",")})`;
       const { data, count, error } = await supabase
         .from("reviews")
         .select("*", { count: "exact" })
         .eq("product_id", productId)
+        .not("reviewer_name", "in", formattedNames)
         .order("sort_weight", { ascending: true })
         .order("created_at", { ascending: false })
         .range(from, to);
 
       if (!error) {
         setReviews((data as Review[]) || []);
-        if (count !== null) setPageTotal(count);
+        if (count !== null) setPageTotal(count + pinnedCount);
       }
       setLoading(false);
     },
@@ -151,6 +184,7 @@ export default function ReviewList({
     </div>
   );
 
+  const displayReviews = page === 1 ? [...pinnedReviews, ...reviews] : reviews;
   const rangeStart = (page - 1) * PAGE_SIZE + 1;
   const rangeEnd = Math.min(page * PAGE_SIZE, displayedTotal);
 
@@ -231,19 +265,24 @@ export default function ReviewList({
       <div className="flex flex-col">
         {loading
           ? Array.from({ length: PAGE_SIZE }).map((_, i) => <SkeletonCard key={i} />)
-          : reviews.map((review) => {
+          : displayReviews.map((review) => {
               const hasImages = review.image_urls && review.image_urls.length > 0;
               return (
                 <div
                   key={review.id}
                   className="py-5 border-b border-gray-100 last:border-b-0"
                 >
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex flex-col mb-3">
                     <div className="flex items-center gap-3">
                       <div>
-                        <p className="text-sm font-semibold text-brand-text">
-                          {review.reviewer_name}
-                        </p>
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <p className="text-sm font-semibold text-brand-text">
+                            {review.reviewer_name}
+                          </p>
+                          <span className="text-[10px] font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
+                            VERIFIED
+                          </span>
+                        </div>
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <Star
@@ -258,9 +297,6 @@ export default function ReviewList({
                         </div>
                       </div>
                     </div>
-                    <span className="text-[10px] font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
-                      VERIFIED
-                    </span>
                   </div>
 
                   {review.review_text?.trim() && (
@@ -397,16 +433,45 @@ export default function ReviewList({
                 ))}
               </div>
               
-              {/* Counter removed per user request */}
+              {/* Navigation Arrows for Large Screens */}
+              <button
+                type="button"
+                className="hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 w-10 h-10 items-center justify-center bg-black/50 text-white rounded-full opacity-50 hover:opacity-100 transition-opacity disabled:hidden"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (carouselRef.current) {
+                    carouselRef.current.scrollBy({ left: -carouselRef.current.clientWidth, behavior: "smooth" });
+                  }
+                }}
+                disabled={lightbox.index === 0}
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              
+              <button
+                type="button"
+                className="hidden md:flex absolute top-1/2 right-4 -translate-y-1/2 w-10 h-10 items-center justify-center bg-black/50 text-white rounded-full opacity-50 hover:opacity-100 transition-opacity disabled:hidden"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (carouselRef.current) {
+                    carouselRef.current.scrollBy({ left: carouselRef.current.clientWidth, behavior: "smooth" });
+                  }
+                }}
+                disabled={lightbox.index === lightbox.items.length - 1}
+                aria-label="Next image"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
             </div>
 
             {/* Right/Bottom: Review Info */}
             <div className="w-full md:w-2/5 p-5 md:p-8 flex flex-col overflow-y-auto max-h-[45vh] md:max-h-[80vh]">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3 mb-3">
                 <p className="font-bold text-brand-text text-lg">
                   {lightbox.items[lightbox.index].review.reviewer_name}
                 </p>
-                <span className="text-[10px] font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full shrink-0 ml-2">
+                <span className="text-[10px] font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full shrink-0">
                   VERIFIED
                 </span>
               </div>

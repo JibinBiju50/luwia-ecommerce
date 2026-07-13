@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import type { Product } from "@/lib/products";
 
 type Section = "science" | "results" | "benefits" | "safety";
@@ -39,8 +40,26 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
             openSection === "science" ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="px-4 pb-5 text-xs md:text-sm text-gray-600 leading-relaxed whitespace-pre-line">
-            {product.description}
+          <div className="px-4 pb-2 pt-2">
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 hide-scrollbar">
+              {[
+                { src: "/images/niacinamide.png", name: "Niacinamide" },
+                { src: "/images/shea_butter.png", name: "Shea Butter" },
+                { src: "/images/alpha_arbutin.png", name: "Alpha Arbutin" },
+                { src: "/images/licorie_extract.png", name: "Licorice Extract" },
+                { src: "/images/kojic_acid.png", name: "Kojic Acid" },
+                { src: "/images/glutathione.png", name: "Glutathione" }
+              ].map((ingredient, idx) => (
+                <div key={idx} className="flex flex-col items-center flex-shrink-0 snap-center w-[22%]">
+                  <div className="relative w-full aspect-square rounded-full overflow-hidden border border-gray-100 mb-2 shadow-sm">
+                    <Image src={ingredient.src} alt={ingredient.name} fill className="object-cover" sizes="(max-width: 768px) 25vw, 15vw" />
+                  </div>
+                  <span className="text-[9px] sm:text-[11px] text-center font-semibold text-gray-700 leading-tight">
+                    {ingredient.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
