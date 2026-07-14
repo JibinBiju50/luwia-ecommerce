@@ -268,8 +268,29 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
         </button>
       </div>
 
-      {/* Hero Ingredients */}
+      {/* Helps With */}
       <div className="mt-6 pt-5 border-t border-gray-100 relative group">
+        <h3 className="text-sm font-bold text-brand-text mb-4">Helps with</h3>
+        <div className="flex gap-4 sm:gap-8 pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+          {[
+            { src: "/images/tan_repair.png", name: "Tan repair & even tone" },
+            { src: "/images/brightening.jpg", name: "Brightening & glow" },
+            { src: "/images/Hydration.png", name: "Hydration & barrier support" }
+          ].map((item, idx) => (
+            <div key={idx} className="flex flex-col items-center flex-shrink-0 w-[28%] max-w-[100px]">
+              <div className="relative w-full aspect-square rounded-full overflow-hidden border border-gray-100 mb-2 shadow-sm bg-white">
+                <Image src={item.src} alt={item.name} fill className="object-cover" sizes="(max-width: 768px) 30vw, 15vw" />
+              </div>
+              <span className="text-[10px] sm:text-[11px] text-center font-semibold text-gray-700 leading-tight">
+                {item.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Hero Ingredients */}
+      <div className="mt-4 pt-2.5 border-t border-gray-100 relative group">
         <h3 className="text-sm font-bold text-brand-text mb-4">Hero Ingredients</h3>
         <div 
           ref={ingredientsScrollRef}
