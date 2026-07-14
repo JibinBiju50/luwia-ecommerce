@@ -41,25 +41,47 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
           }`}
         >
           <div className="px-4 pb-2 pt-2">
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 hide-scrollbar">
-              {[
-                { src: "/images/niacinamide.png", name: "Niacinamide" },
-                { src: "/images/shea_butter.png", name: "Shea Butter" },
-                { src: "/images/alpha_arbutin.png", name: "Alpha Arbutin" },
-                { src: "/images/licorie_extract.png", name: "Licorice Extract" },
-                { src: "/images/kojic_acid.png", name: "Kojic Acid" },
-                { src: "/images/glutathione.png", name: "Glutathione" }
-              ].map((ingredient, idx) => (
-                <div key={idx} className="flex flex-col items-center flex-shrink-0 snap-center w-[22%]">
-                  <div className="relative w-full aspect-square rounded-full overflow-hidden border border-gray-100 mb-2 shadow-sm">
-                    <Image src={ingredient.src} alt={ingredient.name} fill className="object-cover" sizes="(max-width: 768px) 25vw, 15vw" />
-                  </div>
-                  <span className="text-[9px] sm:text-[11px] text-center font-semibold text-gray-700 leading-tight">
-                    {ingredient.name}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+              Powered by a premium blend of brightening, hydrating, and skin-supporting actives for healthier-looking skin.
+            </p>
+            <ul className="space-y-2 text-sm text-gray-700 leading-relaxed">
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>3% Niacinamide</strong> – Refines pores & strengthens the skin barrier.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>3% Glycerin</strong> – Delivers deep, long-lasting hydration.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>1% Alpha Arbutin</strong> – Helps reduce tanning & pigmentation.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>1% Kojic Acid</strong> – Helps fade dark spots and post-acne marks.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>1% Glutathione</strong> – Promotes a brighter-looking complexion.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>Licorice Extract & Shea Butter</strong> – Soothe, nourish & lock in moisture.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>Sandalwood & Turmeric Extracts</strong> – Help calm skin and improve clarity.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>Collagen & Biotin</strong> – Support smoother, firmer-looking skin.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
+                <span><strong>Vitamins A, C & E</strong> – Help protect, repair & renew skin overnight.</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

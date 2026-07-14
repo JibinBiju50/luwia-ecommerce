@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Heart, Share2, Minus, Plus, Truck, Star, Flame, Eye } from "lucide-react";
+import { Heart, Share2, Minus, Plus, Truck, Star, Flame, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { addToCart as fbAddToCart, initiateCheckout } from "@/lib/fbpixel";
@@ -31,6 +31,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
   const { addToCart, couponApplied, applyCoupon } = useCart();
   const { user, openMagicLinkModal, pendingCartAction: pendingCartActionRef } = useAuth();
   const router = useRouter();
+  const ingredientsScrollRef = useRef<HTMLDivElement>(null);
 
   const reviewCount = totalCount;
   const rating = avgRating;
@@ -244,6 +245,62 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
           className="w-full h-[52px] sm:h-[56px] text-sm font-bold text-white gradient-brand rounded-full hover:opacity-90 transition-all shadow-brand active:scale-[0.97] active:shadow-inner"
         >
           Buy Now
+        </button>
+      </div>
+
+      {/* Hero Ingredients */}
+      <div className="mt-6 pt-5 border-t border-gray-100 relative group">
+        <h3 className="text-sm font-bold text-brand-text mb-4">Hero Ingredients</h3>
+        <div 
+          ref={ingredientsScrollRef}
+          className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0"
+        >
+          {[
+            { src: "/images/niacinamide.png", name: "Niacinamide" },
+            { src: "/images/shea_butter.png", name: "Shea Butter" },
+            { src: "/images/alpha_arbutin.png", name: "Alpha Arbutin" },
+            { src: "/images/licorie_extract.png", name: "Licorice Extract" },
+            { src: "/images/kojic_acid.png", name: "Kojic Acid" },
+            { src: "/images/glutathione.png", name: "Glutathione" }
+          ].map((ingredient, idx) => (
+            <div key={idx} className="flex flex-col items-center flex-shrink-0 snap-center w-[22%]">
+              <div className="relative w-full aspect-square rounded-full overflow-hidden border border-gray-100 mb-2 shadow-sm bg-white">
+                <Image src={ingredient.src} alt={ingredient.name} fill className="object-cover" sizes="(max-width: 768px) 25vw, 15vw" />
+              </div>
+              <span className="text-[9px] sm:text-[11px] text-center font-semibold text-gray-700 leading-tight">
+                {ingredient.name}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Navigation Arrows for Large Screens */}
+        <button
+          type="button"
+          className="hidden md:flex absolute top-[60%] -translate-y-1/2 -left-4 w-8 h-8 items-center justify-center bg-white border border-gray-200 text-gray-600 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-50 z-10"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (ingredientsScrollRef.current) {
+              ingredientsScrollRef.current.scrollBy({ left: -ingredientsScrollRef.current.clientWidth / 2, behavior: "smooth" });
+            }
+          }}
+          aria-label="Scroll left"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        
+        <button
+          type="button"
+          className="hidden md:flex absolute top-[60%] -translate-y-1/2 -right-4 w-8 h-8 items-center justify-center bg-white border border-gray-200 text-gray-600 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-50 z-10"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (ingredientsScrollRef.current) {
+              ingredientsScrollRef.current.scrollBy({ left: ingredientsScrollRef.current.clientWidth / 2, behavior: "smooth" });
+            }
+          }}
+          aria-label="Scroll right"
+        >
+          <ChevronRight className="w-5 h-5" />
         </button>
       </div>
 
