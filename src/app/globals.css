@@ -18,7 +18,6 @@
 
 /* Base Styles */
 html {
-  scroll-behavior: smooth;
   font-size: 110%; /* Scales up all text sizes globally by 10% */
 }
 

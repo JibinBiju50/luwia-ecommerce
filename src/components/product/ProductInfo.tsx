@@ -28,10 +28,13 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
   const [selectedQty, setSelectedQty] = useState(1);
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const [showMobileBuyNow, setShowMobileBuyNow] = useState(false);
   const { addToCart, couponApplied, applyCoupon } = useCart();
   const { user, openMagicLinkModal, pendingCartAction: pendingCartActionRef } = useAuth();
   const router = useRouter();
   const ingredientsScrollRef = useRef<HTMLDivElement>(null);
+  const actionButtonsRef = useRef<HTMLDivElement>(null);
 
   const reviewCount = totalCount;
   const rating = avgRating;
@@ -43,6 +46,22 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
     }
   }, [couponApplied, applyCoupon]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Show the sticky bar if the original action buttons have scrolled past the top of the viewport
+        setShowStickyBar(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+      },
+      { root: null, threshold: 0, rootMargin: "0px" }
+    );
+
+    if (actionButtonsRef.current) {
+      observer.observe(actionButtonsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -53,6 +72,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
       return;
     }
     addToCart(product.id, selectedQty);
+    setShowMobileBuyNow(true);
     // Fire Meta Pixel AddToCart
     fbAddToCart({
       content_name: product.name,
@@ -207,7 +227,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
       </p>
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-3 pt-2">
+      <div ref={actionButtonsRef} className="flex flex-col gap-3 pt-2">
         <div className="flex gap-3 h-[48px] sm:h-[52px]">
           {/* Quantity */}
           <div className="flex items-center border border-gray-200 rounded-full overflow-hidden shrink-0">
@@ -305,7 +325,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
       </div>
 
       {/* Trust Badges Banner */}
-      <div className="mt-6 pt-5 border-t border-gray-100 overflow-hidden relative -mx-4 md:mx-0">
+      <div className="mt-3 pt-4 border-t border-gray-100 overflow-hidden relative -mx-4 md:mx-0">
         <div className="flex w-max md:w-full gap-8 md:gap-4 md:grid md:grid-cols-3 animate-[scroll_12s_linear_infinite] md:animate-none hover:[animation-play-state:paused] md:hover:[animation-play-state:running]">
           
           {[
@@ -326,6 +346,120 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
             </div>
           ))}
 
+        </div>
+      </div>
+
+      {/* Sticky Bottom Bar */}
+      <div 
+        className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.08)] p-3 md:p-4 z-50 transition-transform duration-300 ease-in-out ${
+          showStickyBar ? "translate-y-0" : "translate-y-[120%]"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          {/* Optional: Small Product Info on Desktop */}
+          <div className="hidden lg:flex items-center gap-3">
+             <div className="relative w-12 h-12 rounded bg-brand-bg overflow-hidden shrink-0">
+               <Image src={product.image} alt={product.name} fill className="object-cover" />
+             </div>
+             <div className="flex flex-col">
+               <span className="font-bold text-sm text-brand-text truncate max-w-[200px]">{product.name}</span>
+               <span className="font-semibold text-brand-primary text-sm">{product.currencySymbol}{product.onlinePrice}</span>
+             </div>
+          </div>
+          
+          <div className="flex flex-1 lg:flex-none items-center w-full lg:w-auto">
+            
+            {/* Desktop View: Always shows all three side-by-side */}
+            <div className="hidden sm:flex items-center gap-3 w-full">
+              {/* Quantity */}
+              <div className="flex items-center border border-gray-200 rounded-full overflow-hidden shrink-0 h-[48px]">
+                <button
+                  onClick={decrementQty}
+                  className="px-3 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors disabled:opacity-30"
+                  disabled={selectedQty <= 1}
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="text-sm font-semibold min-w-[24px] text-center">
+                  {selectedQty}
+                </span>
+                <button
+                  onClick={incrementQty}
+                  className="px-3 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors disabled:opacity-30"
+                  disabled={selectedQty >= product.maxQuantity}
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+              
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 lg:w-[160px] h-[48px] text-sm font-semibold text-brand-primary border-2 border-brand-primary/20 rounded-full hover:border-brand-primary/40 hover:bg-brand-bg transition-all active:scale-[0.97]"
+              >
+                Add to Cart
+              </button>
+
+              <button
+                onClick={handleBuyNow}
+                className="flex-1 lg:w-[160px] h-[48px] text-sm font-bold text-white gradient-brand rounded-full hover:opacity-90 transition-all shadow-brand active:scale-[0.97]"
+              >
+                Buy Now
+              </button>
+            </div>
+
+            {/* Mobile View: Toggles between Add to Cart + Qty OR Buy Now */}
+            <div className="flex sm:hidden w-full relative h-[48px] overflow-hidden">
+                {/* Quantity + Add to Cart container */}
+                <div 
+                  className={`absolute inset-0 flex items-center gap-2 w-full transition-all duration-300 ease-in-out ${
+                    showMobileBuyNow ? "opacity-0 -translate-y-full pointer-events-none" : "opacity-100 translate-y-0"
+                  }`}
+                >
+                   {/* Quantity */}
+                   <div className="flex items-center border border-gray-200 rounded-full overflow-hidden shrink-0 h-[48px]">
+                     <button
+                        onClick={decrementQty}
+                        className="px-3 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors disabled:opacity-30"
+                        disabled={selectedQty <= 1}
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="text-sm font-semibold min-w-[24px] text-center">
+                        {selectedQty}
+                      </span>
+                      <button
+                        onClick={incrementQty}
+                        className="px-3 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors disabled:opacity-30"
+                        disabled={selectedQty >= product.maxQuantity}
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                   </div>
+                   
+                   {/* Add to Cart */}
+                   <button
+                    onClick={handleAddToCart}
+                    className="flex-1 h-[48px] text-sm font-semibold text-brand-primary border-2 border-brand-primary/20 rounded-full hover:border-brand-primary/40 hover:bg-brand-bg transition-all active:scale-[0.97]"
+                   >
+                    Add to Cart
+                   </button>
+                </div>
+
+                {/* Buy Now container */}
+                <div 
+                  className={`absolute inset-0 flex items-center w-full transition-all duration-300 ease-in-out ${
+                    showMobileBuyNow ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full pointer-events-none"
+                  }`}
+                >
+                   <button
+                    onClick={handleBuyNow}
+                    className="w-full h-[48px] text-sm font-bold text-white gradient-brand rounded-full hover:opacity-90 transition-all shadow-brand active:scale-[0.97]"
+                   >
+                    Buy Now
+                   </button>
+                </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

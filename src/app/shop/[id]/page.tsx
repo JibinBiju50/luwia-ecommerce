@@ -84,7 +84,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         </nav>
 
         {/* Product Section */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-10 mb-4 md:mb-6">
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-10">
           <div className="min-w-0">
             <ProductGallery images={product.gallery} />
           </div>
@@ -99,7 +99,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       </div>
 
       {/* Combined Image and Descriptions Section */}
-      <section className="w-full bg-[#FEE5C7] py-8 md:py-12 border-t border-brand-primary/5 mt-4 md:mt-8">
+      <section className="w-full bg-[#FEE5C7] py-8 md:py-12 border-t border-brand-primary/5 mt-2 md:mt-4">
         <div className="max-w-7xl mx-auto px-0 md:px-6 lg:px-8">
           {product.id === "luwia-prime" ? (
             <div className="flex flex-col md:grid md:grid-cols-2 gap-8 lg:gap-12 items-start">

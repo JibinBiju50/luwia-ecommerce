@@ -38,12 +38,12 @@ export default function CartPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <h1 className="text-2xl md:text-3xl font-bold text-brand-text mb-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+        <h1 className="text-xl md:text-3xl font-bold text-brand-text mb-5 md:mb-8">
           Shopping Cart
         </h1>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-5 md:gap-8">
           {/* Cart Items */}
           <div className="md:col-span-2 space-y-4">
             {items.map((item) => {
@@ -51,10 +51,10 @@ export default function CartPage() {
               if (!product) return null;
 
               return (
-                <div key={item.productId} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-                  <div className="flex gap-4">
+                <div key={item.productId} className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 shadow-sm">
+                  <div className="flex gap-3 sm:gap-4">
                     {/* Image */}
-                    <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden flex-shrink-0 bg-gray-50">
+                    <div className="relative w-20 h-20 sm:w-32 sm:h-32 rounded-xl overflow-hidden flex-shrink-0 bg-gray-50">
                       <Image
                         src={product.cardImage || ('image' in product ? product.image : "")}
                         alt={product.name}
@@ -133,8 +133,8 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="md:col-span-1">
-            <div className="bg-brand-bg/50 rounded-2xl p-6 border border-brand-primary/5 sticky top-24">
-              <h2 className="text-lg font-semibold text-brand-text mb-5">
+            <div className="bg-brand-bg/50 rounded-2xl p-4 sm:p-6 border border-brand-primary/5 sticky top-24">
+              <h2 className="text-lg font-semibold text-brand-text mb-4 sm:mb-5">
                 Order Summary
               </h2>
 

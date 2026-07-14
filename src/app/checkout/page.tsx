@@ -266,21 +266,21 @@ export default function CheckoutPage() {
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
       <div className="bg-gray-50/50 min-h-screen">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-          <h1 className="text-2xl md:text-3xl font-bold text-brand-text mb-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+          <h1 className="text-xl md:text-3xl font-bold text-brand-text mb-5 md:mb-8">
             Checkout
           </h1>
 
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-5 md:gap-8">
             {/* Left: Form + Payment Method */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 md:space-y-6">
               {/* Address Form */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-brand-text mb-5">
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+                <h2 className="text-lg font-semibold text-brand-text mb-4 sm:mb-5">
                   Delivery Address
                 </h2>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="sm:col-span-2">
                     <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
                     <input id="fullName" name="fullName" type="text" value={form.fullName} onChange={handleChange}
@@ -342,11 +342,11 @@ export default function CheckoutPage() {
               </div>
 
               {/* Payment Method */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-brand-text mb-5">Payment Method</h2>
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+                <h2 className="text-lg font-semibold text-brand-text mb-4 sm:mb-5">Payment Method</h2>
                 <div className="space-y-3">
                   <button type="button" onClick={() => setPaymentMethod("online")}
-                    className={`w-full relative flex items-start gap-4 px-5 py-4 rounded-xl border-2 transition-all text-left ${paymentMethod === "online" ? "border-brand-primary bg-brand-bg/50" : "border-gray-200 hover:border-gray-300"}`}>
+                    className={`w-full relative flex items-start gap-3 sm:gap-4 px-4 py-3 sm:px-5 sm:py-4 rounded-xl border-2 transition-all text-left ${paymentMethod === "online" ? "border-brand-primary bg-brand-bg/50" : "border-gray-200 hover:border-gray-300"}`}>
                     <div className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${paymentMethod === "online" ? "border-brand-primary" : "border-gray-300"}`}>
                       {paymentMethod === "online" && <div className="w-2.5 h-2.5 rounded-full bg-brand-primary" />}
                     </div>
@@ -367,7 +367,7 @@ export default function CheckoutPage() {
                   </button>
 
                   <button type="button" onClick={() => setPaymentMethod("cod")}
-                    className={`w-full relative flex items-start gap-4 px-5 py-4 rounded-xl border-2 transition-all text-left ${paymentMethod === "cod" ? "border-brand-primary bg-brand-bg/50" : "border-gray-200 hover:border-gray-300"}`}>
+                    className={`w-full relative flex items-start gap-3 sm:gap-4 px-4 py-3 sm:px-5 sm:py-4 rounded-xl border-2 transition-all text-left ${paymentMethod === "cod" ? "border-brand-primary bg-brand-bg/50" : "border-gray-200 hover:border-gray-300"}`}>
                     <div className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${paymentMethod === "cod" ? "border-brand-primary" : "border-gray-300"}`}>
                       {paymentMethod === "cod" && <div className="w-2.5 h-2.5 rounded-full bg-brand-primary" />}
                     </div>
@@ -385,8 +385,8 @@ export default function CheckoutPage() {
 
             {/* Right: Order Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
-                <h2 className="text-lg font-semibold text-brand-text mb-5">Order Summary</h2>
+              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 sticky top-24">
+                <h2 className="text-lg font-semibold text-brand-text mb-4 sm:mb-5">Order Summary</h2>
 
                 {/* Items */}
                 <div className="space-y-4 pb-4 border-b border-gray-100 max-h-64 overflow-y-auto pr-2">

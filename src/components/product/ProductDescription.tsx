@@ -41,10 +41,10 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
           }`}
         >
           <div className="px-4 pb-2 pt-2">
-            <p className="text-gray-700 text-sm leading-relaxed mb-4">
+            <p className="text-gray-700 text-xs lg:text-sm leading-relaxed mb-4">
               Powered by a premium blend of brightening, hydrating, and skin-supporting actives for healthier-looking skin.
             </p>
-            <ul className="space-y-2 text-sm text-gray-700 leading-relaxed">
+            <ul className="space-y-2 text-xs lg:text-sm text-gray-700 leading-relaxed">
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 shrink-0"></span>
                 <span><strong>3% Niacinamide</strong> – Refines pores & strengthens the skin barrier.</span>
