@@ -30,6 +30,7 @@ export const PRODUCTS: Product[] = [
     cardImage: "/images/luwia_women_with_pack.jpeg",
     image: "/images/luwia_women_with_pack.jpeg",
     gallery: [
+      "/images/Brightening face cream_.jpeg",
       "/images/luwia_women_with_pack.jpeg",
       "/images/luwia_women_2.jpeg",
       "/images/face_img_2.jpeg",
