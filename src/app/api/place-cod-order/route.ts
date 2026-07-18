@@ -3,6 +3,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { sendCAPIPurchase } from "@/lib/meta-capi";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { PRODUCTS } from "@/lib/products";
+import { PRODUCT } from "@/lib/product";
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -36,6 +38,32 @@ export async function POST(request: NextRequest) {
 
     if (!orderDetails) {
       return NextResponse.json({ error: "Missing order details" }, { status: 400 });
+    }
+
+    if (!orderDetails.items || !Array.isArray(orderDetails.items) || orderDetails.items.length === 0) {
+      return NextResponse.json({ error: "Invalid items in order" }, { status: 400 });
+    }
+
+    // Validate COD price on the server
+    let serverTotal = 0;
+    for (const item of orderDetails.items) {
+      let productPrice = 0;
+      const found = PRODUCTS.find((p) => p.id === item.productId);
+      if (found) {
+        productPrice = found.codPrice;
+      } else if (item.productId === "luwia-cream" || item.productId === "default") {
+        productPrice = PRODUCT.codPrice;
+      }
+      
+      if (!productPrice) {
+        return NextResponse.json({ error: "Invalid product in order" }, { status: 400 });
+      }
+      serverTotal += productPrice * item.quantity;
+    }
+
+    if (serverTotal !== orderDetails.amount) {
+      console.warn(`[place-cod-order] Price mismatch. Client: ${orderDetails.amount}, Server: ${serverTotal}`);
+      return NextResponse.json({ error: "Price validation failed. Please refresh your cart." }, { status: 400 });
     }
 
     // Save COD order to Supabase
