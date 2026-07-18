@@ -29,6 +29,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [showMobileBuyNow, setShowMobileBuyNow] = useState(false);
   const { addToCart, couponApplied, applyCoupon } = useCart();
   const { user, openMagicLinkModal, pendingCartAction: pendingCartActionRef } = useAuth();
@@ -47,7 +48,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
   }, [couponApplied, applyCoupon]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const actionObserver = new IntersectionObserver(
       ([entry]) => {
         // Show the sticky bar if the original action buttons have scrolled past the top of the viewport
         setShowStickyBar(!entry.isIntersecting && entry.boundingClientRect.top < 0);
@@ -56,10 +57,24 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
     );
 
     if (actionButtonsRef.current) {
-      observer.observe(actionButtonsRef.current);
+      actionObserver.observe(actionButtonsRef.current);
     }
 
-    return () => observer.disconnect();
+    const footer = document.querySelector("footer");
+    const footerObserver = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterVisible(entry.isIntersecting);
+      },
+      { root: null, threshold: 0, rootMargin: "0px" }
+    );
+    if (footer) {
+      footerObserver.observe(footer);
+    }
+
+    return () => {
+      actionObserver.disconnect();
+      footerObserver.disconnect();
+    };
   }, []);
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -375,7 +390,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
       {/* Sticky Bottom Bar */}
       <div 
         className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.08)] p-3 md:p-4 z-50 transition-transform duration-300 ease-in-out ${
-          showStickyBar ? "translate-y-0" : "translate-y-[120%]"
+          showStickyBar && !isFooterVisible ? "translate-y-0" : "translate-y-[120%]"
         }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">

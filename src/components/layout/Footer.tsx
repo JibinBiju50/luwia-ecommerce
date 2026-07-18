@@ -134,7 +134,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="mt-8 pt-8 border-t border-white/20 text-center">
-          <p className="text-xs text-white/70 mt-1">Kottayam, Kerala, India</p>
+          <p className="text-xs text-white/70 mt-1">Kerala, India</p>
           <p className="text-xs text-white/60 mt-4">
             © {new Date().getFullYear()} LUWIA SKIN SCIENCE. ALL RIGHTS RESERVED.
           </p>
