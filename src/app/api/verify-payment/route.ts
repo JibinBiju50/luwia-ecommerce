@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { sendCAPIPurchase } from "@/lib/meta-capi";
+import Razorpay from "razorpay";
+import { PRODUCTS } from "@/lib/products";
+import { PRODUCT } from "@/lib/product";
+
+const razorpay = new Razorpay({
+  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,6 +34,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!orderDetails || !orderDetails.items || !Array.isArray(orderDetails.items)) {
+      return NextResponse.json({ success: false, error: "Invalid order details" }, { status: 400 });
+    }
+
+    // Fetch the actual order from Razorpay to know how much was ACTUALLY paid
+    const rzpOrder = await razorpay.orders.fetch(razorpay_order_id);
+    const actualAmountPaid = rzpOrder.amount / 100; // Razorpay returns paise
+
+    // Calculate the total value of the items they CLAIM to have bought
+    let serverTotal = 0;
+    for (const item of orderDetails.items) {
+      let productPrice = 0;
+      const found = PRODUCTS.find((p) => p.id === item.productId);
+      if (found) {
+        productPrice = found.onlinePrice;
+      } else if (item.productId === "luwia-cream" || item.productId === "default") {
+        productPrice = PRODUCT.onlinePrice;
+      }
+      
+      if (!productPrice) {
+        return NextResponse.json({ success: false, error: "Invalid product in order" }, { status: 400 });
+      }
+      serverTotal += productPrice * item.quantity;
+    }
+
+    // If the value of the items doesn't perfectly match what they actually paid, they tampered with the payload!
+    if (serverTotal !== actualAmountPaid) {
+      console.error(`[verify-payment] TAMPERING DETECTED! User claimed items worth ${serverTotal} but only paid ${actualAmountPaid}`);
+      return NextResponse.json({ success: false, error: "Data integrity check failed" }, { status: 400 });
+    }
+
+    // Override the client's claimed amount with the truth from Razorpay
+    const safeAmount = actualAmountPaid;
+
     // Save order to Supabase
     const { data: order, error: dbError } = await supabaseAdmin
       .from("orders")
@@ -39,7 +81,7 @@ export async function POST(request: NextRequest) {
         state: orderDetails.state,
         pincode: orderDetails.pincode,
         quantity: orderDetails.quantity,
-        amount_paid: orderDetails.amount,
+        amount_paid: safeAmount,
         items: orderDetails.items,
         payment_method: "online",
         razorpay_payment_id,
@@ -68,7 +110,7 @@ export async function POST(request: NextRequest) {
           email: orderDetails.email,
           phone: orderDetails.phone,
           quantity: orderDetails.quantity,
-          amount: orderDetails.amount,
+          amount: safeAmount,
           paymentMethod: "online",
           address: `${orderDetails.addressLine1}${
             orderDetails.addressLine2 ? ", " + orderDetails.addressLine2 : ""
@@ -87,7 +129,7 @@ export async function POST(request: NextRequest) {
       eventId: order.id,
       email: orderDetails.email,
       phone: orderDetails.phone,
-      amount: orderDetails.amount,
+      amount: safeAmount,
       currency: "INR",
       contentIds: (orderDetails.items ?? []).map(
         (i: { productId: string }) => i.productId
