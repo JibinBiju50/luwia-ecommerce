@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     // Fetch the actual order from Razorpay to know how much was ACTUALLY paid
     const rzpOrder = await razorpay.orders.fetch(razorpay_order_id);
-    const actualAmountPaid = rzpOrder.amount / 100; // Razorpay returns paise
+    const actualAmountPaid = Number(rzpOrder.amount) / 100; // Razorpay returns paise
 
     // Calculate the total value of the items they CLAIM to have bought
     let serverTotal = 0;
