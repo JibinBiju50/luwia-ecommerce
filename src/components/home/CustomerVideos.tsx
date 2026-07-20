@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 export default function CustomerVideos() {
   const videoScrollRef = useRef<HTMLDivElement>(null);
@@ -98,15 +98,7 @@ export default function CustomerVideos() {
               className="flex-shrink-0 w-[40vw] sm:w-[35vw] md:w-[25vw] lg:w-[18vw] relative rounded-2xl overflow-hidden shadow-brand snap-start"
             >
               <div className="relative w-full flex items-center justify-center rounded-2xl">
-                <video
-                  src={src}
-                  className="w-full h-auto rounded-2xl pointer-events-none"
-                  muted
-                  autoPlay
-                  loop
-                  playsInline
-                  preload="metadata"
-                />
+                <LazyVideo src={src} />
               </div>
             </div>
           ))}
@@ -129,5 +121,45 @@ export default function CustomerVideos() {
         ))}
       </div>
     </section>
+  );
+}
+
+/**
+ * LazyVideo — only loads the video when it scrolls into view.
+ * Uses IntersectionObserver to detect visibility.
+ */
+function LazyVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Only need to load once
+        }
+      },
+      { rootMargin: "200px" } // Start loading 200px before visible
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={isVisible ? src : undefined}
+      className="w-full h-auto rounded-2xl pointer-events-none"
+      muted
+      autoPlay
+      loop
+      playsInline
+      preload="none"
+    />
   );
 }
