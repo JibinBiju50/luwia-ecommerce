@@ -5,6 +5,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { PRODUCTS } from "@/lib/products";
 import { PRODUCT } from "@/lib/product";
+import { sendConfirmationEmail } from "@/lib/email";
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -99,22 +100,18 @@ export async function POST(request: NextRequest) {
 
     // Trigger confirmation email (fire and forget)
     try {
-      await fetch(new URL("/api/send-confirmation", request.url).toString(), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId: order.id,
-          customerName: orderDetails.fullName,
-          email: orderDetails.email,
-          phone: orderDetails.phone,
-          quantity: orderDetails.quantity,
-          amount: orderDetails.amount,
-          paymentMethod: "cod",
-          address: `${orderDetails.addressLine1}${
-            orderDetails.addressLine2 ? ", " + orderDetails.addressLine2 : ""
-          }, ${orderDetails.city}, ${orderDetails.state} - ${orderDetails.pincode}`,
-          items: orderDetails.items,
-        }),
+      await sendConfirmationEmail({
+        orderId: order.id,
+        customerName: orderDetails.fullName,
+        email: orderDetails.email,
+        phone: orderDetails.phone,
+        quantity: orderDetails.quantity,
+        amount: orderDetails.amount,
+        paymentMethod: "cod",
+        address: `${orderDetails.addressLine1}${
+          orderDetails.addressLine2 ? ", " + orderDetails.addressLine2 : ""
+        }, ${orderDetails.city}, ${orderDetails.state} - ${orderDetails.pincode}`,
+        items: orderDetails.items,
       });
     } catch (emailError) {
       console.error("Email trigger error:", emailError);

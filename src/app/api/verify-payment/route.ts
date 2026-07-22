@@ -5,11 +5,7 @@ import { sendCAPIPurchase } from "@/lib/meta-capi";
 import Razorpay from "razorpay";
 import { PRODUCTS } from "@/lib/products";
 import { PRODUCT } from "@/lib/product";
-
-const razorpay = new Razorpay({
-  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
+import { sendConfirmationEmail } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,7 +13,6 @@ export async function POST(request: NextRequest) {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      orderDetails,
     } = await request.json();
 
     // Verify signature
@@ -34,109 +29,62 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!orderDetails || !orderDetails.items || !Array.isArray(orderDetails.items)) {
-      return NextResponse.json({ success: false, error: "Invalid order details" }, { status: 400 });
-    }
-
-    // Fetch the actual order from Razorpay to know how much was ACTUALLY paid
-    const rzpOrder = await razorpay.orders.fetch(razorpay_order_id);
-    const actualAmountPaid = Number(rzpOrder.amount) / 100; // Razorpay returns paise
-
-    // Calculate the total value of the items they CLAIM to have bought
-    let serverTotal = 0;
-    for (const item of orderDetails.items) {
-      let productPrice = 0;
-      const found = PRODUCTS.find((p) => p.id === item.productId);
-      if (found) {
-        productPrice = found.onlinePrice;
-      } else if (item.productId === "luwia-cream" || item.productId === "default") {
-        productPrice = PRODUCT.onlinePrice;
-      }
-      
-      if (!productPrice) {
-        return NextResponse.json({ success: false, error: "Invalid product in order" }, { status: 400 });
-      }
-      serverTotal += productPrice * item.quantity;
-    }
-
-    // If the value of the items doesn't perfectly match what they actually paid, they tampered with the payload!
-    if (serverTotal !== actualAmountPaid) {
-      console.error(`[verify-payment] TAMPERING DETECTED! User claimed items worth ${serverTotal} but only paid ${actualAmountPaid}`);
-      return NextResponse.json({ success: false, error: "Data integrity check failed" }, { status: 400 });
-    }
-
-    // Override the client's claimed amount with the truth from Razorpay
-    const safeAmount = actualAmountPaid;
-
-    // Save order to Supabase
-    const { data: order, error: dbError } = await supabaseAdmin
+    // Find the pending order and update to paid
+    // The order was already created in /api/create-order with status "awaiting_payment"
+    const { data: order, error: updateError } = await supabaseAdmin
       .from("orders")
-      .insert({
-        customer_name: orderDetails.fullName,
-        email: orderDetails.email,
-        phone: orderDetails.phone,
-        address_line1: orderDetails.addressLine1,
-        address_line2: orderDetails.addressLine2 || null,
-        city: orderDetails.city,
-        state: orderDetails.state,
-        pincode: orderDetails.pincode,
-        quantity: orderDetails.quantity,
-        amount_paid: safeAmount,
-        items: orderDetails.items,
-        payment_method: "online",
-        razorpay_payment_id,
-        razorpay_order_id,
+      .update({
         payment_status: "paid",
+        razorpay_payment_id,
       })
-      .select("id")
+      .eq("razorpay_order_id", razorpay_order_id)
+      .eq("payment_status", "awaiting_payment")
+      .select("*")
       .single();
 
-    if (dbError) {
-      console.error("Supabase insert error:", dbError);
+    if (updateError) {
+      // Order might have already been updated by the webhook — check if it exists as paid
+      const { data: existingOrder } = await supabaseAdmin
+        .from("orders")
+        .select("id, payment_status")
+        .eq("razorpay_order_id", razorpay_order_id)
+        .single();
+
+      if (existingOrder?.payment_status === "paid") {
+        // Webhook already processed it — that's fine
+        return NextResponse.json({
+          success: true,
+          orderId: existingOrder.id,
+        });
+      }
+
+      console.error("[verify-payment] Update error:", updateError);
       return NextResponse.json(
-        { success: false, error: "Failed to save order" },
+        { success: false, error: "Failed to update order" },
         { status: 500 }
       );
     }
 
-    // Trigger confirmation email (fire and forget)
+    // Trigger confirmation email
     try {
-      await fetch(new URL("/api/send-confirmation", request.url).toString(), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId: order.id,
-          customerName: orderDetails.fullName,
-          email: orderDetails.email,
-          phone: orderDetails.phone,
-          quantity: orderDetails.quantity,
-          amount: safeAmount,
-          paymentMethod: "online",
-          address: `${orderDetails.addressLine1}${
-            orderDetails.addressLine2 ? ", " + orderDetails.addressLine2 : ""
-          }, ${orderDetails.city}, ${orderDetails.state} - ${orderDetails.pincode}`,
-          items: orderDetails.items,
-        }),
+      await sendConfirmationEmail({
+        orderId: order.id,
+        customerName: order.customer_name,
+        email: order.email,
+        phone: order.phone,
+        quantity: order.quantity,
+        amount: order.amount_paid,
+        paymentMethod: "online",
+        address: `${order.address_line1}${
+          order.address_line2 ? ", " + order.address_line2 : ""
+        }, ${order.city}, ${order.state} - ${order.pincode}`,
+        items: order.items,
       });
     } catch (emailError) {
-      console.error("Email trigger error:", emailError);
-      // Don't fail the order if email fails
+      console.error("Failed to send confirmation email:", emailError);
     }
 
-    // Send Purchase event via Meta Conversions API
-    // Must be awaited — serverless functions shut down immediately after response
-    await sendCAPIPurchase({
-      eventId: order.id,
-      email: orderDetails.email,
-      phone: orderDetails.phone,
-      amount: safeAmount,
-      currency: "INR",
-      contentIds: (orderDetails.items ?? []).map(
-        (i: { productId: string }) => i.productId
-      ),
-      numItems: orderDetails.quantity,
-    });
-
+    // Return success immediately
     return NextResponse.json({
       success: true,
       orderId: order.id,

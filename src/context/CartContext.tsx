@@ -94,6 +94,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Sync cart across tabs — when another tab updates localStorage,
+  // this tab picks up the change automatically.
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key !== STORAGE_KEY || !e.newValue) return;
+      try {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed.items)) {
+          setItems(parsed.items);
+        }
+        if (typeof parsed.couponApplied === "boolean") {
+          setCouponApplied(parsed.couponApplied);
+        }
+      } catch {
+        // Ignore parse errors
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
   const addToCart = useCallback((productId: string, qty: number = 1) => {
     setItems((prevItems) => {
       const existing = prevItems.find((item) => item.productId === productId);

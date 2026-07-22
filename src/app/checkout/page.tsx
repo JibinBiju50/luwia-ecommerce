@@ -179,7 +179,11 @@ export default function CheckoutPage() {
       const res = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: total, items: checkoutItems }),
+        body: JSON.stringify({
+          amount: total,
+          items: checkoutItems,
+          orderDetails: { ...form },
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to create order");
@@ -201,13 +205,6 @@ export default function CheckoutPage() {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                orderDetails: {
-                  ...form,
-                  items: checkoutItems,
-                  quantity: checkoutQuantity,
-                  amount: total,
-                  paymentMethod: "online",
-                },
               }),
             });
             const verifyData = await verifyRes.json();
