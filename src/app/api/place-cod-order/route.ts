@@ -7,6 +7,8 @@ import { PRODUCTS } from "@/lib/products";
 import { PRODUCT } from "@/lib/product";
 import { sendConfirmationEmail } from "@/lib/email";
 
+export const maxDuration = 60; // 60 seconds timeout (Vercel Pro)
+
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(5, "1 m"),

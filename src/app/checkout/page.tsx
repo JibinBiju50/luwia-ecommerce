@@ -161,7 +161,7 @@ export default function CheckoutPage() {
       clearCart();
     }
     setIsSuccess(true);
-    router.push("/order/success");
+    router.push(`/order/success?order_id=${orderId}`);
   };
 
   const handlePlaceOrder = async () => {

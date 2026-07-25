@@ -7,6 +7,8 @@ import { PRODUCTS } from "@/lib/products";
 import { PRODUCT } from "@/lib/product";
 import { sendConfirmationEmail } from "@/lib/email";
 
+export const maxDuration = 60; // 60 seconds timeout (Vercel Pro)
+
 export async function POST(request: NextRequest) {
   try {
     const {

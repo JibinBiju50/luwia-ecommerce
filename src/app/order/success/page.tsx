@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { CheckCircle, Package, MapPin, CreditCard, Banknote } from "lucide-react";
 import { purchase } from "@/lib/fbpixel";
 
@@ -19,8 +20,10 @@ interface OrderInfo {
   pincode: string;
 }
 
-export default function OrderSuccessPage() {
+function SuccessPageContent() {
   const [order, setOrder] = useState<OrderInfo | null>(null);
+  const searchParams = useSearchParams();
+  const urlOrderId = searchParams.get("order_id");
 
   useEffect(() => {
     const stored = sessionStorage.getItem("luwia-order");
@@ -56,56 +59,56 @@ export default function OrderSuccessPage() {
           </p>
         </div>
 
-        {order ? (
+        {order || urlOrderId ? (
           <div className="bg-white rounded-2xl p-6 shadow-brand border border-gray-100 animate-fade-in-up space-y-5">
             {/* Order ID */}
             <div className="text-center pb-4 border-b border-gray-100">
               <p className="text-xs text-gray-500 uppercase tracking-widest">Order ID</p>
               <p className="text-lg font-bold text-brand-primary mt-1">
-                #{order.orderId?.slice(0, 8).toUpperCase()}
+                #{order ? order.orderId?.slice(0, 8).toUpperCase() : urlOrderId?.slice(0, 8).toUpperCase()}
               </p>
             </div>
 
-            {/* Order Details */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Package className="w-4 h-4 text-brand-primary flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-medium text-brand-text">
-                    Luwia — Pearl Radiance Cream × {order.quantity}
-                  </p>
+            {/* Order Details (Only if available in session) */}
+            {order && (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <Package className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-brand-text">
+                      Luwia — Pearl Radiance Cream × {order.quantity}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-3">
-                {order.paymentMethod === "cod" ? (
-                  <Banknote className="w-4 h-4 text-brand-primary flex-shrink-0" />
-                ) : (
-                  <CreditCard className="w-4 h-4 text-brand-primary flex-shrink-0" />
-                )}
-                <div>
-                  <p className="text-sm text-gray-500">
-                    {order.paymentMethod === "cod" ? "Cash on Delivery" : "Paid Online"}
-                  </p>
-                  <p className="text-lg font-bold text-brand-text">₹{order.amount}</p>
+                <div className="flex items-center gap-3">
+                  {order.paymentMethod === "cod" ? (
+                    <Banknote className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  ) : (
+                    <CreditCard className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  )}
+                  <div>
+                    <p className="text-sm text-gray-500">
+                      {order.paymentMethod === "cod" ? "Cash on Delivery" : "Paid Online"}
+                    </p>
+                    <p className="text-lg font-bold text-brand-text">₹{order.amount}</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-brand-primary flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm text-gray-500">Delivery Address</p>
-                  <p className="text-sm font-medium text-brand-text">
-                    {order.fullName}
-                    <br />
-                    {order.addressLine1}
-                    {order.addressLine2 && <>, {order.addressLine2}</>}
-                    <br />
-                    {order.city}, {order.state} - {order.pincode}
-                  </p>
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 text-brand-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-gray-500">Delivery Address</p>
+                    <p className="text-sm font-medium text-brand-text mt-0.5">
+                      {order.addressLine1}
+                      {order.addressLine2 ? `, ${order.addressLine2}` : ""}
+                      <br />
+                      {order.city}, {order.state} - {order.pincode}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Delivery note */}
             <div className="bg-brand-bg/50 rounded-xl p-4 text-center">
@@ -129,7 +132,9 @@ export default function OrderSuccessPage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
           <a
             href={`https://wa.me/917025459137?text=${encodeURIComponent(
-              `Hi Luwia! I just placed an order. My Order ID is #${order?.orderId?.slice(0, 8).toUpperCase() || 'unknown'}. Please send me order updates here!`
+              (order?.orderId || urlOrderId)
+                ? `Hi Luwia! I just placed an order. My Order ID is #${(order?.orderId || urlOrderId)!.slice(0, 8).toUpperCase()}. Please send me order updates here!`
+                : `Hi Luwia! I just placed an order. Please send me order updates here!`
             )}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -146,5 +151,13 @@ export default function OrderSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center">Loading...</div>}>
+      <SuccessPageContent />
+    </Suspense>
   );
 }

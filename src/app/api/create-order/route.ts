@@ -6,6 +6,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { PRODUCTS } from "@/lib/products";
 import { PRODUCT } from "@/lib/product";
 
+export const maxDuration = 60; // 60 seconds timeout (Vercel Pro)
+
 const razorpay = new Razorpay({
   key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
   key_secret: process.env.RAZORPAY_KEY_SECRET!,

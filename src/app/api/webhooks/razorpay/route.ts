@@ -4,6 +4,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { sendCAPIPurchase } from "@/lib/meta-capi";
 import { sendConfirmationEmail } from "@/lib/email";
 
+export const maxDuration = 60; // 60 seconds timeout (Vercel Pro)
+
 /**
  * Razorpay Webhook Handler
  *
