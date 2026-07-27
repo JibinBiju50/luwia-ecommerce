@@ -43,11 +43,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // The old createClient stored sessions in localStorage; the new
     // cookie-based createBrowserClient no longer uses it.
     if (typeof window !== "undefined") {
-      Object.keys(localStorage).forEach((key) => {
-        if (key.startsWith("sb-") && key.includes("-auth-token")) {
-          localStorage.removeItem(key);
-        }
-      });
+      try {
+        Object.keys(localStorage).forEach((key) => {
+          if (key.startsWith("sb-") && key.includes("-auth-token")) {
+            localStorage.removeItem(key);
+          }
+        });
+      } catch (e) {
+        // Ignore storage access errors
+      }
     }
 
     // Get initial session

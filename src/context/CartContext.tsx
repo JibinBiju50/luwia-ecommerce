@@ -78,7 +78,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Persist to localStorage on change
   useEffect(() => {
     if (hydrated) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, couponApplied }));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, couponApplied }));
+      } catch (e) {
+        // Ignore storage access errors
+      }
     }
   }, [items, couponApplied, hydrated]);
 

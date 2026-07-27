@@ -35,17 +35,33 @@ export default function CustomerVideos() {
   const handleVideoScroll = () => {
     const el = videoScrollRef.current;
     if (!el) return;
-    const scrollLeft = el.scrollLeft;
+
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    const isScrollable = scrollWidth > clientWidth;
+    
+    // Check if scrolled to the absolute right edge (with 5px buffer)
+    const isAtEnd = isScrollable && scrollLeft + clientWidth >= scrollWidth - 5;
     const children = Array.from(el.children) as HTMLElement[];
+
+    if (isAtEnd) {
+      setActiveVideoIndex(children.length - 1);
+      return;
+    }
+
+    // Find the video whose center is closest to the center of the visible area
+    const viewportCenter = scrollLeft + clientWidth / 2;
     let closest = 0;
     let minDist = Infinity;
+    
     children.forEach((child, i) => {
-      const dist = Math.abs(child.offsetLeft - 16 - scrollLeft);
+      const childCenter = child.offsetLeft + child.offsetWidth / 2;
+      const dist = Math.abs(childCenter - viewportCenter);
       if (dist < minDist) {
         minDist = dist;
         closest = i;
       }
     });
+    
     setActiveVideoIndex(closest);
   };
 
@@ -95,10 +111,10 @@ export default function CustomerVideos() {
           {videos.map((src, i) => (
             <div
               key={`${src}-${i}`}
-              className="flex-shrink-0 w-[40vw] sm:w-[35vw] md:w-[25vw] lg:w-[18vw] relative rounded-2xl overflow-hidden shadow-brand snap-start"
+              className="flex-shrink-0 w-[40vw] sm:w-[35vw] md:w-[25vw] lg:w-[18vw] aspect-[9/16] relative rounded-2xl overflow-hidden shadow-brand snap-start bg-brand-light/10"
             >
-              <div className="relative w-full flex items-center justify-center rounded-2xl">
-                <LazyVideo src={src} />
+              <div className="relative w-full h-full flex items-center justify-center rounded-2xl">
+                <LazyVideo src={src} isActive={i === activeVideoIndex} />
               </div>
             </div>
           ))}
@@ -126,11 +142,22 @@ export default function CustomerVideos() {
 
 /**
  * LazyVideo — only loads the video when it scrolls into view.
- * Uses IntersectionObserver to detect visibility.
+ * Only plays the video if it is the currently active (centered) one to save memory on Android.
  */
-function LazyVideo({ src }: { src: string }) {
+function LazyVideo({ src, isActive }: { src: string; isActive: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mediaQuery.matches);
+    
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -139,27 +166,42 @@ function LazyVideo({ src }: { src: string }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          setHasLoaded(true);
           observer.disconnect(); // Only need to load once
         }
       },
-      { rootMargin: "200px" } // Start loading 200px before visible
+      { rootMargin: "300px" } // Start loading 300px before visible
     );
 
     observer.observe(video);
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !hasLoaded) return;
+
+    // On desktop, only play on hover. On mobile, play if active or hovered.
+    const shouldPlay = isDesktop ? isHovered : (isActive || isHovered);
+
+    if (shouldPlay) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [isActive, isHovered, hasLoaded, isDesktop]);
+
   return (
     <video
       ref={videoRef}
-      src={isVisible ? src : undefined}
-      className="w-full h-auto rounded-2xl pointer-events-none"
+      src={hasLoaded ? src : undefined}
+      className="w-full h-full object-cover rounded-2xl pointer-events-auto"
       muted
-      autoPlay
       loop
       playsInline
-      preload="none"
+      preload="auto"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     />
   );
 }
