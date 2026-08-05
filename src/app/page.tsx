@@ -28,6 +28,7 @@ export default function HomePage() {
               height={1080}
               className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 500px"
+              priority
             />
           </div>
           <div className="relative rounded-3xl overflow-hidden shadow-xl ring-1 ring-brand-primary/10 transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(30,58,138,0.5)] hover:-translate-y-1 group cursor-pointer">
