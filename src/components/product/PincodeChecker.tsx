@@ -14,15 +14,26 @@ export default function PincodeChecker() {
     }
 
     const prefix3 = pincode.substring(0, 3);
-
-    // Expanded Metro List: Delhi (110), Mumbai (400), Bangalore (560), Chennai (600), Kolkata (700), Hyderabad (500), Pune (411), Ahmedabad (380), Ernakulam/Kochi (682)
     const metros = ["110", "400", "560", "600", "700", "500", "411", "380", "682"];
 
-    if (metros.includes(prefix3)) {
-      setDeliveryMessage({ text: "Estimated Delivery: 2 - 3 Days", type: "success" });
-    } else {
-      setDeliveryMessage({ text: "Estimated Delivery: 3 - 5 Days", type: "success" });
-    }
+    const today = new Date();
+    const minDays = metros.includes(prefix3) ? 2 : 3;
+    const maxDays = metros.includes(prefix3) ? 3 : 5;
+
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + minDays);
+    
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + maxDays);
+
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' };
+    const formattedMin = minDate.toLocaleDateString('en-GB', options);
+    const formattedMax = maxDate.toLocaleDateString('en-GB', options);
+
+    setDeliveryMessage({ 
+      text: `Estimated delivery between ${formattedMin} - ${formattedMax}`, 
+      type: "success" 
+    });
   };
 
   return (
