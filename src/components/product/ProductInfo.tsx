@@ -7,6 +7,7 @@ import { Heart, Share2, Minus, Plus, Truck, Star, Flame, Eye, ChevronLeft, Chevr
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { addToCart as fbAddToCart, initiateCheckout } from "@/lib/fbpixel";
+import PincodeChecker from "./PincodeChecker";
 import type { Product } from "@/lib/products";
 
 export interface Review {
@@ -241,6 +242,8 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
         Glass skin begins tonight. Advanced brightening actives meet deep overnight hydration for smoother, healthier, more luminous skin by morning. Perfect for all skin types
       </p>
 
+      
+
       {/* Action Buttons */}
       <div ref={actionButtonsRef} className="flex flex-col gap-3 pt-2">
         <div className="flex gap-3 h-[48px] sm:h-[52px]">
@@ -282,6 +285,8 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
           Buy Now
         </button>
       </div>
+
+      <PincodeChecker />
 
       {/* Helps With */}
       {product.id !== "luwia-core" && (

@@ -5,6 +5,7 @@ import { notFound, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { PRODUCTS } from "@/lib/products";
+import FloatingVideo from "@/components/product/FloatingVideo";
 import { supabase } from "@/lib/supabase-client";
 import { viewContent } from "@/lib/fbpixel";
 import ProductGallery from "@/components/product/ProductGallery";
@@ -84,7 +85,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         </nav>
 
         {/* Product Section */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-10">
+        <div id="product-info-section" className="grid md:grid-cols-2 gap-6 lg:gap-10">
           <div className="min-w-0">
             <ProductGallery images={product.gallery} />
           </div>
@@ -269,6 +270,10 @@ export default function ProductPage({ params }: ProductPageProps) {
       </a>
 
       {/* Magic link modal for Meta Ads conversion */}
+      {/* Floating Video for Luwia Prime */}
+      {product.id === "luwia-prime" && (
+        <FloatingVideo showAfterId="product-info-section" />
+      )}
     </main>
   );
 }

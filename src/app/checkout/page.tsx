@@ -77,6 +77,9 @@ export default function CheckoutPage() {
 
   // Read direct-buy from sessionStorage on mount
   useEffect(() => {
+    // Ensure the page starts at the top (fixes issue where clicking Buy Now from footer opens checkout scrolled down)
+    window.scrollTo(0, 0);
+
     const raw = sessionStorage.getItem("luwia-direct-buy");
     if (raw) {
       try {
