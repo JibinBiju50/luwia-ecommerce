@@ -16,7 +16,7 @@ export default function FloatingVideo() {
     // Show video after a 4-second delay to prevent impacting initial page load
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 4000);
+    }, 2000);
     
     return () => clearTimeout(timer);
   }, [isDismissed]);
