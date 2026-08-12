@@ -3,11 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 
-interface FloatingVideoProps {
-  showAfterId: string;
-}
-
-export default function FloatingVideo({ showAfterId }: FloatingVideoProps) {
+export default function FloatingVideo() {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 20 });
@@ -17,24 +13,13 @@ export default function FloatingVideo({ showAfterId }: FloatingVideoProps) {
   useEffect(() => {
     if (isDismissed) return;
 
-    const handleScroll = () => {
-      const target = document.getElementById(showAfterId);
-      if (target) {
-        const rect = target.getBoundingClientRect();
-        // Show video when the bottom of the product info section passes the middle of the viewport
-        if (rect.bottom < window.innerHeight / 2) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
+    // Show video after a 4-second delay to prevent impacting initial page load
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 4000);
     
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [showAfterId, isDismissed]);
+    return () => clearTimeout(timer);
+  }, [isDismissed]);
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     // Only allow drag with primary button

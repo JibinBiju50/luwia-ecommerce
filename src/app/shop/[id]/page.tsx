@@ -272,7 +272,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       {/* Magic link modal for Meta Ads conversion */}
       {/* Floating Video for Luwia Prime */}
       {product.id === "luwia-prime" && (
-        <FloatingVideo showAfterId="product-info-section" />
+        <FloatingVideo />
       )}
     </main>
   );
