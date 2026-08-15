@@ -11,6 +11,7 @@ import Script from "next/script";
 import { PIXEL_ID } from "@/lib/fbpixel";
 import DelayedScripts from "@/components/layout/DelayedScripts";
 import NextTopLoader from "nextjs-toploader";
+import { Analytics } from "@vercel/analytics/react";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -117,6 +118,7 @@ export default function RootLayout({
             <MagicLinkModal />
           </CartProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
