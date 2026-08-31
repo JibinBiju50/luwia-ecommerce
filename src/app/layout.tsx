@@ -7,7 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import AuthModal from "@/components/auth/AuthModal";
 import MagicLinkModal from "@/components/auth/MagicLinkModal";
-import Script from "next/script";
+
 import { PIXEL_ID } from "@/lib/fbpixel";
 import DelayedScripts from "@/components/layout/DelayedScripts";
 import NextTopLoader from "nextjs-toploader";
