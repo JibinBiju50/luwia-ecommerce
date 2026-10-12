@@ -192,7 +192,7 @@ export default function CheckoutPage() {
       if (!res.ok) throw new Error(data.error || "Failed to create order");
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: data.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.amount,
         currency: data.currency,
         name: "Luwia Skin Science",

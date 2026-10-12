@@ -9,7 +9,7 @@ import { PRODUCT } from "@/lib/product";
 export const maxDuration = 60; // 60 seconds timeout (Vercel Pro)
 
 const razorpay = new Razorpay({
-  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+  key_id: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
   key_secret: process.env.RAZORPAY_KEY_SECRET!,
 });
 
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   try {
     const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
     const { success, limit, remaining, reset } = await ratelimit.limit(ip);
-    
+
     if (!success) {
       return NextResponse.json(
         { error: "Too many requests. Please try again later." },
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       } else if (item.productId === "luwia-cream" || item.productId === "default") {
         productPrice = PRODUCT.onlinePrice;
       }
-      
+
       if (!productPrice) {
         return NextResponse.json({ error: "Invalid product in order" }, { status: 400 });
       }
@@ -116,6 +116,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
+      keyId: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       orderId: rzpOrder.id,
       internalOrderId: dbOrder.id,
       amount: rzpOrder.amount,

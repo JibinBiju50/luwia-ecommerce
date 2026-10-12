@@ -37,5 +37,3 @@ export const INDIAN_STATES = [
   "Lakshadweep",
   "Puducherry",
 ] as const;
-
-export type IndianState = (typeof INDIAN_STATES)[number];

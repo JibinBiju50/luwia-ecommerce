@@ -1,8 +1,8 @@
 import crypto from "crypto";
 
-const PIXEL_ID = process.env.META_PIXEL_ID || "1531746671789593";
-const ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN!;
-const API_URL = `https://graph.facebook.com/v19.0/${PIXEL_ID}/events`;
+const PIXEL_ID = process.env.META_PIXEL_ID || process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
+const ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN || "";
+const API_URL = PIXEL_ID ? `https://graph.facebook.com/v19.0/${PIXEL_ID}/events` : "";
 
 /** SHA-256 hash a string (for email/phone — required by Meta) */
 function hash(value: string): string {
@@ -36,12 +36,11 @@ export async function sendCAPIPurchase(params: CAPIPurchaseParams): Promise<void
   console.log("[CAPI] ACCESS_TOKEN present:", !!ACCESS_TOKEN);
   console.log("[CAPI] PIXEL_ID:", PIXEL_ID);
 
-  if (!ACCESS_TOKEN) {
-    console.warn("[CAPI] META_CAPI_ACCESS_TOKEN is not set — skipping.");
+  if (!ACCESS_TOKEN || !PIXEL_ID) {
     return;
   }
 
-  const payload = {
+  const payload: Record<string, any> = {
     data: [
       {
         event_name: "Purchase",
@@ -62,7 +61,7 @@ export async function sendCAPIPurchase(params: CAPIPurchaseParams): Promise<void
       },
     ],
     access_token: ACCESS_TOKEN,
-    test_event_code: "TEST71090",
+    ...(process.env.META_TEST_EVENT_CODE ? { test_event_code: process.env.META_TEST_EVENT_CODE } : {}),
   };
 
   try {

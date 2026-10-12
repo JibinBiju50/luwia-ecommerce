@@ -402,7 +402,7 @@ export default function ProductInfo({ product, avgRating, totalCount }: ProductI
           {/* Optional: Small Product Info on Desktop */}
           <div className="hidden lg:flex items-center gap-3">
              <div className="relative w-12 h-12 rounded bg-brand-bg overflow-hidden shrink-0">
-               <Image src={product.image} alt={product.name} fill className="object-cover" />
+               <Image src={product.image} alt={product.name} fill className="object-cover" sizes="48px" />
              </div>
              <div className="flex flex-col">
                <span className="font-bold text-sm text-brand-text truncate max-w-[200px]">{product.name}</span>

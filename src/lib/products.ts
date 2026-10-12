@@ -13,10 +13,7 @@ export type Product = {
   currency: string;
   currencySymbol: string;
   shortDescription?: string;
-  description: string;
   tagline?: string;
-  benefits: { emoji: string; text: string }[];
-  ingredients: { name: string; description: string }[];
   usage?: string;
 };
 
@@ -44,16 +41,7 @@ export const PRODUCTS: Product[] = [
     currency: "INR",
     currencySymbol: "₹",
     shortDescription: "Advanced formula designed specifically for women's skin brightening and repair.",
-    description: PRODUCT.description,
     tagline: "Glow confidently. Glow with Luwia Prime.",
-    benefits: [
-      { emoji: "🌸", text: "Brightens and evens skin tone" },
-      { emoji: "💧", text: "Deeply moisturizes and nourishes skin" },
-      { emoji: "✨", text: "Fades dark spots and pigmentation" },
-      { emoji: "🌿", text: "Improves skin texture and smoothness" },
-      { emoji: "🛡️", text: "Helps repair and protect skin barrier" },
-    ],
-    ingredients: PRODUCT.ingredients,
     usage: PRODUCT.usage,
   },
   {
@@ -77,16 +65,7 @@ export const PRODUCTS: Product[] = [
     currency: "INR",
     currencySymbol: "₹",
     shortDescription: "Potent formulation tailored for men's tough skin to brighten and repair.",
-    description: PRODUCT.description,
     tagline: "Glow confidently. Glow with Luwia Core.",
-    benefits: [
-      { emoji: "💪", text: "Tackles tough skin and uneven tone" },
-      { emoji: "🌟", text: "Visibly reduces tan and dullness" },
-      { emoji: "✨", text: "Brightens and evens skin tone" },
-      { emoji: "🌿", text: "Improves skin texture and smoothness" },
-      { emoji: "🛡️", text: "Helps repair and protect skin barrier" },
-    ],
-    ingredients: PRODUCT.ingredients,
     usage: PRODUCT.usage,
   },
   {
@@ -113,20 +92,7 @@ export const PRODUCTS: Product[] = [
     currency: "INR",
     currencySymbol: "₹",
     shortDescription: "The ultimate skin care bundle for both men and women. Get the best of both worlds.",
-    description: `Get the best of both worlds with the Luwia Ultimate Combo — Luwia Prime for women and Luwia Core for men, bundled together at an exclusive price.
-
-Both creams harness the power of Glutathione, Niacinamide, Kojic Acid, and other premium actives to deliver radiant, brightened, and healthy skin for everyone.
-
-Perfect as a couple's skincare routine or as a thoughtful gift. One formula for her, one for him — both designed to transform your skin from the inside out.`,
     tagline: "His & Hers. One Glow. Ultimate Combo.",
-    benefits: [
-      { emoji: "👫", text: "Perfect for couples — his & hers formula" },
-      { emoji: "🌟", text: "Visibly reduces tan and dullness" },
-      { emoji: "✨", text: "Brightens and evens skin tone" },
-      { emoji: "💧", text: "Deeply moisturizes and nourishes skin" },
-      { emoji: "🛡️", text: "Helps repair and protect skin barrier" },
-    ],
-    ingredients: PRODUCT.ingredients,
     usage: PRODUCT.usage,
   },
 ];

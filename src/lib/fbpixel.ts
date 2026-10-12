@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const PIXEL_ID = "1531746671789593";
+export const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
 
-// Safe wrapper — only fires in browser and when fbq is loaded
+// Safe wrapper — only fires in browser, when PIXEL_ID is configured, and when fbq is loaded
 function fbq(...args: any[]) {
-  if (typeof window !== "undefined" && typeof (window as any).fbq === "function") {
+  if (PIXEL_ID && typeof window !== "undefined" && typeof (window as any).fbq === "function") {
     (window as any).fbq(...args);
   }
-}
-
-/** Fired automatically via the base pixel script on every page. */
-export function pageview() {
-  fbq("track", "PageView");
 }
 
 /** Product detail page viewed */
